@@ -21,9 +21,9 @@ function PricingComparison() {
       <div className="bg-[#1E293B] rounded-xl border border-[#334155] overflow-hidden shadow-2xl">
         {/* Table header */}
         <div className="grid grid-cols-3 border-b border-[#334155] bg-[#0F172A]">
-          <div className="px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Tool</div>
-          <div className="px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Price</div>
-          <div className="px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">SMB-ready</div>
+          <div className="px-2 sm:px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Tool</div>
+          <div className="px-2 sm:px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Price</div>
+          <div className="px-2 sm:px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">SMB</div>
         </div>
 
         {/* Table rows */}
@@ -34,7 +34,7 @@ function PricingComparison() {
               row.highlight ? 'bg-teal-900/20' : ''
             }`}
           >
-            <div className={`px-4 py-3 text-sm font-semibold ${row.highlight ? 'text-teal-300' : 'text-gray-400'}`}>
+            <div className={`px-2 sm:px-4 py-3 text-sm font-semibold ${row.highlight ? 'text-teal-300' : 'text-gray-400'}`}>
               {row.highlight ? (
                 <span className="flex items-center gap-1.5">
                   {row.tool}
@@ -42,10 +42,10 @@ function PricingComparison() {
                 </span>
               ) : row.tool}
             </div>
-            <div className={`px-4 py-3 text-sm text-center font-mono ${row.highlight ? 'text-teal-300 font-bold' : 'text-gray-500 line-through opacity-60'}`}>
+            <div className={`px-2 sm:px-4 py-3 text-sm text-center font-mono ${row.highlight ? 'text-teal-300 font-bold' : 'text-gray-500 line-through opacity-60'}`}>
               {row.price}
             </div>
-            <div className="px-4 py-3 text-center flex items-center justify-center">
+            <div className="px-2 sm:px-4 py-3 text-center flex items-center justify-center">
               {row.smb ? (
                 <svg className="w-5 h-5 text-teal-400" viewBox="0 0 20 20" fill="none">
                   <circle cx="10" cy="10" r="9" fill="#0D9488" fillOpacity="0.2" stroke="#0D9488" strokeWidth="1.5" />
@@ -62,7 +62,7 @@ function PricingComparison() {
         ))}
 
         {/* Callout footer */}
-        <div className="bg-teal-900/10 border-t border-teal-900/30 px-4 py-2.5">
+        <div className="bg-teal-900/10 border-t border-teal-900/30 px-2 sm:px-4 py-2.5">
           <p className="text-xs text-teal-400 text-center font-medium">
             Save ~$19,400/year vs enterprise tools
           </p>
