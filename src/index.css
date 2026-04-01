@@ -199,6 +199,28 @@
   }
 }
 
+/* Scan grid — amber crosshair pattern at 3% opacity */
+.scan-grid {
+  background-image:
+    linear-gradient(rgba(184, 98, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184, 98, 42, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Decorative section number */
+.section-num {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(100px, 15vw, 180px);
+  line-height: 1;
+  color: rgba(184, 98, 42, 0.06);
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 0;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -206,8 +228,8 @@
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #FAFAF6;
-  color: #111827;
+  background-color: #0D0F1A;
+  color: #FAFAF6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

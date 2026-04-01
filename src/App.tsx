@@ -39,6 +39,228 @@ function Hero() {
   return variant === 'a' ? <HeroA /> : <HeroB />
 }
 
+// Diagonal SVG divider — "to" colour fills a triangle in the lower-left corner
+function DiagonalLeft({ from, to }: { from: string; to: string }) {
+  return (
+    <div style={{ background: from, lineHeight: 0, fontSize: 0 }}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 48" preserveAspectRatio="none" style={{ width: '100%', height: 48, display: 'block' }}>
+        <polygon points="0,0 1440,48 0,48" fill={to} />
+      </svg>
+    </div>
+  )
+}
+
+// Diagonal SVG divider — "to" colour fills a triangle in the lower-right corner
+function DiagonalRight({ from, to }: { from: string; to: string }) {
+  return (
+    <div style={{ background: from, lineHeight: 0, fontSize: 0 }}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 48" preserveAspectRatio="none" style={{ width: '100%', height: 48, display: 'block' }}>
+        <polygon points="0,48 1440,0 1440,48" fill={to} />
+      </svg>
+    </div>
+  )
+}
+
+// Realistic Peerscope live feed — replaces generic icon+text cards
+function ProductFeed() {
+  return (
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{
+        background: '#06080F',
+        border: '1px solid rgba(184,98,42,0.22)',
+        boxShadow: '0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(184,98,42,0.08)',
+      }}
+    >
+      {/* Window chrome */}
+      <div
+        className="flex items-center justify-between px-4 py-3 border-b"
+        style={{ background: '#03050A', borderColor: 'rgba(255,255,255,0.05)' }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full" style={{ background: '#1e2030' }} />
+            <div className="w-3 h-3 rounded-full" style={{ background: '#1e2030' }} />
+            <div className="w-3 h-3 rounded-full" style={{ background: '#1e2030' }} />
+          </div>
+          <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.18)' }}>peerscope — live feed</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B8622A] animate-pulse" />
+          <span className="text-xs font-mono" style={{ color: '#B8622A' }}>3 new</span>
+        </div>
+      </div>
+
+      {/* Feed item 1 — pricing change */}
+      <div className="px-4 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+        <div className="flex items-start justify-between gap-3 mb-2.5">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span
+              className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
+              style={{ color: '#F07C35', background: 'rgba(184,98,42,0.12)', border: '1px solid rgba(184,98,42,0.28)' }}
+            >
+              PRICE ↑
+            </span>
+            <span className="text-sm font-semibold text-white">Acme Corp</span>
+          </div>
+          <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>2 min ago</span>
+        </div>
+        <p className="text-xs font-mono mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>acmecorp.com/pricing</p>
+        <div className="space-y-1 font-mono text-xs">
+          <div
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded"
+            style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.14)' }}
+          >
+            <span style={{ color: '#EF4444' }}>−</span>
+            <span style={{ color: 'rgba(252,165,165,0.6)', textDecoration: 'line-through' }}>Pro Plan: $79/mo</span>
+          </div>
+          <div
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded"
+            style={{ background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.14)' }}
+          >
+            <span style={{ color: '#10B981' }}>+</span>
+            <span style={{ color: 'rgba(167,243,208,0.9)' }}>Pro Plan: $99/mo</span>
+            <span className="ml-auto font-sans font-semibold text-xs" style={{ color: 'rgba(16,185,129,0.65)' }}>+25%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Feed item 2 — feature launch */}
+      <div className="px-4 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.04)', opacity: 0.78 }}>
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-center gap-2">
+            <span
+              className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
+              style={{ color: '#34D6B7', background: 'rgba(26,122,110,0.14)', border: '1px solid rgba(26,122,110,0.28)' }}
+            >
+              LAUNCH
+            </span>
+            <span className="text-sm font-semibold text-white">Rival Inc</span>
+          </div>
+          <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>1 hr ago</span>
+        </div>
+        <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>rivalinc.com/changelog</p>
+        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
+          New feature: <span className="text-white font-medium">"AI-powered battlecards"</span>
+        </p>
+      </div>
+
+      {/* Feed item 3 — hiring signal */}
+      <div className="px-4 py-4" style={{ opacity: 0.52 }}>
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-center gap-2">
+            <span
+              className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
+              style={{ color: '#818CF8', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)' }}
+            >
+              HIRING
+            </span>
+            <span className="text-sm font-semibold text-white">Competitor X</span>
+          </div>
+          <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>3 hrs ago</span>
+        </div>
+        <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>competitorx.com/careers</p>
+        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
+          Sr. Engineer — <span className="text-white font-medium">AI/ML Platform</span>
+        </p>
+      </div>
+
+      {/* Status bar */}
+      <div
+        className="flex items-center justify-between px-4 py-2.5 border-t"
+        style={{ background: '#03050A', borderColor: 'rgba(255,255,255,0.05)' }}
+      >
+        <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.18)' }}>8 competitors · live</span>
+        <span className="text-xs font-mono" style={{ color: 'rgba(184,98,42,0.5)' }}>view all →</span>
+      </div>
+    </div>
+  )
+}
+
+interface PricingPlan {
+  name: string
+  price: string
+  period: string
+  description: string
+  competitors: string
+  alerts: string
+  history: string
+  users: string
+  battlecards: boolean
+  csvExport: boolean
+  api: boolean
+  popular: boolean
+}
+
+type FeatureKey = keyof Pick<PricingPlan, 'competitors' | 'alerts' | 'history' | 'users' | 'battlecards' | 'csvExport' | 'api'>
+
+const pricingPlans: PricingPlan[] = [
+  {
+    name: 'Starter',
+    price: '$49',
+    period: '/mo',
+    description: 'For founders tracking a handful of competitors.',
+    competitors: '3',
+    alerts: 'Daily digest',
+    history: '30 days',
+    users: '1',
+    battlecards: false,
+    csvExport: false,
+    api: false,
+    popular: false,
+  },
+  {
+    name: 'Pro',
+    price: '$99',
+    period: '/mo',
+    description: 'For teams that need real-time intelligence.',
+    competitors: '10',
+    alerts: 'Real-time',
+    history: '12 months',
+    users: '5',
+    battlecards: true,
+    csvExport: true,
+    api: false,
+    popular: true,
+  },
+  {
+    name: 'Team',
+    price: '$199',
+    period: '/mo',
+    description: 'For GTM teams that need the full picture.',
+    competitors: 'Unlimited',
+    alerts: 'Real-time',
+    history: 'Unlimited',
+    users: 'Unlimited',
+    battlecards: true,
+    csvExport: true,
+    api: true,
+    popular: false,
+  },
+]
+
+const featureRows: Array<{ label: string; key: FeatureKey }> = [
+  { label: 'Competitors monitored', key: 'competitors' },
+  { label: 'Alert delivery', key: 'alerts' },
+  { label: 'Change history', key: 'history' },
+  { label: 'Team members', key: 'users' },
+  { label: 'Battlecard templates', key: 'battlecards' },
+  { label: 'CSV export', key: 'csvExport' },
+  { label: 'API access', key: 'api' },
+]
+
+function Check({ active = true }: { active?: boolean }) {
+  if (!active) {
+    return <span style={{ color: 'rgba(250,250,246,0.2)', fontSize: '1rem' }}>—</span>
+  }
+  return (
+    <svg className="w-5 h-5 mx-auto" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="9" fill="rgba(20,184,166,0.12)" stroke="rgba(52,214,183,0.35)" strokeWidth="1" />
+      <path d="M6.5 10l2.5 2.5 4.5-5" stroke="#34D6B7" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 const faqs = [
   {
     q: 'How is this different from Google Alerts?',
@@ -95,18 +317,25 @@ function FAQ() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#FAFAF6] font-[Inter,system-ui,sans-serif]">
+    <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
 
       {/* Founding member offer banner — variant B only */}
       <FoundingBanner />
 
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+      {/* Nav — dark glass */}
+      <nav
+        className="sticky top-0 z-50 border-b"
+        style={{ background: 'rgba(13,15,26,0.92)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderColor: 'rgba(184,98,42,0.12)' }}
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <Logo />
+          <Logo dark />
           <div className="flex items-center gap-4">
-            <a href="#pricing" className="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900 transition">Pricing</a>
-            <a href="#waitlist-footer" className="text-sm font-semibold bg-[#B8622A] text-white px-4 py-2 rounded-lg hover:bg-[#F07C35] transition">
+            <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition">Pricing</a>
+            <a
+              href="#waitlist-footer"
+              className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition hover:brightness-110"
+              style={{ background: '#B8622A' }}
+            >
               Join waitlist
             </a>
           </div>
@@ -116,283 +345,411 @@ export default function App() {
       {/* Hero — swap via ?variant=a (problem-led) or ?variant=b (value-led, default) */}
       <Hero />
 
-      {/* Problem */}
+      {/* Diagonal: hero (#0F172A) → Problem (#111320) — right-leaning cut */}
+      <DiagonalRight from="#0F172A" to="#111320" />
+
+      {/* Problem — asymmetric editorial layout */}
       <section
-        className="py-20 px-4 sm:px-6 lg:px-8"
-        style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(184,98,42,0.04) 0%, transparent 60%), #FAFAF6' }}
+        className="relative py-24 px-4 sm:px-6 lg:px-8 scan-grid overflow-hidden"
+        style={{ background: '#111320' }}
       >
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2
-              className="text-3xl sm:text-4xl font-bold text-[#111827] mb-4"
-              style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
-            >
-              Enterprise CI costs $20k/year.
-              <br />
-              Manual monitoring costs you hours.
-            </h2>
-            <p className="text-lg text-gray-500 max-w-xl mx-auto">There's nothing in between - until now.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {/* Dominant card - "Finding out too late" */}
-            <RevealDiv className="md:col-span-3 bg-white rounded-xl p-8 border border-gray-100 border-l-4 border-l-[#B8622A] card-hover flex flex-col">
-              <blockquote className="italic text-[#111320] text-lg leading-relaxed mb-2">
-                "I found out my competitor changed their pricing from a prospect, not from monitoring."
-              </blockquote>
-              <p className="text-sm text-gray-400 mb-6">— SaaS founder, 12-person team</p>
-              <div className="text-3xl mb-3">😤</div>
-              <h3 className="font-semibold text-[#111827] mb-2">Finding out too late</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">Your competitor moves. You find out from a prospect. Every week you're not monitoring is a week you're flying blind.</p>
-            </RevealDiv>
-            {/* Supporting cards column */}
-            <div className="md:col-span-2 flex flex-col gap-6">
-              <RevealDiv staggerMs={80} className="flex-1 bg-white rounded-xl p-6 border border-gray-100 card-hover">
-                <div className="text-3xl mb-4">💸</div>
-                <h3 className="font-semibold text-[#111827] mb-2">Crayon costs $20k/year</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Enterprise platforms like Crayon and Klue start at $12,500/year. Built for analyst teams, not founders.</p>
-              </RevealDiv>
-              <RevealDiv staggerMs={160} className="flex-1 bg-white rounded-xl p-6 border border-gray-100 card-hover">
-                <div className="text-3xl mb-4">⏱️</div>
-                <h3 className="font-semibold text-[#111827] mb-2">Manual checks waste hours</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Manually checking 5 competitor websites every Monday takes an hour - and you still miss things.</p>
-              </RevealDiv>
+        <div className="max-w-6xl mx-auto">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-16 lg:items-start">
+
+            {/* Left column — section label + headline */}
+            <div className="lg:col-span-5 mb-14 lg:mb-0 relative">
+              <span
+                aria-hidden="true"
+                className="section-num"
+                style={{ top: '-8px', left: '-8px' }}
+              >01</span>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <span
+                  className="text-xs font-mono tracking-[0.2em] uppercase mb-6 block"
+                  style={{ color: '#B8622A' }}
+                >
+                  The Problem
+                </span>
+                <h2
+                  className="text-4xl sm:text-5xl font-bold leading-tight text-white"
+                  style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+                >
+                  Enterprise CI costs $20k/year.
+                  <br />
+                  Manual monitoring costs you hours.
+                </h2>
+                <p
+                  className="text-lg mt-6 leading-relaxed"
+                  style={{ color: 'rgba(250,250,246,0.5)' }}
+                >
+                  There's nothing in between - until now.
+                </p>
+              </div>
             </div>
+
+            {/* Right column — cards */}
+            <div className="lg:col-span-7 flex flex-col gap-5">
+              <RevealDiv
+                className="rounded-2xl p-7 border-l-4 card-hover"
+                style={{
+                  background: '#0D0F1A',
+                  borderLeftColor: '#B8622A',
+                  borderTop: '1px solid rgba(184,98,42,0.14)',
+                  borderRight: '1px solid rgba(184,98,42,0.14)',
+                  borderBottom: '1px solid rgba(184,98,42,0.14)',
+                }}
+              >
+                <blockquote
+                  className="italic text-lg leading-relaxed mb-3 text-white"
+                  style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                >
+                  "I found out my competitor changed their pricing from a prospect, not from monitoring."
+                </blockquote>
+                <p className="text-sm mb-5" style={{ color: 'rgba(250,250,246,0.35)' }}>— SaaS founder, 12-person team</p>
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl flex-shrink-0">😤</span>
+                  <div>
+                    <h3 className="font-semibold text-white mb-1">Finding out too late</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
+                      Your competitor moves. You find out from a prospect. Every week you're not monitoring is a week you're flying blind.
+                    </p>
+                  </div>
+                </div>
+              </RevealDiv>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <RevealDiv
+                  staggerMs={80}
+                  className="rounded-2xl p-6 card-hover"
+                  style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.1)' }}
+                >
+                  <div className="text-3xl mb-4">💸</div>
+                  <h3 className="font-semibold text-white mb-2">Crayon costs $20k/year</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
+                    Enterprise platforms like Crayon and Klue start at $12,500/year. Built for analyst teams, not founders.
+                  </p>
+                </RevealDiv>
+                <RevealDiv
+                  staggerMs={160}
+                  className="rounded-2xl p-6 card-hover"
+                  style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.1)' }}
+                >
+                  <div className="text-3xl mb-4">⏱️</div>
+                  <h3 className="font-semibold text-white mb-2">Manual checks waste hours</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
+                    Manually checking 5 competitor websites every Monday takes an hour - and you still miss things.
+                  </p>
+                </RevealDiv>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAF6]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2
-            className="text-3xl sm:text-4xl font-bold text-[#111827] mb-4"
-            style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
-          >
-            How it works
-          </h2>
-          <p className="text-gray-500 text-lg mb-14">Up and running in 2 minutes.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Diagonal: Problem (#111320) → How it works (#0D0F1A) — left-leaning cut */}
+      <DiagonalLeft from="#111320" to="#0D0F1A" />
+
+      {/* How it works — editorial numbered steps, dark */}
+      <section
+        className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        style={{ background: '#0D0F1A' }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-16">
+            <span
+              className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
+              style={{ color: '#B8622A' }}
+            >
+              How it works
+            </span>
+            <h2
+              className="text-4xl sm:text-5xl font-bold text-white leading-tight"
+              style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+            >
+              Up and running in 2 minutes.
+            </h2>
+          </div>
+
+          <div>
             {[
               {
-                step: '1',
+                num: '1',
                 title: 'Add competitors',
                 desc: 'Paste their URLs. Takes two minutes. No engineering required.',
-                color: 'bg-[#B8622A]',
+                accent: '#B8622A',
               },
               {
-                step: '2',
+                num: '2',
                 title: 'We monitor 24/7',
                 desc: 'We watch pricing pages, feature pages, job boards, and reviews around the clock.',
-                color: 'bg-teal-600',
+                accent: '#1A7A6E',
               },
               {
-                step: '3',
+                num: '3',
                 title: 'You get alerts',
                 desc: 'Instant Slack or email notification the moment something changes. Not a weekly digest.',
-                color: 'bg-[#111320]',
+                accent: '#B8622A',
               },
-            ].map(item => (
-              <div key={item.step} className="flex flex-col items-center text-center">
-                <div className={`w-12 h-12 rounded-full ${item.color} text-white flex items-center justify-center text-xl font-bold mb-5`}>
-                  {item.step}
-                </div>
-                <h3
-                  className="font-semibold text-[#111827] text-lg mb-2"
-                  style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
-                >
-                  {item.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* What we track */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2
-              className="text-3xl sm:text-4xl font-bold text-[#111827] mb-4"
-              style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
-            >
-              What we track
-            </h2>
-            <p className="text-gray-500 text-lg">Every signal your competitors send - captured and structured.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {[
-              {
-                icon: (
-                  <svg className="w-6 h-6 text-[#B8622A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                ),
-                title: 'Pricing pages',
-                desc: 'Detect price changes, new tiers, removed plans, and changed feature bundles.',
-              },
-              {
-                icon: (
-                  <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                  </svg>
-                ),
-                title: 'Feature launches',
-                desc: 'Website copy changes, changelog updates, and new product page additions.',
-              },
-              {
-                icon: (
-                  <svg className="w-6 h-6 text-[#B8622A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
-                  </svg>
-                ),
-                title: 'Job postings',
-                desc: 'Headcount signals and new product bets - know what your competitors are building before they announce it.',
-              },
-              {
-                icon: (
-                  <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                  </svg>
-                ),
-                title: 'G2/Capterra reviews',
-                desc: 'Sentiment shifts and new reviews on major software review platforms.',
-              },
-            ].map((item, index) => (
-              <RevealDiv key={item.title} staggerMs={index * 60} className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-[#FAFAF6] card-hover">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center">
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-[#111827] mb-1">{item.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
-                </div>
-              </RevealDiv>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAF6]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2
-              className="text-3xl sm:text-4xl font-bold text-[#111827] mb-4"
-              style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
-            >
-              Simple, transparent pricing
-            </h2>
-            <p className="text-gray-500 text-lg">14-day free trial on all plans. No credit card required.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            {[
-              {
-                name: 'Starter',
-                price: '$49',
-                period: '/mo',
-                description: 'For founders tracking a handful of competitors.',
-                features: [
-                  'Monitor up to 3 competitors',
-                  'Daily email digest',
-                  'Pricing page monitoring',
-                  '30-day change history',
-                  '1 user',
-                ],
-                cta: 'Join waitlist',
-                popular: false,
-              },
-              {
-                name: 'Pro',
-                price: '$99',
-                period: '/mo',
-                description: 'For teams that need real-time intelligence.',
-                features: [
-                  'Monitor up to 10 competitors',
-                  'Real-time Slack & email alerts',
-                  'Pricing + features + jobs + reviews',
-                  '12-month change history',
-                  'Searchable timeline',
-                  'Up to 5 users',
-                  'Battlecard templates',
-                ],
-                cta: 'Join waitlist',
-                popular: true,
-              },
-              {
-                name: 'Team',
-                price: '$199',
-                period: '/mo',
-                description: 'For GTM teams that need the full picture.',
-                features: [
-                  'Unlimited competitors',
-                  'All Pro features',
-                  'AI-generated change summaries',
-                  'Unlimited users',
-                  'CRM & Slack deep integrations',
-                  'Priority support',
-                ],
-                cta: 'Join waitlist',
-                popular: false,
-              },
-            ].map((plan, index) => (
+            ].map((item, i) => (
               <RevealDiv
-                key={plan.name}
-                scale
-                staggerMs={index * 100}
-                className={`relative rounded-2xl p-6 border transition-all duration-200 ${plan.popular
-                  ? 'bg-[#111320] border-[#B8622A]/40 border-l-4 border-l-[#B8622A] text-white'
-                  : 'bg-white border-gray-100 opacity-85 hover:opacity-100 hover:-translate-y-1 hover:shadow-lg card-hover'
-                  }`}
-                style={plan.popular ? {
-                  transform: 'translateY(-24px)',
-                  boxShadow: '0 0 40px 0 rgba(184,98,42,0.2), 0 20px 60px -20px rgba(17,19,32,0.4)',
-                } : undefined}
+                key={item.num}
+                staggerMs={i * 100}
+                className="relative flex items-start gap-8 lg:gap-20 py-10 border-b last:border-b-0"
+                style={{ borderColor: 'rgba(250,250,246,0.06)' }}
               >
-                {false && null /* elevation communicates popularity - pill removed */}
-                <div className="mb-6">
-                  <h3
-                    className={`text-lg font-bold mb-1 ${plan.popular ? 'text-white' : 'text-[#111827]'}`}
-                    style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
+                {/* Big decorative number */}
+                <div className="flex-shrink-0 w-16 lg:w-28 pt-1">
+                  <span
+                    className="block leading-none select-none"
+                    style={{
+                      fontFamily: "'Syne', system-ui, sans-serif",
+                      fontWeight: 800,
+                      fontSize: 'clamp(72px, 10vw, 112px)',
+                      color: item.accent,
+                      opacity: 0.14,
+                    }}
                   >
-                    {plan.name}
-                  </h3>
-                  <div className="flex items-baseline gap-1 mb-2">
-                    <span className={`text-4xl font-bold ${plan.popular ? 'text-white' : 'text-[#111827]'}`}>{plan.price}</span>
-                    <span className={`text-sm ${plan.popular ? 'text-gray-400' : 'text-gray-500'}`}>{plan.period}</span>
-                  </div>
-                  <p className={`text-sm leading-relaxed ${plan.popular ? 'text-gray-300' : 'text-gray-500'}`}>{plan.description}</p>
+                    {item.num}
+                  </span>
                 </div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map(f => (
-                    <li key={f} className="flex items-start gap-2 text-sm">
-                      <svg className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-teal-400' : 'text-teal-600'}`} viewBox="0 0 16 16" fill="none">
-                        <circle cx="8" cy="8" r="8" fill={plan.popular ? '#0D9488' : '#CCFBF1'} />
-                        <path d="M5 8l2 2 4-4" stroke={plan.popular ? 'white' : '#0D9488'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <span className={plan.popular ? 'text-gray-200' : 'text-gray-600'}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#waitlist-footer"
-                  className={`block text-center w-full py-3 rounded-lg font-semibold text-sm transition ${plan.popular
-                    ? 'bg-teal-500 text-white hover:bg-teal-400'
-                    : 'bg-[#B8622A] text-white hover:bg-[#F07C35]'
-                    }`}
-                >
-                  {plan.cta}
-                </a>
+                {/* Content */}
+                <div className="flex-1 pt-2">
+                  <h3
+                    className="text-2xl sm:text-3xl font-bold text-white mb-3"
+                    style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    className="text-lg leading-relaxed"
+                    style={{ color: 'rgba(250,250,246,0.52)', maxWidth: '42ch' }}
+                  >
+                    {item.desc}
+                  </p>
+                </div>
               </RevealDiv>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 mt-6">All prices in USD &middot; Annual billing available at 20% discount</p>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* Diagonal: How it works (#0D0F1A) → What we track (#111320) — right-leaning cut */}
+      <DiagonalRight from="#0D0F1A" to="#111320" />
+
+      {/* What we track — asymmetric with product feed UI */}
+      <section
+        className="relative py-24 px-4 sm:px-6 lg:px-8 scan-grid overflow-hidden"
+        style={{ background: '#111320' }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-16 lg:items-center">
+
+            {/* Left column — heading + signal tags */}
+            <div className="lg:col-span-5 mb-14 lg:mb-0 relative">
+              <span
+                aria-hidden="true"
+                className="section-num"
+                style={{ top: '-8px', left: '-8px' }}
+              >02</span>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <span
+                  className="text-xs font-mono tracking-[0.2em] uppercase mb-6 block"
+                  style={{ color: '#B8622A' }}
+                >
+                  Signal intelligence
+                </span>
+                <h2
+                  className="text-4xl sm:text-5xl font-bold text-white leading-tight mb-6"
+                  style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+                >
+                  What we track
+                </h2>
+                <p
+                  className="text-lg leading-relaxed mb-8"
+                  style={{ color: 'rgba(250,250,246,0.5)' }}
+                >
+                  Every signal your competitors send - captured and structured.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: 'Pricing pages', color: '#B8622A' },
+                    { label: 'Feature launches', color: '#1A7A6E' },
+                    { label: 'Job postings', color: '#818CF8' },
+                    { label: 'G2/Capterra reviews', color: '#1A7A6E' },
+                  ].map(tag => (
+                    <span
+                      key={tag.label}
+                      className="text-xs font-medium px-3 py-1.5 rounded-full"
+                      style={{
+                        background: `${tag.color}18`,
+                        border: `1px solid ${tag.color}35`,
+                        color: tag.color,
+                      }}
+                    >
+                      {tag.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right column — product feed UI */}
+            <RevealDiv className="lg:col-span-7" staggerMs={100}>
+              <ProductFeed />
+            </RevealDiv>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing — feature comparison table, dark */}
+      <section
+        id="pricing"
+        className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        style={{ background: '#0D0F1A' }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-14 relative">
+            <span
+              aria-hidden="true"
+              className="section-num"
+              style={{ top: '-8px', left: '-8px' }}
+            >03</span>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <span
+                className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
+                style={{ color: '#B8622A' }}
+              >
+                Pricing
+              </span>
+              <h2
+                className="text-4xl sm:text-5xl font-bold text-white leading-tight"
+                style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+              >
+                Simple, transparent pricing
+              </h2>
+              <p className="text-lg mt-3" style={{ color: 'rgba(250,250,246,0.5)' }}>
+                14-day free trial on all plans. No credit card required.
+              </p>
+            </div>
+          </div>
+
+          {/* Comparison table */}
+          <RevealDiv scale>
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{ border: '1px solid rgba(184,98,42,0.2)' }}
+            >
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[560px]" style={{ borderCollapse: 'collapse' }}>
+                  <colgroup>
+                    <col style={{ width: '36%' }} />
+                    <col style={{ width: '21%' }} />
+                    <col style={{ width: '21%' }} />
+                    <col style={{ width: '22%' }} />
+                  </colgroup>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(184,98,42,0.15)' }}>
+                      <th className="px-6 py-5 text-left">
+                        <span className="text-xs font-mono" style={{ color: 'rgba(250,250,246,0.28)' }}>Feature</span>
+                      </th>
+                      {pricingPlans.map(plan => (
+                        <th
+                          key={plan.name}
+                          className="px-4 py-5 text-center"
+                          style={{ background: plan.popular ? 'rgba(184,98,42,0.07)' : undefined }}
+                        >
+                          {plan.popular && (
+                            <div
+                              className="text-xs font-mono mb-2"
+                              style={{ color: '#B8622A' }}
+                            >
+                              ★ Popular
+                            </div>
+                          )}
+                          <div
+                            className="font-bold text-base text-white"
+                            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                          >
+                            {plan.name}
+                          </div>
+                          <div className="mt-1.5">
+                            <span
+                              className="text-2xl font-bold"
+                              style={{ color: plan.popular ? '#F07C35' : 'rgba(250,250,246,0.88)' }}
+                            >
+                              {plan.price}
+                            </span>
+                            <span className="text-sm" style={{ color: 'rgba(250,250,246,0.38)' }}>{plan.period}</span>
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {featureRows.map((row) => (
+                      <tr key={row.key} style={{ borderBottom: '1px solid rgba(250,250,246,0.04)' }}>
+                        <td
+                          className="px-6 py-4 text-sm"
+                          style={{ color: 'rgba(250,250,246,0.58)' }}
+                        >
+                          {row.label}
+                        </td>
+                        {pricingPlans.map(plan => (
+                          <td
+                            key={plan.name}
+                            className="px-4 py-4 text-center text-sm"
+                            style={{ background: plan.popular ? 'rgba(184,98,42,0.04)' : undefined }}
+                          >
+                            {typeof plan[row.key] === 'boolean' ? (
+                              <Check active={plan[row.key] as boolean} />
+                            ) : (
+                              <span style={{ color: plan.popular ? '#F07C35' : 'rgba(250,250,246,0.78)' }}>
+                                {plan[row.key] as string}
+                              </span>
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                    <tr>
+                      <td className="px-6 py-5" />
+                      {pricingPlans.map(plan => (
+                        <td
+                          key={plan.name}
+                          className="px-4 py-5 text-center"
+                          style={{ background: plan.popular ? 'rgba(184,98,42,0.04)' : undefined }}
+                        >
+                          <a
+                            href="#waitlist-footer"
+                            className="inline-block py-2.5 px-5 rounded-lg font-semibold text-sm text-white transition hover:brightness-110"
+                            style={{
+                              background: plan.popular ? '#B8622A' : 'rgba(250,250,246,0.08)',
+                              border: plan.popular ? 'none' : '1px solid rgba(250,250,246,0.12)',
+                            }}
+                          >
+                            Join waitlist
+                          </a>
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </RevealDiv>
+          <p className="text-center text-sm mt-6" style={{ color: 'rgba(250,250,246,0.28)' }}>
+            All prices in USD &middot; Annual billing available at 20% discount
+          </p>
+        </div>
+      </section>
+
+      {/* Diagonal: Pricing (#0D0F1A) → FAQ (light #FAFAF6) — left-leaning cut */}
+      <DiagonalLeft from="#0D0F1A" to="#FAFAF6" />
+
+      {/* FAQ — single light contrast section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAF6]">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h2
@@ -406,18 +763,27 @@ export default function App() {
         </div>
       </section>
 
+      {/* Diagonal: FAQ (#FAFAF6) → Footer CTA (#0D0F1A) — right-leaning cut */}
+      <DiagonalRight from="#FAFAF6" to="#0D0F1A" />
+
       {/* Footer CTA */}
-      <section id="waitlist-footer" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0D0F1A] text-white">
+      <section
+        id="waitlist-footer"
+        className="py-20 px-4 sm:px-6 lg:px-8"
+        style={{ background: '#0D0F1A' }}
+      >
         <div className="max-w-2xl mx-auto text-center">
           <h2
-            className="text-3xl sm:text-4xl font-bold mb-4"
-            style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
+            className="text-3xl sm:text-4xl font-bold mb-4 text-white"
+            style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
           >
             Start tracking your competitors
             <br />
             in 2 minutes.
           </h2>
-          <p className="text-gray-400 text-lg mb-10">Free for 14 days. No credit card required.</p>
+          <p className="text-lg mb-10" style={{ color: 'rgba(250,250,246,0.48)' }}>
+            Free for 14 days. No credit card required.
+          </p>
           <div className="max-w-md mx-auto">
             <EmailForm placeholder="Enter your work email" buttonText="Join the waitlist" size="large" variant="dark" />
           </div>
@@ -425,12 +791,17 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0D0F1A] border-t border-gray-800 py-8 px-4 sm:px-6 lg:px-8">
+      <footer
+        className="border-t py-8 px-4 sm:px-6 lg:px-8"
+        style={{ background: '#0D0F1A', borderColor: 'rgba(250,250,246,0.06)' }}
+      >
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo dark />
-          <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} peerscope. All rights reserved.</p>
-          <div className="flex gap-5 text-sm text-gray-500">
-            <a href="mailto:hello@peerscope.io" className="hover:text-gray-300 transition-colors">Contact</a>
+          <p className="text-sm" style={{ color: 'rgba(250,250,246,0.3)' }}>
+            &copy; {new Date().getFullYear()} peerscope. All rights reserved.
+          </p>
+          <div className="flex gap-5 text-sm" style={{ color: 'rgba(250,250,246,0.3)' }}>
+            <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </footer>
