@@ -1,5 +1,6 @@
 interface Env {
   DB: D1Database
+  NOTIFY_WEBHOOK_URL?: string
 }
 
 interface WaitlistRequest {
@@ -8,6 +9,16 @@ interface WaitlistRequest {
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+async function notifyNewSignup(webhookUrl: string, email: string, count: number): Promise<void> {
+  await fetch(webhookUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      text: `🎉 New Peerscope waitlist signup: \`${email}\` (total: ${count})`,
+    }),
+  })
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -28,11 +39,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       )
     }
 
-    await context.env.DB.prepare(
+    const result = await context.env.DB.prepare(
       'INSERT OR IGNORE INTO waitlist (email, created_at) VALUES (?, ?)'
     )
       .bind(email, new Date().toISOString())
       .run()
+
+    // Notify on new signups only (not duplicates)
+    const isNew = (result.meta?.changes ?? 0) > 0
+    if (isNew && context.env.NOTIFY_WEBHOOK_URL) {
+      const countResult = await context.env.DB.prepare(
+        'SELECT COUNT(*) as count FROM waitlist'
+      ).first<{ count: number }>()
+      context.waitUntil(
+        notifyNewSignup(context.env.NOTIFY_WEBHOOK_URL, email, countResult?.count ?? 0)
+      )
+    }
 
     return Response.json(
       { success: true },
