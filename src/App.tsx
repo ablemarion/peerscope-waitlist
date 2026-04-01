@@ -271,7 +271,7 @@ export default function App() {
                   '30-day change history',
                   '1 user',
                 ],
-                cta: 'Start free trial',
+                cta: 'Join waitlist',
                 popular: false,
               },
               {
@@ -288,7 +288,7 @@ export default function App() {
                   'Up to 5 users',
                   'Battlecard templates',
                 ],
-                cta: 'Start free trial',
+                cta: 'Join waitlist',
                 popular: true,
               },
               {
@@ -304,7 +304,7 @@ export default function App() {
                   'CRM & Slack deep integrations',
                   'Priority support',
                 ],
-                cta: 'Start free trial',
+                cta: 'Join waitlist',
                 popular: false,
               },
             ].map(plan => (
