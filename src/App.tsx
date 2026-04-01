@@ -333,7 +333,7 @@ export default function App() {
             <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
-              className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition hover:brightness-110"
+              className="text-sm font-semibold text-white px-4 py-3 rounded-lg transition hover:brightness-110"
               style={{ background: '#B8622A' }}
             >
               Join waitlist
@@ -811,7 +811,7 @@ export default function App() {
             &copy; {new Date().getFullYear()} peerscope. All rights reserved.
           </p>
           <div className="flex gap-5 text-sm" style={{ color: 'rgba(250,250,246,0.3)' }}>
-            <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors">Contact</a>
+            <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors py-3 inline-block">Contact</a>
           </div>
         </div>
       </footer>
