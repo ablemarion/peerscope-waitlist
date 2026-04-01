@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0F172A"/>
+
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1E293B" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.6"/>
+
+  <!-- Accent bar top -->
+  <rect x="0" y="0" width="1200" height="4" fill="#14B8A6"/>
+
+  <!-- Logo mark — simple telescope icon -->
+  <g transform="translate(100, 200)">
+    <!-- Telescope body -->
+    <rect x="0" y="18" width="80" height="20" rx="4" fill="#14B8A6"/>
+    <rect x="80" y="10" width="60" height="36" rx="4" fill="#0EA5E9"/>
+    <rect x="140" y="4" width="44" height="48" rx="4" fill="#2563EB"/>
+    <!-- Tripod -->
+    <line x1="40" y1="38" x2="20" y2="70" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+    <line x1="40" y1="38" x2="60" y2="70" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+    <!-- Eyepiece -->
+    <circle cx="0" cy="28" r="8" fill="#1E293B" stroke="#14B8A6" stroke-width="2"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="100" y="320" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="white" letter-spacing="-2">peerscope</text>
+
+  <!-- Tagline -->
+  <text x="100" y="390" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="#94A3B8">Track your competitors. Not your budget.</text>
+
+  <!-- Divider -->
+  <rect x="100" y="430" width="80" height="3" rx="2" fill="#14B8A6"/>
+
+  <!-- Sub-line -->
+  <text x="100" y="490" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#64748B">Competitive intelligence for SaaS teams · From $49/mo</text>
+
+  <!-- Right side decorative element — alert card mockup -->
+  <g transform="translate(780, 180)">
+    <rect width="320" height="90" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <rect width="4" height="90" rx="2" fill="#14B8A6"/>
+    <text x="20" y="30" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#94A3B8">PRICING CHANGE DETECTED</text>
+    <text x="20" y="55" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white">Competitor A raised prices</text>
+    <text x="20" y="76" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">Pro plan: $79 → $99 · 2 mins ago</text>
+  </g>
+
+  <g transform="translate(820, 300)">
+    <rect width="280" height="90" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <rect width="4" height="90" rx="2" fill="#2563EB"/>
+    <text x="20" y="30" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#94A3B8">NEW JOB POSTING</text>
+    <text x="20" y="55" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white">Competitor B hiring</text>
+    <text x="20" y="76" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">Head of Partnerships · just now</text>
+  </g>
+
+  <g transform="translate(760, 420)">
+    <rect width="340" height="90" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <rect width="4" height="90" rx="2" fill="#7C3AED"/>
+    <text x="20" y="30" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#94A3B8">FEATURE LAUNCH</text>
+    <text x="20" y="55" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white">Competitor C launched AI tools</text>
+    <text x="20" y="76" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">New features page detected · 1h ago</text>
+  </g>
+</svg>
