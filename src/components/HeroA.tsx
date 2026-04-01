@@ -59,7 +59,7 @@ function AlertMockup() {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button className="flex-1 text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md font-semibold transition">
+          <button className="flex-1 text-xs bg-[#B8622A] hover:bg-[#F07C35] text-white px-3 py-2 rounded-md font-semibold transition">
             View full diff
           </button>
           <button className="text-xs text-gray-400 hover:text-gray-200 px-3 py-2 rounded-md border border-gray-700 transition">

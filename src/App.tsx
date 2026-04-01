@@ -3,6 +3,26 @@ import './App.css'
 import { Logo, EmailForm } from './components/shared'
 import { HeroA } from './components/HeroA'
 import { HeroB } from './components/HeroB'
+import { useRevealOnScroll } from './hooks/useRevealOnScroll'
+
+function RevealDiv({
+  staggerMs = 0,
+  scale = false,
+  className,
+  children,
+}: {
+  staggerMs?: number
+  scale?: boolean
+  className?: string
+  children: React.ReactNode
+}) {
+  const ref = useRevealOnScroll(staggerMs)
+  return (
+    <div ref={ref as React.Ref<HTMLDivElement>} className={`${scale ? 'reveal-scale' : 'reveal'} ${className ?? ''}`}>
+      {children}
+    </div>
+  )
+}
 
 // Read ?variant=a or ?variant=b from the URL. Defaults to 'b'.
 function useHeroVariant(): 'a' | 'b' {
@@ -51,7 +71,7 @@ function FAQ() {
         <div key={i}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
-            className="w-full flex justify-between items-center py-4 text-left text-gray-900 font-medium hover:text-blue-600 transition focus:outline-none"
+            className="w-full flex justify-between items-center py-4 text-left text-gray-900 font-medium hover:text-[#B8622A] transition focus:outline-none"
           >
             <span>{faq.q}</span>
             <svg
@@ -80,7 +100,7 @@ export default function App() {
           <Logo />
           <div className="flex items-center gap-4">
             <a href="#pricing" className="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900 transition">Pricing</a>
-            <a href="#waitlist-footer" className="text-sm font-semibold bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            <a href="#waitlist-footer" className="text-sm font-semibold bg-[#B8622A] text-white px-4 py-2 rounded-lg hover:bg-[#F07C35] transition">
               Join waitlist
             </a>
           </div>
@@ -121,12 +141,12 @@ export default function App() {
                 title: 'Finding out too late',
                 desc: '"I found out my competitor changed their pricing from a prospect, not from monitoring." - Every SaaS founder',
               },
-            ].map(card => (
-              <div key={card.title} className="bg-[#F8FAFC] rounded-xl p-6 border border-gray-100">
+            ].map((card, index) => (
+              <RevealDiv key={card.title} staggerMs={index * 80} className="bg-[#F8FAFC] rounded-xl p-6 border border-gray-100 card-hover">
                 <div className="text-3xl mb-4">{card.icon}</div>
                 <h3 className="font-semibold text-[#111827] mb-2">{card.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
-              </div>
+              </RevealDiv>
             ))}
           </div>
         </div>
@@ -148,7 +168,7 @@ export default function App() {
                 step: '1',
                 title: 'Add competitors',
                 desc: 'Paste their URLs. Takes two minutes. No engineering required.',
-                color: 'bg-blue-600',
+                color: 'bg-[#B8622A]',
               },
               {
                 step: '2',
@@ -196,7 +216,7 @@ export default function App() {
             {[
               {
                 icon: (
-                  <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="w-6 h-6 text-[#B8622A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 ),
@@ -214,7 +234,7 @@ export default function App() {
               },
               {
                 icon: (
-                  <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="w-6 h-6 text-[#B8622A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
                   </svg>
                 ),
@@ -230,8 +250,8 @@ export default function App() {
                 title: 'G2/Capterra reviews',
                 desc: 'Sentiment shifts and new reviews on major software review platforms.',
               },
-            ].map(item => (
-              <div key={item.title} className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-[#F8FAFC]">
+            ].map((item, index) => (
+              <RevealDiv key={item.title} staggerMs={index * 60} className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-[#F8FAFC] card-hover">
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center">
                   {item.icon}
                 </div>
@@ -239,7 +259,7 @@ export default function App() {
                   <h3 className="font-semibold text-[#111827] mb-1">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
-              </div>
+              </RevealDiv>
             ))}
           </div>
         </div>
@@ -348,7 +368,7 @@ export default function App() {
                   href="#waitlist-footer"
                   className={`block text-center w-full py-3 rounded-lg font-semibold text-sm transition ${plan.popular
                     ? 'bg-teal-500 text-white hover:bg-teal-400'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-[#B8622A] text-white hover:bg-[#F07C35]'
                     }`}
                 >
                   {plan.cta}

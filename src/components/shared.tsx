@@ -2,9 +2,9 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 
 export function Logo({ dark = false }: { dark?: boolean }) {
-  const navy = dark ? '#F8FAFC' : '#1A2F4E'
-  const blue = dark ? '#60A5FA' : '#2563EB'
-  const teal = dark ? '#2DD4BF' : '#0D9488'
+  const navy = dark ? '#FAFAF6' : '#111320'
+  const blue = dark ? '#F07C35' : '#B8622A'
+  const teal = dark ? '#34D6B7' : '#1A7A6E'
   return (
     <svg width="140" height="28" viewBox="0 0 140 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="peerscope">
       <circle cx="14" cy="14" r="12" stroke={navy} strokeWidth="2" fill="none" />
@@ -83,12 +83,12 @@ export function EmailForm({
           onChange={e => setEmail(e.target.value)}
           placeholder={placeholder}
           required
-          className={`flex-1 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${size === 'large' ? 'px-4 py-3 text-base' : 'px-3 py-2 text-sm'}`}
+          className={`flex-1 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:border-transparent transition ${size === 'large' ? 'px-4 py-3 text-base' : 'px-3 py-2 text-sm'}`}
         />
         <button
           type="submit"
           disabled={status === 'loading'}
-          className={`whitespace-nowrap rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:opacity-60 disabled:cursor-not-allowed ${size === 'large' ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'}`}
+          className={`whitespace-nowrap rounded-lg bg-[#B8622A] text-white font-semibold hover:bg-[#F07C35] active:bg-[#9E5223] focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:ring-offset-2 transition disabled:opacity-60 disabled:cursor-not-allowed ${size === 'large' ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'}`}
         >
           {status === 'loading' ? 'Joining…' : buttonText}
         </button>
