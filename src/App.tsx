@@ -327,12 +327,14 @@ export default function App() {
                 cta: 'Join waitlist',
                 popular: false,
               },
-            ].map(plan => (
-              <div
+            ].map((plan, index) => (
+              <RevealDiv
                 key={plan.name}
+                scale
+                staggerMs={index * 100}
                 className={`relative rounded-2xl p-6 border ${plan.popular
                   ? 'bg-[#1A2F4E] border-[#1A2F4E] text-white shadow-xl shadow-navy/20'
-                  : 'bg-white border-gray-100'
+                  : 'bg-white border-gray-100 card-hover'
                   }`}
               >
                 {plan.popular && (
@@ -373,7 +375,7 @@ export default function App() {
                 >
                   {plan.cta}
                 </a>
-              </div>
+              </RevealDiv>
             ))}
           </div>
           <p className="text-center text-sm text-gray-500 mt-6">All prices in USD &middot; Annual billing available at 20% discount</p>
