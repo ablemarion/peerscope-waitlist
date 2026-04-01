@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { Logo, EmailForm } from './components/shared'
+import { FoundingBanner } from './components/FoundingBanner'
 import { HeroA } from './components/HeroA'
 import { HeroB } from './components/HeroB'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
@@ -95,6 +96,9 @@ function FAQ() {
 export default function App() {
   return (
     <div className="min-h-screen bg-[#FAFAF6] font-[Inter,system-ui,sans-serif]">
+
+      {/* Founding member offer banner — variant B only */}
+      <FoundingBanner />
 
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
