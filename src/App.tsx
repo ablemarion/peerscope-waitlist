@@ -151,7 +151,7 @@ function ProductFeed() {
           <div className="flex items-center gap-2">
             <span
               className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
-              style={{ color: '#818CF8', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)' }}
+              style={{ color: '#D4A843', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.2)' }}
             >
               HIRING
             </span>
@@ -575,7 +575,7 @@ export default function App() {
                   {[
                     { label: 'Pricing pages', color: '#B8622A' },
                     { label: 'Feature launches', color: '#1A7A6E' },
-                    { label: 'Job postings', color: '#818CF8' },
+                    { label: 'Job postings', color: '#D4A843' },
                     { label: 'G2/Capterra reviews', color: '#1A7A6E' },
                   ].map(tag => (
                     <span
