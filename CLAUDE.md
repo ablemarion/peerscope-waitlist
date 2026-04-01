@@ -44,6 +44,41 @@ SMB competitive intelligence platform. "Track your competitors. Not your budget.
 - Never include AI attribution in commit messages.
 - Push to `ablemarion` GitHub account using GITHUB_TOKEN env var.
 
+## Token Savings (RTK)
+
+All shell commands should be run through `rtk` for token savings. Examples:
+
+```bash
+rtk git status          # instead of: git status
+rtk git log --oneline   # instead of: git log --oneline
+rtk git diff            # instead of: git diff
+rtk ls -la              # instead of: ls -la
+```
+
+Use `rtk proxy` when you need raw unfiltered output (e.g. parsing JSON):
+
+```bash
+rtk proxy curl -s http://localhost:3100/api/health | python3 -m json.tool
+```
+
+## Browser Testing (browser-use)
+
+`browser-use` CLI is available for visual testing, QA, form testing, and site auditing:
+
+```bash
+browser-use open https://peerscope-waitlist.pages.dev    # open the site
+browser-use state                                         # list all interactive elements
+browser-use screenshot ./screenshot.png                   # capture screenshot
+browser-use screenshot --full ./full-page.png             # full-page screenshot
+browser-use click <index>                                 # click element by index
+browser-use input <index> "text"                          # fill a form field
+browser-use scroll down                                   # scroll down
+browser-use eval "document.title"                         # run JavaScript
+browser-use get html --selector ".hero"                   # extract HTML
+```
+
+Use for: visual QA, mobile testing, form validation, conversion flow testing, design review screenshots.
+
 ## Deployment
 
 - Use `wrangler` CLI for Cloudflare deployments.
