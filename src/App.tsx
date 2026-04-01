@@ -390,13 +390,10 @@ export default function App() {
             {/* Right column — cards */}
             <div className="lg:col-span-7 flex flex-col gap-5">
               <RevealDiv
-                className="rounded-2xl p-7 border-l-4 card-hover"
+                className="rounded-2xl p-7 card-hover"
                 style={{
                   background: '#0D0F1A',
-                  borderLeftColor: '#B8622A',
-                  borderTop: '1px solid rgba(184,98,42,0.14)',
-                  borderRight: '1px solid rgba(184,98,42,0.14)',
-                  borderBottom: '1px solid rgba(184,98,42,0.14)',
+                  border: '1px solid rgba(184,98,42,0.14)',
                 }}
               >
                 <blockquote
