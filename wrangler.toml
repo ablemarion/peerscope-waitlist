@@ -5,5 +5,5 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "peerscope-waitlist"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "d74e1ce9-0a54-4366-8750-7133130781a9"
 migrations_dir = "migrations"
