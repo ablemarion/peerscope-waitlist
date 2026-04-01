@@ -1,0 +1,123 @@
+/**
+ * Hero Variant A — Problem-led
+ *
+ * Angle: urgency + fear of missing competitor moves.
+ * Headline stresses the pain of finding out too late.
+ * Visual: mock in-app alert showing a competitor price change detection.
+ * CTA: "Start monitoring free"
+ */
+import { EmailForm } from './shared'
+
+function AlertMockup() {
+  return (
+    <div className="mt-12 max-w-sm mx-auto w-full select-none" aria-hidden="true">
+      {/* Outer card */}
+      <div className="bg-[#1E293B] rounded-xl border border-[#334155] p-4 text-left shadow-2xl">
+        {/* Header row */}
+        <div className="flex items-center gap-2 mb-3">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-400" />
+          </span>
+          <span className="text-xs text-gray-400 font-mono tracking-wide">peerscope alert</span>
+          <span className="ml-auto text-xs text-gray-500">2 min ago</span>
+        </div>
+
+        {/* Change card */}
+        <div className="bg-[#0F172A] rounded-lg p-3 mb-3">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-gray-300">Acme Corp — Pricing page</span>
+            <span className="text-xs bg-red-900/50 text-red-400 border border-red-900/60 px-2 py-0.5 rounded-full font-medium">
+              Price ↑
+            </span>
+          </div>
+
+          {/* Diff lines */}
+          <div className="space-y-1.5 font-mono text-xs">
+            <div className="flex items-center gap-2 bg-red-950/40 border border-red-900/30 rounded px-2 py-1.5">
+              <span className="text-red-500 font-bold select-none">−</span>
+              <span className="text-red-300 line-through opacity-70">Pro Plan: $79/mo</span>
+            </div>
+            <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-900/30 rounded px-2 py-1.5">
+              <span className="text-emerald-500 font-bold select-none">+</span>
+              <span className="text-emerald-300">Pro Plan: $99/mo</span>
+              <span className="ml-auto text-emerald-600 text-xs font-sans font-semibold">+25%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Second alert preview */}
+        <div className="bg-[#0F172A] rounded-lg p-3 mb-3 opacity-60">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-400">Rival Inc — Jobs page</span>
+            <span className="text-xs bg-blue-900/50 text-blue-400 border border-blue-900/60 px-2 py-0.5 rounded-full font-medium">
+              New role
+            </span>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">Sr. Engineer — AI/ML Platform <span className="text-gray-600">· 3 hrs ago</span></p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2">
+          <button className="flex-1 text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md font-semibold transition">
+            View full diff
+          </button>
+          <button className="text-xs text-gray-400 hover:text-gray-200 px-3 py-2 rounded-md border border-gray-700 transition">
+            Dismiss
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function HeroA() {
+  return (
+    <section className="bg-[#0F172A] text-white pt-20 pb-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 bg-teal-900/50 text-teal-300 border border-teal-700 rounded-full px-4 py-1.5 text-sm font-medium mb-8">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400" />
+          </span>
+          Now in private waitlist
+        </div>
+
+        {/* Headline */}
+        <h1
+          className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 tracking-tight"
+          style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
+        >
+          Your competitors changed their pricing{' '}
+          <span className="text-red-400">last week.</span>
+          <br className="hidden sm:block" />
+          Did you notice?
+        </h1>
+
+        {/* Sub-headline */}
+        <p className="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+          Peerscope monitors competitor pricing pages, feature releases, and job postings 24/7.
+          Get instant alerts the moment something changes - not a weekly digest.
+        </p>
+
+        {/* CTA */}
+        <div className="max-w-lg mx-auto mb-8">
+          <EmailForm placeholder="Enter your work email" buttonText="Start monitoring free" size="large" />
+          <p className="mt-3 text-sm text-gray-500">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
+        </div>
+
+        {/* Social proof */}
+        <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
+          <svg className="w-4 h-4 text-teal-400" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          Used by 200+ SaaS teams (placeholder - real at launch)
+        </div>
+
+        {/* Alert mockup visual */}
+        <AlertMockup />
+      </div>
+    </section>
+  )
+}

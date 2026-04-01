@@ -1,103 +1,19 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
 import './App.css'
+import { Logo, EmailForm } from './components/shared'
+import { HeroA } from './components/HeroA'
+import { HeroB } from './components/HeroB'
 
-// Logo SVG inline - scope reticle mark + wordmark
-function Logo({ dark = false }: { dark?: boolean }) {
-  const navy = dark ? '#F8FAFC' : '#1A2F4E'
-  const blue = dark ? '#60A5FA' : '#2563EB'
-  const teal = dark ? '#2DD4BF' : '#0D9488'
-  return (
-    <svg width="140" height="28" viewBox="0 0 140 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="peerscope">
-      {/* Reticle icon */}
-      <circle cx="14" cy="14" r="12" stroke={navy} strokeWidth="2" fill="none" />
-      <circle cx="14" cy="14" r="4" fill={teal} />
-      <line x1="14" y1="2" x2="14" y2="8" stroke={navy} strokeWidth="2" strokeLinecap="round" />
-      <line x1="14" y1="20" x2="14" y2="26" stroke={navy} strokeWidth="2" strokeLinecap="round" />
-      <line x1="2" y1="14" x2="8" y2="14" stroke={navy} strokeWidth="2" strokeLinecap="round" />
-      <line x1="20" y1="14" x2="26" y2="14" stroke={navy} strokeWidth="2" strokeLinecap="round" />
-      {/* Wordmark */}
-      <text x="32" y="19" fontFamily="'Plus Jakarta Sans', Inter, system-ui, sans-serif" fontSize="15" fontWeight="400" fill={navy}>peer</text>
-      <text x="62" y="19" fontFamily="'Plus Jakarta Sans', Inter, system-ui, sans-serif" fontSize="15" fontWeight="700" fill={blue}>scope</text>
-    </svg>
-  )
+// Read ?variant=a or ?variant=b from the URL. Defaults to 'b'.
+function useHeroVariant(): 'a' | 'b' {
+  const params = new URLSearchParams(window.location.search)
+  const v = params.get('variant')?.toLowerCase()
+  return v === 'a' ? 'a' : 'b'
 }
 
-interface EmailFormProps {
-  placeholder?: string
-  buttonText?: string
-  size?: 'default' | 'large'
-}
-
-function EmailForm({ placeholder = 'Enter your work email', buttonText = 'Join waitlist', size = 'default' }: EmailFormProps) {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [errorMsg, setErrorMsg] = useState('')
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-    if (!email) return
-    setStatus('loading')
-    setErrorMsg('')
-
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      if (res.ok) {
-        setStatus('success')
-        setEmail('')
-      } else {
-        const data = await res.json().catch(() => ({}))
-        setErrorMsg((data as { error?: string }).error || 'Something went wrong. Please try again.')
-        setStatus('error')
-      }
-    } catch {
-      setErrorMsg('Something went wrong. Please try again.')
-      setStatus('error')
-    }
-  }
-
-  if (status === 'success') {
-    return (
-      <div className={`flex items-center gap-3 ${size === 'large' ? 'text-base' : 'text-sm'}`}>
-        <div className="flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg px-4 py-3 font-medium">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="8" cy="8" r="8" fill="#059669" />
-            <path d="M5 8l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          You're on the waitlist! We'll be in touch.
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className={`flex gap-2 ${size === 'large' ? 'flex-col sm:flex-row' : 'flex-row'}`}>
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder={placeholder}
-          required
-          className={`flex-1 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${size === 'large' ? 'px-4 py-3 text-base' : 'px-3 py-2 text-sm'}`}
-        />
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className={`whitespace-nowrap rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:opacity-60 disabled:cursor-not-allowed ${size === 'large' ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'}`}
-        >
-          {status === 'loading' ? 'Joining…' : buttonText}
-        </button>
-      </div>
-      {status === 'error' && (
-        <p className="mt-2 text-sm text-red-600">{errorMsg}</p>
-      )}
-    </form>
-  )
+function Hero() {
+  const variant = useHeroVariant()
+  return variant === 'a' ? <HeroA /> : <HeroB />
 }
 
 const faqs = [
@@ -171,42 +87,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="bg-[#0F172A] text-white pt-20 pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-teal-900/50 text-teal-300 border border-teal-700 rounded-full px-4 py-1.5 text-sm font-medium mb-8">
-            <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="currentColor">
-              <circle cx="7" cy="7" r="7" />
-            </svg>
-            Now in private waitlist
-          </div>
-
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 tracking-tight"
-            style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
-          >
-            Track your competitors.{' '}
-            <span className="text-teal-400">Not your budget.</span>
-          </h1>
-
-          <p className="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Get alerts when competitors change their pricing, launch features, or post jobs.
-            Built for SaaS teams. From $49/mo.
-          </p>
-
-          <div className="max-w-lg mx-auto mb-8">
-            <EmailForm placeholder="Enter your work email" buttonText="Get early access" size="large" />
-            <p className="mt-3 text-sm text-gray-500">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
-          </div>
-
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-            <svg className="w-4 h-4 text-teal-400" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            Used by 200+ SaaS teams (placeholder - real at launch)
-          </div>
-        </div>
-      </section>
+      {/* Hero — swap via ?variant=a (problem-led) or ?variant=b (value-led, default) */}
+      <Hero />
 
       {/* Problem */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
