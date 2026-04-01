@@ -296,7 +296,7 @@ function FAQ() {
         <div key={i}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
-            className="w-full flex justify-between items-center py-4 text-left text-gray-900 font-medium hover:text-[#B8622A] transition focus:outline-none"
+            className="w-full flex justify-between items-center py-4 text-left text-gray-900 font-medium hover:text-[#B8622A] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8622A] focus-visible:rounded"
           >
             <span>{faq.q}</span>
             <svg
@@ -330,7 +330,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           <Logo dark />
           <div className="flex items-center gap-4">
-            <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition">Pricing</a>
+            <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
               className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition hover:brightness-110"
@@ -733,7 +733,7 @@ export default function App() {
                         >
                           <a
                             href="#waitlist-footer"
-                            className="inline-block py-2.5 px-5 rounded-lg font-semibold text-sm text-white transition hover:brightness-110"
+                            className="inline-block py-3 px-5 rounded-lg font-semibold text-sm text-white transition hover:brightness-110"
                             style={{
                               background: plan.popular ? '#B8622A' : 'rgba(250,250,246,0.08)',
                               border: plan.popular ? 'none' : '1px solid rgba(250,250,246,0.12)',
