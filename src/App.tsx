@@ -399,8 +399,7 @@ export default function App() {
           <Logo dark />
           <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} peerscope. All rights reserved.</p>
           <div className="flex gap-5 text-sm text-gray-500">
-            <span>Privacy</span>
-            <span>Terms</span>
+            <a href="mailto:hello@peerscope.io" className="hover:text-gray-300 transition-colors">Contact</a>
           </div>
         </div>
       </footer>
