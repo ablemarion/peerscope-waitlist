@@ -404,7 +404,12 @@ export default function App() {
                 </blockquote>
                 <p className="text-sm mb-5" style={{ color: 'rgba(250,250,246,0.35)' }}>— SaaS founder, 12-person team</p>
                 <div className="flex items-start gap-4">
-                  <span className="text-3xl flex-shrink-0">😤</span>
+                  <svg className="w-6 h-6 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" />
+                    <path d="M8 15s1-2 4-2 4 2 4 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <circle cx="9" cy="10" r="1" fill="currentColor" />
+                    <circle cx="15" cy="10" r="1" fill="currentColor" />
+                  </svg>
                   <div>
                     <h3 className="font-semibold text-white mb-1">Finding out too late</h3>
                     <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
@@ -420,7 +425,11 @@ export default function App() {
                   className="rounded-2xl p-6 card-hover"
                   style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.1)' }}
                 >
-                  <div className="text-3xl mb-4">💸</div>
+                  <svg className="w-6 h-6 mb-4" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5" />
+                    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="M12 10v4M10 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
+                  </svg>
                   <h3 className="font-semibold text-white mb-2">Crayon costs $20k/year</h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
                     Enterprise platforms like Crayon and Klue start at $12,500/year. Built for analyst teams, not founders.
@@ -431,7 +440,11 @@ export default function App() {
                   className="rounded-2xl p-6 card-hover"
                   style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.1)' }}
                 >
-                  <div className="text-3xl mb-4">⏱️</div>
+                  <svg className="w-6 h-6 mb-4" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
+                    <circle cx="12" cy="13" r="8" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+                    <path d="M12 9v4l2.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9 2h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5" />
+                  </svg>
                   <h3 className="font-semibold text-white mb-2">Manual checks waste hours</h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
                     Manually checking 5 competitor websites every Monday takes an hour - and you still miss things.
