@@ -5,18 +5,20 @@ interface Env {
 
 interface WaitlistRequest {
   email: string
+  source?: string
 }
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-async function notifyNewSignup(webhookUrl: string, email: string, count: number): Promise<void> {
+async function notifyNewSignup(webhookUrl: string, email: string, count: number, source: string): Promise<void> {
+  const sourceTag = source !== 'direct' ? ` via \`${source}\`` : ''
   await fetch(webhookUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      text: `🎉 New Peerscope waitlist signup: \`${email}\` (total: ${count})`,
+      text: `🎉 New Peerscope waitlist signup: \`${email}\`${sourceTag} (total: ${count})`,
     }),
   })
 }
@@ -31,6 +33,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const body = await context.request.json<WaitlistRequest>()
     const email = (body.email ?? '').trim().toLowerCase()
+    const source = (body.source ?? 'direct').slice(0, 100)
 
     if (!email || !isValidEmail(email)) {
       return Response.json(
@@ -40,9 +43,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     const result = await context.env.DB.prepare(
-      'INSERT OR IGNORE INTO waitlist (email, created_at) VALUES (?, ?)'
+      'INSERT OR IGNORE INTO waitlist (email, source, created_at) VALUES (?, ?, ?)'
     )
-      .bind(email, new Date().toISOString())
+      .bind(email, source, new Date().toISOString())
       .run()
 
     // Notify on new signups only (not duplicates)
@@ -52,7 +55,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         'SELECT COUNT(*) as count FROM waitlist'
       ).first<{ count: number }>()
       context.waitUntil(
-        notifyNewSignup(context.env.NOTIFY_WEBHOOK_URL, email, countResult?.count ?? 0)
+        notifyNewSignup(context.env.NOTIFY_WEBHOOK_URL, email, countResult?.count ?? 0, source)
       )
     }
 
