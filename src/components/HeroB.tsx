@@ -98,8 +98,8 @@ export function HeroB() {
 
         {/* Headline */}
         <h1
-          className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 tracking-tight"
-          style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
+          className="font-bold leading-tight mb-6"
+          style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800, letterSpacing: '-0.03em', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}
         >
           Track your competitors.{' '}
           <span className="text-teal-400">Not your budget.</span>

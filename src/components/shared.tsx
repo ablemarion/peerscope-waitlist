@@ -13,8 +13,8 @@ export function Logo({ dark = false }: { dark?: boolean }) {
       <line x1="14" y1="20" x2="14" y2="26" stroke={navy} strokeWidth="2" strokeLinecap="round" />
       <line x1="2" y1="14" x2="8" y2="14" stroke={navy} strokeWidth="2" strokeLinecap="round" />
       <line x1="20" y1="14" x2="26" y2="14" stroke={navy} strokeWidth="2" strokeLinecap="round" />
-      <text x="32" y="19" fontFamily="'Plus Jakarta Sans', Inter, system-ui, sans-serif" fontSize="15" fontWeight="400" fill={navy}>peer</text>
-      <text x="62" y="19" fontFamily="'Plus Jakarta Sans', Inter, system-ui, sans-serif" fontSize="15" fontWeight="700" fill={blue}>scope</text>
+      <text x="32" y="19" fontFamily="'Syne', 'Plus Jakarta Sans', system-ui, sans-serif" fontSize="16" fontWeight="400" fill={navy}>peer</text>
+      <text x="64" y="19" fontFamily="'Syne', 'Plus Jakarta Sans', system-ui, sans-serif" fontSize="16" fontWeight="700" fill={blue}>scope</text>
     </svg>
   )
 }

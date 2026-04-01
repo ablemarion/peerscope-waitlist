@@ -9,16 +9,18 @@ function RevealDiv({
   staggerMs = 0,
   scale = false,
   className,
+  style,
   children,
 }: {
   staggerMs?: number
   scale?: boolean
   className?: string
+  style?: React.CSSProperties
   children: React.ReactNode
 }) {
   const ref = useRevealOnScroll(staggerMs)
   return (
-    <div ref={ref as React.Ref<HTMLDivElement>} className={`${scale ? 'reveal-scale' : 'reveal'} ${className ?? ''}`}>
+    <div ref={ref as React.Ref<HTMLDivElement>} className={`${scale ? 'reveal-scale' : 'reveal'} ${className ?? ''}`} style={style}>
       {children}
     </div>
   )
@@ -92,7 +94,7 @@ function FAQ() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-[Inter,system-ui,sans-serif]">
+    <div className="min-h-screen bg-[#FAFAF6] font-[Inter,system-ui,sans-serif]">
 
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
@@ -111,7 +113,10 @@ export default function App() {
       <Hero />
 
       {/* Problem */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section
+        className="py-20 px-4 sm:px-6 lg:px-8"
+        style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(184,98,42,0.04) 0%, transparent 60%), #FAFAF6' }}
+      >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <h2
@@ -124,36 +129,36 @@ export default function App() {
             </h2>
             <p className="text-lg text-gray-500 max-w-xl mx-auto">There's nothing in between - until now.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: '💸',
-                title: 'Crayon costs $20k/year',
-                desc: 'Enterprise platforms like Crayon and Klue start at $12,500/year. Built for analyst teams, not founders.',
-              },
-              {
-                icon: '⏱️',
-                title: 'Manual checks waste hours',
-                desc: 'Manually checking 5 competitor websites every Monday takes an hour - and you still miss things.',
-              },
-              {
-                icon: '😤',
-                title: 'Finding out too late',
-                desc: '"I found out my competitor changed their pricing from a prospect, not from monitoring." - Every SaaS founder',
-              },
-            ].map((card, index) => (
-              <RevealDiv key={card.title} staggerMs={index * 80} className="bg-[#F8FAFC] rounded-xl p-6 border border-gray-100 card-hover">
-                <div className="text-3xl mb-4">{card.icon}</div>
-                <h3 className="font-semibold text-[#111827] mb-2">{card.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            {/* Dominant card - "Finding out too late" */}
+            <RevealDiv className="md:col-span-3 bg-white rounded-xl p-8 border border-gray-100 border-l-4 border-l-[#B8622A] card-hover flex flex-col">
+              <blockquote className="italic text-[#111320] text-lg leading-relaxed mb-2">
+                "I found out my competitor changed their pricing from a prospect, not from monitoring."
+              </blockquote>
+              <p className="text-sm text-gray-400 mb-6">— SaaS founder, 12-person team</p>
+              <div className="text-3xl mb-3">😤</div>
+              <h3 className="font-semibold text-[#111827] mb-2">Finding out too late</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">Your competitor moves. You find out from a prospect. Every week you're not monitoring is a week you're flying blind.</p>
+            </RevealDiv>
+            {/* Supporting cards column */}
+            <div className="md:col-span-2 flex flex-col gap-6">
+              <RevealDiv staggerMs={80} className="flex-1 bg-white rounded-xl p-6 border border-gray-100 card-hover">
+                <div className="text-3xl mb-4">💸</div>
+                <h3 className="font-semibold text-[#111827] mb-2">Crayon costs $20k/year</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Enterprise platforms like Crayon and Klue start at $12,500/year. Built for analyst teams, not founders.</p>
               </RevealDiv>
-            ))}
+              <RevealDiv staggerMs={160} className="flex-1 bg-white rounded-xl p-6 border border-gray-100 card-hover">
+                <div className="text-3xl mb-4">⏱️</div>
+                <h3 className="font-semibold text-[#111827] mb-2">Manual checks waste hours</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Manually checking 5 competitor websites every Monday takes an hour - and you still miss things.</p>
+              </RevealDiv>
+            </div>
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAF6]">
         <div className="max-w-4xl mx-auto text-center">
           <h2
             className="text-3xl sm:text-4xl font-bold text-[#111827] mb-4"
@@ -180,7 +185,7 @@ export default function App() {
                 step: '3',
                 title: 'You get alerts',
                 desc: 'Instant Slack or email notification the moment something changes. Not a weekly digest.',
-                color: 'bg-[#1A2F4E]',
+                color: 'bg-[#111320]',
               },
             ].map(item => (
               <div key={item.step} className="flex flex-col items-center text-center">
@@ -251,7 +256,7 @@ export default function App() {
                 desc: 'Sentiment shifts and new reviews on major software review platforms.',
               },
             ].map((item, index) => (
-              <RevealDiv key={item.title} staggerMs={index * 60} className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-[#F8FAFC] card-hover">
+              <RevealDiv key={item.title} staggerMs={index * 60} className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-[#FAFAF6] card-hover">
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center">
                   {item.icon}
                 </div>
@@ -266,7 +271,7 @@ export default function App() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
+      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAF6]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <h2
@@ -277,7 +282,7 @@ export default function App() {
             </h2>
             <p className="text-gray-500 text-lg">14-day free trial on all plans. No credit card required.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             {[
               {
                 name: 'Starter',
@@ -332,16 +337,16 @@ export default function App() {
                 key={plan.name}
                 scale
                 staggerMs={index * 100}
-                className={`relative rounded-2xl p-6 border ${plan.popular
-                  ? 'bg-[#1A2F4E] border-[#1A2F4E] text-white shadow-xl shadow-navy/20'
-                  : 'bg-white border-gray-100 card-hover'
+                className={`relative rounded-2xl p-6 border transition-all duration-200 ${plan.popular
+                  ? 'bg-[#111320] border-[#B8622A]/40 border-l-4 border-l-[#B8622A] text-white'
+                  : 'bg-white border-gray-100 opacity-85 hover:opacity-100 hover:-translate-y-1 hover:shadow-lg card-hover'
                   }`}
+                style={plan.popular ? {
+                  transform: 'translateY(-24px)',
+                  boxShadow: '0 0 40px 0 rgba(184,98,42,0.2), 0 20px 60px -20px rgba(17,19,32,0.4)',
+                } : undefined}
               >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-teal-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Most popular</span>
-                  </div>
-                )}
+                {false && null /* elevation communicates popularity - pill removed */}
                 <div className="mb-6">
                   <h3
                     className={`text-lg font-bold mb-1 ${plan.popular ? 'text-white' : 'text-[#111827]'}`}
@@ -398,7 +403,7 @@ export default function App() {
       </section>
 
       {/* Footer CTA */}
-      <section id="waitlist-footer" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0F172A] text-white">
+      <section id="waitlist-footer" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0D0F1A] text-white">
         <div className="max-w-2xl mx-auto text-center">
           <h2
             className="text-3xl sm:text-4xl font-bold mb-4"
@@ -416,7 +421,7 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0F172A] border-t border-gray-800 py-8 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-[#0D0F1A] border-t border-gray-800 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo dark />
           <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} peerscope. All rights reserved.</p>
