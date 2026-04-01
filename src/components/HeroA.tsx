@@ -6,6 +6,7 @@
  * Visual: mock in-app alert showing a competitor price change detection.
  * CTA: "Start monitoring free"
  */
+import { useState, useEffect } from 'react'
 import { EmailForm } from './shared'
 
 function AlertMockup() {
@@ -72,6 +73,17 @@ function AlertMockup() {
 }
 
 export function HeroA() {
+  const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/waitlist/count')
+      .then(res => res.ok ? res.json() : null)
+      .then((data: { count: number } | null) => {
+        if (data && data.count > 0) setWaitlistCount(data.count)
+      })
+      .catch(() => {/* show nothing on error */})
+  }, [])
+
   return (
     <section className="bg-[#0F172A] text-white pt-20 pb-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto text-center">
@@ -105,6 +117,15 @@ export function HeroA() {
         <div className="max-w-lg mx-auto mb-8">
           <EmailForm placeholder="Enter your work email" buttonText="Start monitoring free" size="large" />
           <p className="mt-3 text-sm text-gray-500">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
+          {waitlistCount !== null && waitlistCount >= 20 ? (
+            <p className="mt-2 text-sm text-teal-400 font-medium">
+              Join {waitlistCount.toLocaleString()} others on the waitlist
+            </p>
+          ) : (
+            <p className="mt-2 text-sm text-teal-400 font-medium">
+              Early access — limited spots before public launch
+            </p>
+          )}
         </div>
 
         {/* Alert mockup visual */}
