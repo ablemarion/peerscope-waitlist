@@ -33,6 +33,7 @@ export function EmailForm({
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [copied, setCopied] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -40,11 +41,14 @@ export function EmailForm({
     setStatus('loading')
     setErrorMsg('')
 
+    const params = new URLSearchParams(window.location.search)
+    const source = params.get('utm_source') || params.get('ref') || 'direct'
+
     try {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, source }),
       })
       if (res.ok) {
         setStatus('success')
@@ -61,15 +65,31 @@ export function EmailForm({
   }
 
   if (status === 'success') {
+    function handleShare() {
+      navigator.clipboard.writeText('https://peerscope-waitlist.pages.dev').catch(() => {})
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+
     return (
-      <div className={`flex items-center gap-3 ${size === 'large' ? 'text-base' : 'text-sm'}`}>
-        <div className="flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg px-4 py-3 font-medium">
+      <div className="flex flex-col items-center gap-3">
+        <div className={`flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg px-4 py-3 font-medium ${size === 'large' ? 'text-base' : 'text-sm'}`}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="8" cy="8" r="8" fill="#059669" />
             <path d="M5 8l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           You're on the waitlist! We'll be in touch.
         </div>
+        <button
+          type="button"
+          onClick={handleShare}
+          className="text-sm text-gray-400 hover:text-gray-200 transition flex items-center gap-1.5"
+        >
+          {copied
+            ? <><span className="text-teal-400">✓</span> Link copied!</>
+            : <>Know a founder who'd want this? Share the link <span aria-hidden="true">→</span></>
+          }
+        </button>
       </div>
     )
   }

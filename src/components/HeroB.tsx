@@ -115,9 +115,13 @@ export function HeroB() {
         <div className="max-w-lg mx-auto mb-8">
           <EmailForm placeholder="Enter your work email" buttonText="Get early access" size="large" />
           <p className="mt-3 text-sm text-gray-500">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
-          {waitlistCount !== null && (
+          {waitlistCount !== null && waitlistCount >= 20 ? (
             <p className="mt-2 text-sm text-teal-400 font-medium">
               Join {waitlistCount.toLocaleString()} others on the waitlist
+            </p>
+          ) : (
+            <p className="mt-2 text-sm text-teal-400 font-medium">
+              Early access — limited spots before public launch
             </p>
           )}
         </div>
