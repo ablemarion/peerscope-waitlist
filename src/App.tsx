@@ -408,7 +408,7 @@ export default function App() {
           </h2>
           <p className="text-gray-400 text-lg mb-10">Free for 14 days. No credit card required.</p>
           <div className="max-w-md mx-auto">
-            <EmailForm placeholder="Enter your work email" buttonText="Join the waitlist" size="large" />
+            <EmailForm placeholder="Enter your work email" buttonText="Join the waitlist" size="large" variant="dark" />
           </div>
         </div>
       </section>

@@ -113,7 +113,7 @@ export function HeroB() {
 
         {/* CTA */}
         <div className="max-w-lg mx-auto mb-8">
-          <EmailForm placeholder="Enter your work email" buttonText="Get early access" size="large" />
+          <EmailForm placeholder="Enter your work email" buttonText="Get early access" size="large" variant="dark" />
           <p className="mt-3 text-sm text-gray-500">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
           {waitlistCount !== null && waitlistCount >= 20 ? (
             <p className="mt-2 text-sm text-teal-400 font-medium">

@@ -146,6 +146,27 @@
   transform: translateY(0) scale(1);
 }
 
+/* Scope icon pulse animation (success state) */
+@keyframes scope-ping {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.scope-ping {
+  animation: scope-ping 1.4s ease-out infinite;
+}
+
+.scope-ping-delay {
+  animation-delay: 300ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scope-ping {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Card hover states */
 .card-hover {
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
