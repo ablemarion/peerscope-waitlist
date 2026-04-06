@@ -221,10 +221,14 @@ function SetupFlow() {
             <button
               key={i}
               onClick={() => setStep(i)}
-              className="h-1 rounded-full flex-1 transition-all"
-              style={{ background: step === i ? '#B8622A' : 'rgba(184,98,42,0.15)' }}
+              className="flex-1 min-h-[44px] flex items-center justify-center"
               aria-label={`Go to step ${i + 1}`}
-            />
+            >
+              <span
+                className="h-1 w-full rounded-full transition-all"
+                style={{ background: step === i ? '#B8622A' : 'rgba(184,98,42,0.15)' }}
+              />
+            </button>
           ))}
         </div>
       </div>
@@ -1039,7 +1043,7 @@ export default function App() {
                         >
                           <a
                             href="#waitlist-footer"
-                            className="inline-block py-3 px-5 rounded-lg font-semibold text-sm text-white transition hover:brightness-110"
+                            className="inline-block py-3.5 px-5 rounded-lg font-semibold text-sm text-white transition hover:brightness-110"
                             style={{
                               background: plan.popular ? '#B8622A' : 'rgba(250,250,246,0.08)',
                               border: plan.popular ? 'none' : '1px solid rgba(250,250,246,0.12)',
