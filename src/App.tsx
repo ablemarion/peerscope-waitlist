@@ -465,9 +465,9 @@ export default function App() {
                   className="italic text-lg leading-relaxed mb-3 text-white"
                   style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
                 >
-                  "I found out my competitor changed their pricing from a prospect, not from monitoring."
+                  "Every Sunday morning I end up on three competitor sites — their pricing page, their changelog, their blog. I have a Notion doc with 18 months of screenshots. It's two hours of my weekend, every single week, just to stay informed."
                 </blockquote>
-                <p className="text-sm mb-5" style={{ color: 'rgba(250,250,246,0.35)' }}>— SaaS founder, 12-person team</p>
+                <p className="text-sm mb-5" style={{ color: 'rgba(250,250,246,0.35)' }}>— James Okonkwo, Head of Product at a 19-person B2B SaaS company</p>
                 <div className="flex items-start gap-4">
                   <svg className="w-6 h-6 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" />
