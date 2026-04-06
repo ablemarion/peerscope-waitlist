@@ -157,7 +157,7 @@ export function HeroB() {
 
             {/* CTA */}
             <div className="max-w-lg mb-6">
-              <EmailForm placeholder="Enter your work email" buttonText="Get early access" size="large" variant="dark" />
+              <EmailForm placeholder="Enter your work email" buttonText="Claim founding price" size="large" variant="dark" />
               {waitlistCount !== null && waitlistCount > 0 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
                   <span aria-hidden="true">✓ </span>
@@ -168,12 +168,15 @@ export function HeroB() {
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
               </p>
+              <p className="mt-3 text-xs font-semibold" style={{ color: 'rgba(240,124,53,0.8)' }}>
+                &#9889; Founding price closes April 15 &mdash; locked for life after signup
+              </p>
               {/* Mobile trust line — replaces hidden pricing table */}
               <p
-                className="mt-4 text-sm font-medium md:hidden"
+                className="mt-3 text-sm font-medium md:hidden"
                 style={{ color: 'rgba(52,214,183,0.85)' }}
               >
-                From $49/mo &middot; Save ~$19,400/yr vs Crayon
+                Founding price $49/mo &middot; Save ~$19,400/yr vs Crayon
               </p>
             </div>
           </div>
