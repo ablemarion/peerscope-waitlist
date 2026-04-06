@@ -2,14 +2,9 @@ import { useState } from 'react'
 
 const STORAGE_KEY = 'peerscope_founding_banner_dismissed'
 
-function useVariant(): 'a' | 'b' {
+export function FoundingBanner() {
   const params = new URLSearchParams(window.location.search)
   const v = params.get('variant')?.toLowerCase()
-  return v === 'a' ? 'a' : 'b'
-}
-
-export function FoundingBanner() {
-  const variant = useVariant()
   const [dismissed, setDismissed] = useState(() => {
     try {
       return localStorage.getItem(STORAGE_KEY) === '1'
@@ -18,7 +13,8 @@ export function FoundingBanner() {
     }
   })
 
-  if (variant === 'a' || dismissed) return null
+  // Only show for variant B (default); suppress for variant A and C
+  if (v === 'a' || v === 'c' || dismissed) return null
 
   function dismiss() {
     try {

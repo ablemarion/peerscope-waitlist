@@ -126,7 +126,7 @@ export function EmailForm({
         <button
           type="submit"
           disabled={status === 'loading'}
-          className={`whitespace-nowrap rounded-lg bg-[#B8622A] text-white font-semibold hover:bg-[#F07C35] hover:shadow-lg hover:shadow-[#B8622A]/30 hover:-translate-y-px active:bg-[#9E5223] active:translate-y-0 active:shadow-none focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:ring-offset-2 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none ${size === 'large' ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'}`}
+          className={`whitespace-nowrap rounded-lg bg-[#B8622A] text-white font-semibold hover:bg-[#F07C35] hover:shadow-lg hover:shadow-[#B8622A]/30 hover:-translate-y-px active:bg-[#9E5223] active:translate-y-0 active:shadow-none focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:ring-offset-2 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none ${size === 'large' ? 'w-full sm:w-auto px-6 py-3 text-base' : 'px-4 py-2 text-sm'}`}
         >
           {status === 'loading' ? 'Joining…' : buttonText}
         </button>

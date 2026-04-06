@@ -516,15 +516,13 @@ export default function App() {
                   </p>
                 </RevealDiv>
               </div>
-              <div className="flex justify-end mt-8">
-                <a
-                  href="#pricing"
-                  className="text-sm font-medium transition hover:opacity-80"
-                  style={{ color: '#B8622A' }}
-                >
-                  Already convinced? Skip to pricing →
-                </a>
-              </div>
+              <a
+                href="#pricing"
+                className="text-sm font-medium transition hover:opacity-80 mt-8 inline-flex items-center py-3"
+                style={{ color: '#B8622A' }}
+              >
+                Already convinced? Skip to pricing →
+              </a>
             </div>
 
           </div>
@@ -697,7 +695,7 @@ export default function App() {
                 </div>
                 <a
                   href="#waitlist-footer"
-                  className="text-sm font-medium mt-6 block transition hover:opacity-80"
+                  className="text-sm font-medium mt-6 block py-3 transition hover:opacity-80"
                   style={{ color: '#B8622A' }}
                 >
                   See all signals Peerscope tracks →
@@ -758,7 +756,7 @@ export default function App() {
                 <button
                   key={option}
                   onClick={() => setBilling(option)}
-                  className="text-sm px-4 py-1.5 rounded-full transition font-mono"
+                  className="text-sm px-4 py-3 rounded-full transition font-mono"
                   style={billing === option ? {
                     background: 'rgba(184,98,42,0.15)',
                     border: '1px solid rgba(184,98,42,0.35)',
@@ -771,7 +769,7 @@ export default function App() {
                   }}
                   aria-pressed={billing === option}
                 >
-                  {option === 'monthly' ? 'Monthly' : 'Annual  save 20%'}
+                  {option === 'monthly' ? 'Monthly' : 'Annual - save 20%'}
                 </button>
               ))}
             </div>
