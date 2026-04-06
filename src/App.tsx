@@ -237,14 +237,23 @@ function SetupFlow() {
   )
 }
 
-// Read ?variant=a/b/c/d from the URL. Defaults to 'b'.
-function useHeroVariant(): 'a' | 'b' | 'c' | 'd' {
+// Assign and persist a hero variant for this session.
+// URL param ?variant=a/b/c/d overrides random assignment.
+// Without param: equal 25% chance of each variant, persisted in sessionStorage.
+const HERO_VARIANTS = ['a', 'b', 'c', 'd'] as const
+type HeroVariant = typeof HERO_VARIANTS[number]
+
+function useHeroVariant(): HeroVariant {
   const params = new URLSearchParams(window.location.search)
-  const v = params.get('variant')?.toLowerCase()
-  if (v === 'a') return 'a'
-  if (v === 'c') return 'c'
-  if (v === 'd') return 'd'
-  return 'b'
+  const urlParam = params.get('variant')?.toLowerCase()
+  if (urlParam === 'a' || urlParam === 'b' || urlParam === 'c' || urlParam === 'd') {
+    return urlParam
+  }
+  const stored = sessionStorage.getItem('hero_variant') as HeroVariant | null
+  if (stored && HERO_VARIANTS.includes(stored)) return stored
+  const assigned = HERO_VARIANTS[Math.floor(Math.random() * HERO_VARIANTS.length)]
+  sessionStorage.setItem('hero_variant', assigned)
+  return assigned
 }
 
 function Hero() {
