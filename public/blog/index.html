@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog - Competitive Intelligence for SMBs | Peerscope</title>
+    <meta name="description" content="Guides and insights on competitor monitoring, pricing intelligence, and competitive strategy for small and medium businesses." />
+    <meta property="og:site_name" content="Peerscope" />
+    <meta property="og:title" content="Blog - Competitive Intelligence for SMBs | Peerscope" />
+    <meta property="og:description" content="Guides and insights on competitor monitoring, pricing intelligence, and competitive strategy for small and medium businesses." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:url" content="https://peerscope-waitlist.pages.dev/blog/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+    <meta name="twitter:title" content="Blog - Competitive Intelligence for SMBs | Peerscope" />
+    <meta name="twitter:description" content="Guides and insights on competitor monitoring, pricing intelligence, and competitive strategy for small and medium businesses." />
+    <link rel="canonical" href="https://peerscope-waitlist.pages.dev/blog/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0D0F1A" />
+    <link rel="preload" as="font" href="/fonts/syne-latin.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/inter-latin.woff2" type="font/woff2" crossorigin>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      @font-face {
+        font-family: 'Syne';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: swap;
+        src: url('/fonts/syne-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400 600;
+        font-display: swap;
+        src: url('/fonts/inter-latin.woff2') format('woff2');
+      }
+
+      :root {
+        --bg: #0D0F1A;
+        --surface: #13162A;
+        --border: rgba(250,250,246,0.08);
+        --text: rgba(250,250,246,0.9);
+        --muted: rgba(250,250,246,0.45);
+        --accent: #F59E0B;
+        --accent-hover: #FBBF24;
+      }
+
+      html { background: var(--bg); color: var(--text); }
+
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 1rem;
+        line-height: 1.7;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+      nav {
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        text-decoration: none;
+      }
+      .logo:hover { color: var(--text); text-decoration: none; }
+      .logo span { color: var(--accent); }
+
+      .nav-cta {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--accent);
+        border: 1px solid rgba(245,158,11,0.4);
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        transition: background 0.15s, border-color 0.15s;
+        text-decoration: none;
+      }
+      .nav-cta:hover {
+        background: rgba(245,158,11,0.1);
+        border-color: var(--accent);
+        text-decoration: none;
+        color: var(--accent-hover);
+      }
+
+      .wrapper {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 5rem;
+      }
+
+      .page-header {
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 2rem;
+      }
+
+      .page-header h1 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        color: #FAFAFF;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-header p {
+        font-size: 1rem;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .post-card {
+        display: block;
+        padding: 1.75rem 0;
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+        transition: none;
+      }
+      .post-card:last-child { border-bottom: none; }
+      .post-card:hover { text-decoration: none; }
+      .post-card:hover .post-title { color: var(--accent); }
+
+      .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        margin-bottom: 0.625rem;
+      }
+
+      .tag {
+        background: rgba(245,158,11,0.12);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+
+      .post-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        color: #FAFAFF;
+        margin-bottom: 0.5rem;
+        transition: color 0.15s;
+      }
+
+      .post-excerpt {
+        font-size: 0.9375rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .post-read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--accent);
+        margin-top: 0.75rem;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2rem 1.5rem;
+      }
+      .footer-inner {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+
+      @media (min-width: 640px) {
+        .footer-inner {
+          flex-direction: row;
+          justify-content: space-between;
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="logo">peer<span>scope</span></a>
+        <a href="/?utm_source=blog&utm_medium=organic&utm_campaign=blog-index#waitlist-footer" class="nav-cta">Join waitlist</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="wrapper">
+        <div class="page-header">
+          <h1>Blog</h1>
+          <p>Competitive intelligence guides for small and medium businesses.</p>
+        </div>
+
+        <div class="post-list">
+
+          <a href="/blog/competitor-monitoring-small-business/" class="post-card">
+            <div class="post-meta">
+              <span class="tag">How-to</span>
+              <time datetime="2026-04-07">7 April 2026</time>
+              <span>·</span>
+              <span>6 min read</span>
+            </div>
+            <div class="post-title">5 Ways to Monitor Competitors Without Hiring an Analyst</div>
+            <p class="post-excerpt">Most small businesses discover competitor moves too late. Here are five practical methods for monitoring competitors systematically - no dedicated analyst, no enterprise budget required.</p>
+            <span class="post-read-more">Read article →</span>
+          </a>
+
+          <a href="/blog/competitive-intelligence-smb-2026/" class="post-card">
+            <div class="post-meta">
+              <span class="tag">Guide</span>
+              <time datetime="2026-04-07">7 April 2026</time>
+              <span>·</span>
+              <span>7 min read</span>
+            </div>
+            <div class="post-title">How SMBs Can Track Competitor Pricing Without an Analyst or Enterprise Budget</div>
+            <p class="post-excerpt">You find out your competitor dropped their prices on a Tuesday afternoon - from a prospect, not your own monitoring. Here's how to close that gap.</p>
+            <span class="post-read-more">Read article →</span>
+          </a>
+
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <a href="/" class="logo">peer<span>scope</span></a>
+        <p>&copy; 2026 Peerscope. All rights reserved.</p>
+        <a href="mailto:hello@peerscope.io">Contact</a>
+      </div>
+    </footer>
+  </body>
+</html>

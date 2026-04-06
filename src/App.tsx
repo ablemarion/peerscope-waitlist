@@ -3,9 +3,9 @@ import './App.css'
 import { Logo, EmailForm } from './components/shared'
 import { FoundingBanner } from './components/FoundingBanner'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
+import { HeroB } from './components/HeroB'
 
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
-const HeroB = lazy(() => import('./components/HeroB').then(m => ({ default: m.HeroB })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
 
 function RevealDiv({
@@ -247,11 +247,9 @@ function useHeroVariant(): 'a' | 'b' | 'c' {
 
 function Hero() {
   const variant = useHeroVariant()
-  return (
-    <Suspense fallback={null}>
-      {variant === 'a' ? <HeroA /> : variant === 'c' ? <HeroC /> : <HeroB />}
-    </Suspense>
-  )
+  if (variant === 'a') return <Suspense fallback={null}><HeroA /></Suspense>
+  if (variant === 'c') return <Suspense fallback={null}><HeroC /></Suspense>
+  return <HeroB />
 }
 
 
@@ -584,6 +582,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           <Logo dark />
           <div className="flex items-center gap-4">
+            <a href="/blog/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Blog</a>
             <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
