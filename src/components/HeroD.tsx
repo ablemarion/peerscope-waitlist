@@ -272,8 +272,8 @@ export function HeroD() {
 
   return (
     <section
-      className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
-      style={{ background: '#0D0F1A', paddingTop: '3rem', paddingBottom: '3rem' }}
+      className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12"
+      style={{ background: '#0D0F1A' }}
     >
       <div className="w-full max-w-7xl mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
@@ -282,7 +282,7 @@ export function HeroD() {
           <div className="mb-12 lg:mb-0">
             {/* Badge */}
             <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-8 border"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-4 sm:mb-6 lg:mb-8 border"
               style={{ background: 'rgba(20,184,166,0.08)', color: '#34D6B7', borderColor: 'rgba(20,184,166,0.2)' }}
             >
               <span className="relative flex h-2 w-2">
@@ -294,7 +294,7 @@ export function HeroD() {
 
             {/* Headline */}
             <h1
-              className="font-bold leading-tight mb-6 text-white"
+              className="font-bold leading-tight mb-4 sm:mb-6 text-white"
               style={{
                 fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
                 fontWeight: 800,
@@ -308,7 +308,7 @@ export function HeroD() {
 
             {/* Sub-headline */}
             <p
-              className="text-lg sm:text-xl mb-4 leading-relaxed"
+              className="text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed"
               style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '44ch' }}
             >
               Peerscope watches your competitors 24/7 - pricing changes, new features, job listings -
@@ -317,12 +317,12 @@ export function HeroD() {
 
             {/* Social proof */}
             {waitlistCount !== null && waitlistCount > 0 && (
-              <p className="text-sm font-medium mb-8" style={{ color: '#34D6B7' }}>
+              <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: '#34D6B7' }}>
                 Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
               </p>
             )}
             {(waitlistCount === null || waitlistCount === 0) && (
-              <p className="text-sm font-medium mb-8" style={{ color: 'rgba(52,214,183,0.7)' }}>
+              <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: 'rgba(52,214,183,0.7)' }}>
                 No more flying blind. Know what your competitors are doing, before your customers do.
               </p>
             )}
