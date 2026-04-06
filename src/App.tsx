@@ -296,23 +296,23 @@ const faqs = [
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null)
   return (
-    <div className="divide-y divide-gray-100">
+    <div className="divide-y divide-[rgba(250,250,246,0.06)]">
       {faqs.map((faq, i) => (
         <div key={i}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
-            className="w-full flex justify-between items-center py-4 text-left text-gray-900 font-medium hover:text-[#B8622A] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8622A] focus-visible:rounded"
+            className="w-full flex justify-between items-center py-4 text-left text-white font-medium hover:text-[#B8622A] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8622A] focus-visible:rounded"
           >
             <span>{faq.q}</span>
             <svg
-              className={`ml-4 w-5 h-5 text-gray-400 flex-shrink-0 transition-transform ${open === i ? 'rotate-180' : ''}`}
+              className={`ml-4 w-5 h-5 text-white/30 flex-shrink-0 transition-transform ${open === i ? 'rotate-180' : ''}`}
               viewBox="0 0 20 20" fill="currentColor"
             >
               <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </button>
           {open === i && (
-            <p className="pb-4 text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+            <p className="pb-4 text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.58)' }}>{faq.a}</p>
           )}
         </div>
       ))}
@@ -847,15 +847,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* Diagonal: Pricing (#0D0F1A) → FAQ (light #FAFAF6) — left-leaning cut */}
-      <DiagonalLeft from="#0D0F1A" to="#FAFAF6" />
-
-      {/* FAQ — single light contrast section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAF6]">
+      {/* FAQ — dark section continuous with pricing */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ background: '#0D0F1A' }}>
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h2
-              className="text-3xl sm:text-4xl font-bold text-[#111827] mb-4"
+              className="text-3xl sm:text-4xl font-bold text-white mb-4"
               style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
             >
               Frequently asked questions
@@ -864,9 +861,6 @@ export default function App() {
           <FAQ />
         </div>
       </section>
-
-      {/* Diagonal: FAQ (#FAFAF6) → Footer CTA (#0D0F1A) — right-leaning cut */}
-      <DiagonalRight from="#FAFAF6" to="#0D0F1A" />
 
       {/* Footer CTA */}
       <section
