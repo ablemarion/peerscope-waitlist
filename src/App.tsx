@@ -1127,6 +1127,7 @@ export default function App() {
             &copy; {new Date().getFullYear()} peerscope. All rights reserved.
           </p>
           <div className="flex gap-5 text-sm" style={{ color: 'rgba(250,250,246,0.3)' }}>
+            <a href="/blog/competitive-intelligence-smb-2026/" className="hover:text-white transition-colors py-3 inline-block">Blog</a>
             <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors py-3 inline-block">Contact</a>
           </div>
         </div>
