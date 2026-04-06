@@ -232,7 +232,7 @@ export function HeroC() {
                 className="text-sm font-medium mb-8"
                 style={{ color: '#34D6B7' }}
               >
-                Join {waitlistCount.toLocaleString()} SMBs already on the waitlist
+                Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
               </p>
             )}
             {(waitlistCount === null || waitlistCount === 0) && (

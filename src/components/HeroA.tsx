@@ -43,7 +43,7 @@ function AlertMockup() {
             style={{ background: '#0A0C15', border: '1px solid rgba(255,255,255,0.05)' }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>Acme Corp — Pricing page</span>
+              <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>Bluestone Plumbing Co. — Pricing page</span>
               <span
                 className="text-xs px-2 py-0.5 rounded-full font-medium"
                 style={{ background: 'rgba(239,68,68,0.12)', color: '#F87171', border: '1px solid rgba(239,68,68,0.2)' }}
@@ -78,7 +78,7 @@ function AlertMockup() {
             style={{ background: '#0A0C15', border: '1px solid rgba(255,255,255,0.05)', opacity: 0.6 }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>Rival Inc — Jobs page</span>
+              <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>Clearpath Logistics — Jobs page</span>
               <span
                 className="text-xs px-2 py-0.5 rounded-full font-medium"
                 style={{ background: 'rgba(99,102,241,0.12)', color: '#818CF8', border: '1px solid rgba(99,102,241,0.2)' }}
@@ -180,7 +180,7 @@ export function HeroA() {
               </p>
               {waitlistCount !== null && waitlistCount >= 20 ? (
                 <p className="mt-2 text-sm font-medium" style={{ color: '#34D6B7' }}>
-                  Join {waitlistCount.toLocaleString()} others on the waitlist
+                  Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
                 </p>
               ) : (
                 <p className="mt-2 text-sm font-medium" style={{ color: '#34D6B7' }}>

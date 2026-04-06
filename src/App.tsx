@@ -154,11 +154,11 @@ function ProductFeed() {
               >
                 PRICE ↑
               </span>
-              <span className="text-sm font-semibold text-white">Acme Corp</span>
+              <span className="text-sm font-semibold text-white">Bluestone Plumbing Co.</span>
             </div>
             <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>{timestamp}</span>
           </div>
-          <p className="text-xs font-mono mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>acmecorp.com/pricing</p>
+          <p className="text-xs font-mono mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>bluestoneplumbing.com/pricing</p>
           <div className="space-y-1 font-mono text-xs">
             <div
               className="flex items-center gap-2 px-2.5 py-1.5 rounded"
@@ -190,11 +190,11 @@ function ProductFeed() {
               >
                 LAUNCH
               </span>
-              <span className="text-sm font-semibold text-white">Rival Inc</span>
+              <span className="text-sm font-semibold text-white">Clearpath Logistics</span>
             </div>
             <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>1 hr ago</span>
           </div>
-          <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>rivalinc.com/changelog</p>
+          <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>clearpathlogistics.com/changelog</p>
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
             New feature: <span className="text-white font-medium">"AI-powered battlecards"</span>
           </p>
@@ -212,11 +212,11 @@ function ProductFeed() {
               >
                 HIRING
               </span>
-              <span className="text-sm font-semibold text-white">Competitor X</span>
+              <span className="text-sm font-semibold text-white">Sunridge Accounting</span>
             </div>
             <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>3 hrs ago</span>
           </div>
-          <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>competitorx.com/careers</p>
+          <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>sunridgeaccounting.com/careers</p>
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
             Sr. Engineer — <span className="text-white font-medium">AI/ML Platform</span>
           </p>

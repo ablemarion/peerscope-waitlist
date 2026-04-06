@@ -158,18 +158,16 @@ export function HeroB() {
             {/* CTA */}
             <div className="max-w-lg mb-6">
               <EmailForm placeholder="Enter your work email" buttonText="Get early access" size="large" variant="dark" />
-              <p className="mt-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                14-day free trial &middot; No credit card required &middot; Cancel anytime
-              </p>
-              {waitlistCount !== null && waitlistCount >= 20 ? (
-                <p className="mt-2 text-sm font-medium" style={{ color: '#34D6B7' }}>
-                  Join {waitlistCount.toLocaleString()} others on the waitlist
-                </p>
-              ) : (
-                <p className="mt-2 text-sm font-medium" style={{ color: '#34D6B7' }}>
-                  Early access — limited spots before public launch
+              {waitlistCount !== null && waitlistCount > 0 && (
+                <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                  <span aria-hidden="true">✓ </span>
+                  <span className="hidden sm:inline">Join {waitlistCount.toLocaleString()} founders already tracking their competitors.</span>
+                  <span className="sm:hidden">Join {waitlistCount.toLocaleString()} founders on the waitlist</span>
                 </p>
               )}
+              <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                14-day free trial &middot; No credit card required &middot; Cancel anytime
+              </p>
             </div>
           </div>
 
