@@ -334,7 +334,7 @@ const faqs = [
   },
   {
     q: 'Is there a free plan?',
-    a: 'We offer a 14-day free trial with no credit card required. There is no permanent free tier.',
+    a: "Yes — every plan starts with a 14-day free trial, full feature access, no credit card needed. If you don't see value in your first week, cancel in one click. There is no free tier after trial, but we've never had a founder who set it up properly wish they hadn't.",
   },
   {
     q: 'How quickly do you detect changes?',
