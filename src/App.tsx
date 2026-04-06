@@ -387,7 +387,7 @@ export default function App() {
   return (
     <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
 
-      {/* Founding member offer banner — variant B only */}
+      {/* Urgency banner — deadline + founding spot count, all variants */}
       <FoundingBanner />
 
       {/* Nav — dark glass */}
