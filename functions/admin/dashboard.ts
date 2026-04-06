@@ -12,8 +12,8 @@ interface SignupRow {
 
 interface VariantRow {
   variant: string | null
-  views: number
-  conversions: number
+  sessions: number
+  signups: number
 }
 
 interface CountRow {
@@ -50,8 +50,10 @@ function renderHtml(data: {
   pageviewsToday: number
   pageviewsYesterday: number
   generatedAt: string
+  bestVariant: string | null
 }): string {
-  const { totalSignups, recentSignups, variantStats, pageviewsToday, pageviewsYesterday, generatedAt } = data
+  const { totalSignups, recentSignups, variantStats, pageviewsToday, pageviewsYesterday, generatedAt, bestVariant } =
+    data
 
   const pvDelta = pageviewsToday - pageviewsYesterday
   const pvDeltaStr = pvDelta >= 0 ? `+${pvDelta}` : `${pvDelta}`
@@ -70,16 +72,24 @@ function renderHtml(data: {
     .join('')
 
   const variantRows = variantStats
-    .map(
-      (v) => `
-      <tr>
-        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#e2e8f0;">${v.variant ?? 'unknown'}</td>
-        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#a0a3b1;text-align:right;">${v.views.toLocaleString()}</td>
-        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#a0a3b1;text-align:right;">${v.conversions}</td>
-        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#4ade80;text-align:right;">${v.cvr}%</td>
-      </tr>`,
-    )
+    .map((v) => {
+      const isBest = bestVariant !== null && v.variant === bestVariant
+      const rowBg = isBest ? 'background:#0f2a1a;' : ''
+      const labelSuffix = isBest ? ' <span style="font-size:11px;background:#14532d;color:#4ade80;padding:2px 6px;border-radius:4px;margin-left:4px;">★ Best</span>' : ''
+      return `
+      <tr style="${rowBg}">
+        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#e2e8f0;">${v.variant ?? 'unknown'}${labelSuffix}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#a0a3b1;text-align:right;">${v.sessions.toLocaleString()}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#a0a3b1;text-align:right;">${v.signups}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:${isBest ? '#4ade80' : '#a0a3b1'};font-weight:${isBest ? '700' : '400'};text-align:right;">${v.cvr}%</td>
+      </tr>`
+    })
     .join('')
+
+  const recommendationNote =
+    bestVariant !== null
+      ? `<p style="margin:12px 0 0;font-size:12px;color:#4ade80;">Recommended default: <strong>${bestVariant}</strong></p>`
+      : ''
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -110,13 +120,13 @@ function renderHtml(data: {
     </div>
 
     <div style="margin-bottom:32px;">
-      <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">A/B Variant Breakdown</h2>
+      <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">A/B Variant Conversion</h2>
       <div style="background:#13162A;border-radius:10px;overflow:hidden;">
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="background:#1a1d33;">
               <th style="padding:10px 12px;text-align:left;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">Variant</th>
-              <th style="padding:10px 12px;text-align:right;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">Views</th>
+              <th style="padding:10px 12px;text-align:right;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">Sessions</th>
               <th style="padding:10px 12px;text-align:right;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">Sign-ups</th>
               <th style="padding:10px 12px;text-align:right;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">CVR</th>
             </tr>
@@ -124,6 +134,7 @@ function renderHtml(data: {
           <tbody>${variantRows || '<tr><td colspan="4" style="padding:16px 12px;text-align:center;color:#4a4d5e;font-size:13px;">No data yet</td></tr>'}</tbody>
         </table>
       </div>
+      ${recommendationNote}
     </div>
 
     <div>
@@ -159,7 +170,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const todayUtc = new Date().toISOString().slice(0, 10)
   const yesterdayUtc = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
 
-  const [signupCountResult, recentResult, variantResult, pvTodayResult, pvYesterdayResult] =
+  const [signupCountResult, recentResult, pvSessionResult, waitlistVariantResult, pvTodayResult, pvYesterdayResult] =
     await context.env.DB.batch([
       context.env.DB.prepare(
         `SELECT COUNT(*) as count FROM waitlist
@@ -172,10 +183,12 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
          ORDER BY created_at DESC LIMIT 10`,
       ),
       context.env.DB.prepare(
-        `SELECT COALESCE(variant, 'unknown') as variant,
-                COUNT(*) as views,
-                COALESCE(SUM(converted), 0) as conversions
-         FROM page_views GROUP BY variant ORDER BY views DESC`,
+        `SELECT variant, COUNT(DISTINCT session_id) as sessions
+         FROM page_views WHERE variant IS NOT NULL GROUP BY variant`,
+      ),
+      context.env.DB.prepare(
+        `SELECT variant, COUNT(*) as signups
+         FROM waitlist WHERE variant IS NOT NULL GROUP BY variant`,
       ),
       context.env.DB.prepare(
         `SELECT COUNT(*) as pageviews FROM page_views WHERE DATE(created_at) = '${todayUtc}'`,
@@ -187,13 +200,28 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const totalSignups = (signupCountResult.results[0] as CountRow | undefined)?.count ?? 0
   const recentSignups = recentResult.results as SignupRow[]
-  const variantStats = (variantResult.results as VariantRow[]).map((v) => ({
-    ...v,
-    cvr: v.views > 0 ? ((v.conversions / v.views) * 100).toFixed(1) : '0.0',
-  }))
   const pageviewsToday = (pvTodayResult.results[0] as { pageviews: number } | undefined)?.pageviews ?? 0
   const pageviewsYesterday =
     (pvYesterdayResult.results[0] as { pageviews: number } | undefined)?.pageviews ?? 0
+
+  const signupsByVariant = new Map<string, number>()
+  for (const row of waitlistVariantResult.results as { variant: string; signups: number }[]) {
+    signupsByVariant.set(row.variant, row.signups)
+  }
+  const variantStats = (pvSessionResult.results as { variant: string; sessions: number }[])
+    .filter((row) => row.sessions > 0)
+    .map((row) => {
+      const signups = signupsByVariant.get(row.variant) ?? 0
+      return {
+        variant: row.variant,
+        sessions: row.sessions,
+        signups,
+        cvr: ((signups / row.sessions) * 100).toFixed(1),
+      }
+    })
+    .sort((a, b) => parseFloat(b.cvr) - parseFloat(a.cvr))
+
+  const bestVariant = variantStats.length > 0 ? (variantStats[0].variant ?? null) : null
 
   const html = renderHtml({
     totalSignups,
@@ -202,6 +230,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     pageviewsToday,
     pageviewsYesterday,
     generatedAt: new Date().toISOString(),
+    bestVariant,
   })
 
   return new Response(html, {
