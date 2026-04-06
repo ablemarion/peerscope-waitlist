@@ -45,12 +45,14 @@ export function EmailForm({
 
     const params = new URLSearchParams(window.location.search)
     const source = params.get('utm_source') || params.get('ref') || 'direct'
+    const sessionId = sessionStorage.getItem('ps_sid') ?? undefined
+    const variant = params.get('variant') ?? 'b'
 
     try {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source }),
+        body: JSON.stringify({ email, source, session_id: sessionId, variant }),
       })
       if (res.ok) {
         setStatus('success')

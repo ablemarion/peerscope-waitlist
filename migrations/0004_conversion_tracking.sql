@@ -1,0 +1,4 @@
+ALTER TABLE page_views ADD COLUMN converted INTEGER DEFAULT 0;
+
+ALTER TABLE waitlist ADD COLUMN session_id TEXT;
+ALTER TABLE waitlist ADD COLUMN variant TEXT;

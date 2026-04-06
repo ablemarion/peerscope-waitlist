@@ -55,6 +55,8 @@ async function sendConfirmationEmail(apiKey: string, email: string): Promise<voi
 interface WaitlistRequest {
   email: string
   source?: string
+  session_id?: string
+  variant?: string
 }
 
 function isValidEmail(email: string): boolean {
@@ -83,6 +85,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const body = await context.request.json<WaitlistRequest>()
     const email = (body.email ?? '').trim().toLowerCase()
     const source = (body.source ?? 'direct').slice(0, 100)
+    const sessionId = (body.session_id ?? '').slice(0, 64) || null
+    const variant = (body.variant ?? 'b').slice(0, 10)
 
     if (!email || !isValidEmail(email)) {
       return Response.json(
@@ -92,13 +96,23 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     const result = await context.env.DB.prepare(
-      'INSERT OR IGNORE INTO waitlist (email, source, created_at) VALUES (?, ?, ?)'
+      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, created_at) VALUES (?, ?, ?, ?, ?)'
     )
-      .bind(email, source, new Date().toISOString())
+      .bind(email, source, sessionId, variant, new Date().toISOString())
       .run()
 
     // Notify and email on new signups only (not duplicates)
     const isNew = (result.meta?.changes ?? 0) > 0
+    if (isNew && sessionId) {
+      context.waitUntil(
+        context.env.DB.prepare(
+          'UPDATE page_views SET converted = 1 WHERE session_id = ? ORDER BY created_at DESC LIMIT 1'
+        )
+          .bind(sessionId)
+          .run()
+          .catch((err: unknown) => console.error('Conversion mark failed:', err))
+      )
+    }
     if (isNew) {
       if (context.env.NOTIFY_WEBHOOK_URL) {
         const countResult = await context.env.DB.prepare(

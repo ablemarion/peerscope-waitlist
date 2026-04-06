@@ -6,6 +6,8 @@ interface Env {
 interface VariantRow {
   variant: string | null
   views: number
+  conversions: number
+  cvr: number
 }
 
 interface DailyViewRow {
@@ -45,7 +47,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     context.env.DB.prepare('SELECT COUNT(DISTINCT session_id) as count FROM page_views'),
     context.env.DB.prepare('SELECT COUNT(*) as count FROM waitlist'),
     context.env.DB.prepare(
-      `SELECT COALESCE(variant, 'unknown') as variant, COUNT(*) as views
+      `SELECT COALESCE(variant, 'unknown') as variant,
+              COUNT(*) as views,
+              COALESCE(SUM(converted), 0) as conversions
        FROM page_views GROUP BY variant ORDER BY views DESC`
     ),
     context.env.DB.prepare(
@@ -82,12 +86,19 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     signups: signupByDate.get(row.date) ?? 0,
   }))
 
+  const variantStats = (variantResult.results as Omit<VariantRow, 'cvr'>[]).map((row) => ({
+    variant: row.variant,
+    views: row.views,
+    conversions: row.conversions,
+    cvr: row.views > 0 ? Math.round((row.conversions / row.views) * 1000) / 1000 : 0,
+  }))
+
   return Response.json({
     totalPageviews,
     uniqueVisitors,
     totalSignups,
     signupConversionRate: Math.round(conversionRate * 1000) / 1000,
-    variantStats: variantResult.results as VariantRow[],
+    variantStats,
     dailyBreakdown,
     topReferrers: referrerResult.results as ReferrerRow[],
     deviceBreakdown: deviceResult.results,
