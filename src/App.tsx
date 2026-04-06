@@ -808,12 +808,12 @@ export default function App() {
             className="text-3xl sm:text-4xl font-bold mb-4 text-white"
             style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
           >
-            Start tracking your competitors
+            Still thinking about it?
             <br />
-            in 2 minutes.
+            Start free. Your first competitor alert in under 15 minutes.
           </h2>
           <p className="text-lg mb-10" style={{ color: 'rgba(250,250,246,0.48)' }}>
-            Free for 14 days. No credit card required.
+            No setup fees. No annual commitment. Cancel before you're charged.
           </p>
           <div className="max-w-md mx-auto">
             <EmailForm placeholder="Enter your work email" buttonText="Join the waitlist" size="large" variant="dark" />
