@@ -47,27 +47,6 @@ function Hero() {
   )
 }
 
-// Diagonal SVG divider — "to" colour fills a triangle in the lower-left corner
-function DiagonalLeft({ from, to }: { from: string; to: string }) {
-  return (
-    <div style={{ background: from, lineHeight: 0, fontSize: 0 }}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 48" preserveAspectRatio="none" style={{ width: '100%', height: 48, display: 'block' }}>
-        <polygon points="0,0 1440,48 0,48" fill={to} />
-      </svg>
-    </div>
-  )
-}
-
-// Diagonal SVG divider — "to" colour fills a triangle in the lower-right corner
-function DiagonalRight({ from, to }: { from: string; to: string }) {
-  return (
-    <div style={{ background: from, lineHeight: 0, fontSize: 0 }}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 48" preserveAspectRatio="none" style={{ width: '100%', height: 48, display: 'block' }}>
-        <polygon points="0,48 1440,0 1440,48" fill={to} />
-      </svg>
-    </div>
-  )
-}
 
 // Realistic Peerscope live feed — replaces generic icon+text cards
 function ProductFeed() {
@@ -401,7 +380,7 @@ export default function App() {
             <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
-              className="text-sm font-semibold text-white px-4 py-3 rounded-lg transition hover:brightness-110"
+              className="text-sm font-semibold text-white px-4 py-3.5 rounded-lg transition hover:brightness-110"
               style={{ background: '#B8622A' }}
             >
               Join waitlist
@@ -412,9 +391,6 @@ export default function App() {
 
       {/* Hero — swap via ?variant=a (problem-led) or ?variant=b (value-led, default) */}
       <Hero />
-
-      {/* Diagonal: hero (#0F172A) → Problem (#111320) — right-leaning cut */}
-      <DiagonalRight from="#0F172A" to="#111320" />
 
       {/* Problem — asymmetric editorial layout */}
       <section
@@ -586,9 +562,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Diagonal: Problem (#111320) → How it works (#0D0F1A) — left-leaning cut */}
-      <DiagonalLeft from="#111320" to="#0D0F1A" />
-
       {/* How it works — editorial numbered steps, dark */}
       <section
         className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
@@ -692,9 +665,6 @@ export default function App() {
           </div>
         </div>
       </section>
-
-      {/* Diagonal: How it works (#0D0F1A) → What we track (#111320) — right-leaning cut */}
-      <DiagonalRight from="#0D0F1A" to="#111320" />
 
       {/* What we track — asymmetric with product feed UI */}
       <section
@@ -849,7 +819,7 @@ export default function App() {
                   <thead>
                     <tr style={{ borderBottom: '1px solid rgba(184,98,42,0.15)' }}>
                       <th className="px-6 py-5 text-left">
-                        <span className="text-xs font-mono" style={{ color: 'rgba(250,250,246,0.28)' }}>Feature</span>
+                        <span className="text-xs font-mono" style={{ color: 'rgba(250,250,246,0.42)' }}>Feature</span>
                       </th>
                       {pricingPlans.map(plan => (
                         <th
@@ -949,7 +919,7 @@ export default function App() {
               </div>
             </div>
           </RevealDiv>
-          <p className="text-center text-sm mt-6" style={{ color: 'rgba(250,250,246,0.28)' }}>
+          <p className="text-center text-sm mt-6" style={{ color: 'rgba(250,250,246,0.42)' }}>
             All prices in USD
           </p>
         </div>
@@ -963,7 +933,7 @@ export default function App() {
               className="text-3xl sm:text-4xl font-bold text-white mb-4"
               style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
             >
-              Frequently asked questions
+              Before you decide.
             </h2>
           </div>
           <FAQ />

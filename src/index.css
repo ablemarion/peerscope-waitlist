@@ -243,6 +243,10 @@
   z-index: 0;
 }
 
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
 * {
   box-sizing: border-box;
 }
