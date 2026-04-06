@@ -128,7 +128,7 @@ export function HeroA() {
   return (
     <section
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
-      style={{ background: '#0F172A', paddingTop: '3rem', paddingBottom: '3rem' }}
+      style={{ background: '#0D0F1A', paddingTop: '3rem', paddingBottom: '3rem' }}
     >
       <div className="w-full max-w-7xl mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
