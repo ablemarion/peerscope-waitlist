@@ -8,8 +8,13 @@ interface Env {
 
 interface SendRequest {
   subject: string
-  html: string
+  /** Plain text body (recommended for personal outreach) */
+  text?: string
+  /** HTML body (for formatted campaigns) */
+  html?: string
   from?: string
+  /** Optional: only send to these specific addresses (must exist in waitlist) */
+  to?: string[]
 }
 
 interface WaitlistRow {
@@ -35,20 +40,28 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { subject, html, from = 'Peerscope <onboarding@resend.dev>' } = body
+  const { subject, text, html, from = 'Henrik from Peerscope <hello@peerscope.io>', to: targetEmails } = body
 
-  if (!subject || !html) {
-    return Response.json({ error: 'subject and html are required' }, { status: 400 })
+  if (!subject) {
+    return Response.json({ error: 'subject is required' }, { status: 400 })
+  }
+  if (!text && !html) {
+    return Response.json({ error: 'text or html body is required' }, { status: 400 })
   }
 
   const rows = await context.env.DB.prepare(
     'SELECT email FROM waitlist ORDER BY created_at ASC'
   ).all<WaitlistRow>()
 
-  const emails = rows.results.map((r) => r.email)
+  let emails = rows.results.map((r) => r.email)
+
+  if (targetEmails && targetEmails.length > 0) {
+    const targetSet = new Set(targetEmails.map((e) => e.toLowerCase()))
+    emails = emails.filter((e) => targetSet.has(e.toLowerCase()))
+  }
 
   if (emails.length === 0) {
-    return Response.json({ sent: 0, failed: 0, message: 'No subscribers found' })
+    return Response.json({ sent: 0, failed: 0, message: 'No matching subscribers found' })
   }
 
   const resend = new Resend(context.env.RESEND_API_KEY)
@@ -58,7 +71,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   for (const email of emails) {
     try {
-      await resend.emails.send({ from, to: email, subject, html })
+      await resend.emails.send({
+        from,
+        to: email,
+        subject,
+        ...(text ? { text } : {}),
+        ...(html ? { html } : {}),
+      })
       sent++
     } catch (err) {
       failed++
