@@ -457,34 +457,88 @@ export default function App() {
 
             {/* Right column — cards */}
             <div className="lg:col-span-7 flex flex-col gap-5">
+              {/* Stat Card Cluster — Option A social proof */}
               <RevealDiv
-                className="rounded-2xl p-7 card-hover"
+                className="rounded-2xl p-6 card-hover"
                 style={{
                   background: '#0D0F1A',
                   border: '1px solid rgba(184,98,42,0.14)',
                 }}
               >
-                <blockquote
-                  className="italic text-lg leading-relaxed mb-3 text-white"
-                  style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
-                >
-                  "Every Sunday morning I end up on three competitor sites — their pricing page, their changelog, their blog. I have a Notion doc with 18 months of screenshots. It's two hours of my weekend, every single week, just to stay informed."
-                </blockquote>
-                <p className="text-sm mb-5" style={{ color: 'rgba(250,250,246,0.35)' }}>— Head of Product, 19-person B2B SaaS company</p>
-                <div className="flex items-start gap-4">
-                  <svg className="w-6 h-6 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" />
-                    <path d="M8 15s1-2 4-2 4 2 4 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <circle cx="9" cy="10" r="1" fill="currentColor" />
-                    <circle cx="15" cy="10" r="1" fill="currentColor" />
-                  </svg>
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Finding out too late</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
-                      Your competitor moves. You find out from a prospect. Every week you're not monitoring is a week you're flying blind.
+                <div className="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-white/[0.06] gap-5 sm:gap-0">
+                  <div className="sm:pr-5 flex flex-col gap-1.5 pb-5 sm:pb-0 border-b sm:border-b-0 border-white/[0.06]">
+                    {/* Top accent line */}
+                    <div
+                      className="w-8 h-0.5 mb-3 rounded-full"
+                      style={{ background: 'linear-gradient(90deg, #F07C35 0%, #B8622A 100%)' }}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="text-3xl sm:text-4xl font-bold leading-none"
+                      style={{ fontFamily: "'Syne', system-ui, sans-serif", color: '#F07C35' }}
+                    >
+                      4+
+                    </span>
+                    <span
+                      className="text-xs font-semibold uppercase tracking-widest mt-1"
+                      style={{ color: 'rgba(250,250,246,0.35)' }}
+                    >
+                      hrs/week
+                    </span>
+                    <p className="text-sm leading-snug mt-2" style={{ color: 'rgba(250,250,246,0.55)' }}>
+                      spent manually monitoring competitors
+                    </p>
+                  </div>
+
+                  <div className="sm:px-5 flex flex-col gap-1.5 pb-5 sm:pb-0 border-b sm:border-b-0 border-white/[0.06]">
+                    <div
+                      className="w-8 h-0.5 mb-3 rounded-full"
+                      style={{ background: 'linear-gradient(90deg, #F07C35 0%, #B8622A 100%)' }}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="text-3xl sm:text-4xl font-bold leading-none"
+                      style={{ fontFamily: "'Syne', system-ui, sans-serif", color: '#F07C35' }}
+                    >
+                      23%
+                    </span>
+                    <span
+                      className="text-xs font-semibold uppercase tracking-widest mt-1"
+                      style={{ color: 'rgba(250,250,246,0.35)' }}
+                    >
+                      of founders
+                    </span>
+                    <p className="text-sm leading-snug mt-2" style={{ color: 'rgba(250,250,246,0.55)' }}>
+                      learned of a competitor price change from a customer first
+                    </p>
+                  </div>
+
+                  <div className="sm:pl-5 flex flex-col gap-1.5">
+                    <div
+                      className="w-8 h-0.5 mb-3 rounded-full"
+                      style={{ background: 'linear-gradient(90deg, #F07C35 0%, #B8622A 100%)' }}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="text-3xl sm:text-4xl font-bold leading-none"
+                      style={{ fontFamily: "'Syne', system-ui, sans-serif", color: '#F07C35' }}
+                    >
+                      1 in 3
+                    </span>
+                    <span
+                      className="text-xs font-semibold uppercase tracking-widest mt-1"
+                      style={{ color: 'rgba(250,250,246,0.35)' }}
+                    >
+                      SaaS founders
+                    </span>
+                    <p className="text-sm leading-snug mt-2" style={{ color: 'rgba(250,250,246,0.55)' }}>
+                      lost a deal to a competitor move they never saw coming
                     </p>
                   </div>
                 </div>
+                <p className="text-xs mt-5 pt-4 border-t border-white/[0.06]" style={{ color: 'rgba(250,250,246,0.2)' }}>
+                  Based on founder surveys · SMB SaaS segment
+                </p>
               </RevealDiv>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
