@@ -99,7 +99,7 @@ export function EmailForm({
         <button
           type="button"
           onClick={handleShare}
-          className={`text-sm transition flex items-center gap-1.5 ${variant === 'dark' ? 'text-white/40 hover:text-white/70' : 'text-gray-400 hover:text-gray-600'}`}
+          className={`text-sm transition flex items-center gap-1.5 min-h-[44px] px-2 ${variant === 'dark' ? 'text-white/40 hover:text-white/70' : 'text-gray-400 hover:text-gray-600'}`}
         >
           {copied
             ? <><span className="text-[#34D6B7]">✓</span> Link copied!</>
@@ -122,6 +122,7 @@ export function EmailForm({
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder={placeholder}
+          aria-label="Email address"
           required
           className={inputClass}
         />
