@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Gallery 3 - Features</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  src: url('../public/fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+</style>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1270px;
+    height: 760px;
+    background: #0D0F1A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Subtle glow */
+  .glow {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(26,122,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Top logo */
+  .logo {
+    position: absolute;
+    top: 32px;
+    left: 40px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo span { color: rgba(240,124,53,0.6); }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1040px;
+    padding: 0 60px;
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #34D6B7;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: -1.5px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 60px;
+    line-height: 1.1;
+  }
+  .headline span { color: #F07C35; }
+
+  /* Feature grid */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+  .feature-card.orange::before { background: #F07C35; }
+  .feature-card.teal::before { background: #34D6B7; }
+  .feature-card.purple::before { background: #A78BFA; }
+  .feature-card.blue::before { background: #60A5FA; }
+
+  .feature-card.orange { border-color: rgba(240,124,53,0.2); background: rgba(240,124,53,0.05); }
+  .feature-card.teal   { border-color: rgba(52,214,183,0.2); background: rgba(52,214,183,0.04); }
+  .feature-card.purple { border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.04); }
+  .feature-card.blue   { border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.04); }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .feature-icon.orange { background: rgba(240,124,53,0.15); }
+  .feature-icon.teal   { background: rgba(52,214,183,0.12); }
+  .feature-icon.purple { background: rgba(167,139,250,0.12); }
+  .feature-icon.blue   { background: rgba(96,165,250,0.12); }
+
+  .feature-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+    color: #FFFFFF;
+  }
+  .feature-name.orange { color: #F07C35; }
+  .feature-name.teal   { color: #34D6B7; }
+  .feature-name.purple { color: #A78BFA; }
+  .feature-name.blue   { color: #60A5FA; }
+
+  .feature-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.55;
+  }
+
+  .feature-example {
+    margin-top: auto;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+  }
+  .feature-example.orange {
+    background: rgba(240,124,53,0.12);
+    color: rgba(240,124,53,0.8);
+  }
+  .feature-example.teal {
+    background: rgba(52,214,183,0.1);
+    color: rgba(52,214,183,0.8);
+  }
+  .feature-example.purple {
+    background: rgba(167,139,250,0.1);
+    color: rgba(167,139,250,0.8);
+  }
+  .feature-example.blue {
+    background: rgba(96,165,250,0.1);
+    color: rgba(96,165,250,0.8);
+  }
+
+  /* Bottom bar */
+  .brand-bar {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: rgba(255,255,255,0.25);
+  }
+  .brand-bar em { color: rgba(240,124,53,0.5); font-style: normal; }
+  .brand-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+  }
+  .tagline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="logo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="9.5" stroke="rgba(240,124,53,0.6)" stroke-width="1.5"/>
+      <circle cx="11" cy="11" r="5" stroke="rgba(240,124,53,0.4)" stroke-width="1.2"/>
+      <circle cx="11" cy="11" r="2" fill="rgba(240,124,53,0.7)"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+
+  <div class="content">
+    <div class="eyebrow">Automated intelligence</div>
+    <div class="headline">Peerscope <span>tracks</span> what matters</div>
+
+    <div class="features">
+      <div class="feature-card orange">
+        <div class="feature-icon orange">💰</div>
+        <div class="feature-name orange">Pricing changes</div>
+        <div class="feature-desc">Know the moment a competitor raises or restructures their plans — before your sales team hears it from a prospect.</div>
+        <div class="feature-example orange">HubSpot Starter +33% ↑</div>
+      </div>
+
+      <div class="feature-card teal">
+        <div class="feature-icon teal">✦</div>
+        <div class="feature-name teal">New features</div>
+        <div class="feature-desc">Track changelogs, product pages, and release notes across all your competitors automatically.</div>
+        <div class="feature-example teal">Intercom AI agent launched</div>
+      </div>
+
+      <div class="feature-card purple">
+        <div class="feature-icon purple">📄</div>
+        <div class="feature-name purple">Landing page copy</div>
+        <div class="feature-desc">Spot messaging pivots, new positioning, and headline A/B tests as soon as they go live on competitor sites.</div>
+        <div class="feature-example purple">Notion changed hero tagline</div>
+      </div>
+
+      <div class="feature-card blue">
+        <div class="feature-icon blue">📣</div>
+        <div class="feature-name blue">Social activity</div>
+        <div class="feature-desc">Monitor competitor announcements, launch posts, and campaign themes so you're never caught off-guard.</div>
+        <div class="feature-example blue">Pipedrive pushed LinkedIn ad</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar">
+    <em>Peer</em>scope
+    <div class="brand-dot"></div>
+    <span class="tagline">Track your competitors. Not your budget.</span>
+  </div>
+</body>
+</html>

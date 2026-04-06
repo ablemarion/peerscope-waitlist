@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Gallery 1 - Hero</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  src: url('../public/fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+</style>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1270px;
+    height: 760px;
+    background: #0D0F1A;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    color: #FAFAF6;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .logo span { color: #F07C35; }
+  .topbar-nav {
+    display: flex;
+    gap: 6px;
+  }
+  .nav-pill {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+  .nav-pill.active {
+    background: rgba(240,124,53,0.15);
+    border-color: rgba(240,124,53,0.35);
+    color: #F07C35;
+  }
+
+  /* Main layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr 300px;
+    gap: 0;
+    height: calc(760px - 61px);
+  }
+
+  /* Left sidebar */
+  .sidebar {
+    background: rgba(255,255,255,0.02);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    padding: 20px 16px;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .competitor-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    cursor: pointer;
+  }
+  .competitor-item.active {
+    background: rgba(240,124,53,0.12);
+    border: 1px solid rgba(240,124,53,0.25);
+  }
+  .competitor-item:not(.active) {
+    border: 1px solid transparent;
+  }
+  .competitor-item:not(.active):hover {
+    background: rgba(255,255,255,0.04);
+  }
+  .comp-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .comp-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .comp-change {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    color: #34D6B7;
+    background: rgba(52,214,183,0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comp-change.red {
+    color: #F87171;
+    background: rgba(248,113,113,0.1);
+  }
+
+  /* Main content */
+  .main {
+    padding: 24px;
+    overflow: hidden;
+  }
+  .main-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .main-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .main-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 3px;
+  }
+  .badge {
+    background: rgba(52,214,183,0.12);
+    border: 1px solid rgba(52,214,183,0.3);
+    color: #34D6B7;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* Change cards */
+  .changes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .change-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .change-card.highlight {
+    background: rgba(240,124,53,0.08);
+    border-color: rgba(240,124,53,0.22);
+  }
+  .change-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .change-icon.orange { background: rgba(240,124,53,0.2); }
+  .change-icon.teal   { background: rgba(52,214,183,0.15); }
+  .change-icon.purple { background: rgba(139,92,246,0.2); }
+  .change-body { flex: 1; }
+  .change-type {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 4px;
+  }
+  .change-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 5px;
+  }
+  .change-detail {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+  }
+  .change-time {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .price-diff {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .price-old {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    text-decoration: line-through;
+  }
+  .price-new {
+    font-size: 13px;
+    font-weight: 600;
+    color: #F07C35;
+  }
+
+  /* Right panel */
+  .right-panel {
+    border-left: 1px solid rgba(255,255,255,0.07);
+    padding: 20px 18px;
+  }
+  .panel-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+  .stat-value.green { color: #34D6B7; }
+  .stat-value.orange { color: #F07C35; }
+
+  .alert-box {
+    margin-top: 18px;
+    background: rgba(240,124,53,0.1);
+    border: 1px solid rgba(240,124,53,0.28);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .alert-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #F07C35;
+    margin-bottom: 6px;
+  }
+  .alert-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  .alert-comp {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+  }
+  .mini-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: #1E293B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .alert-comp-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+  }
+  .alert-since {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    margin-left: auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="logo">
+    <svg class="logo-icon" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="12" stroke="#F07C35" stroke-width="2"/>
+      <circle cx="14" cy="14" r="7" stroke="#F07C35" stroke-width="1.5" stroke-opacity="0.6"/>
+      <line x1="14" y1="2" x2="14" y2="7" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14" y1="21" x2="14" y2="26" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="2" y1="14" x2="7" y2="14" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="21" y1="14" x2="26" y2="14" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="14" cy="14" r="2.5" fill="#F07C35"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+  <div class="topbar-nav">
+    <div class="nav-pill active">Dashboard</div>
+    <div class="nav-pill">Competitors</div>
+    <div class="nav-pill">Pricing</div>
+    <div class="nav-pill">Alerts</div>
+  </div>
+  <div style="font-size:12px; color:rgba(255,255,255,0.35);">Last checked: 2 min ago</div>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+
+  <!-- Left sidebar - competitor list -->
+  <div class="sidebar">
+    <div class="sidebar-label">Tracking (6)</div>
+
+    <div class="competitor-item active">
+      <div class="comp-avatar" style="background:#1E3A5F; color:#60A5FA;">HS</div>
+      <div>
+        <div class="comp-name">HubSpot</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);">3 changes</div>
+      </div>
+      <div class="comp-change">+3</div>
+    </div>
+
+    <div class="competitor-item">
+      <div class="comp-avatar" style="background:#1A2E44; color:#34D6B7;">IC</div>
+      <div>
+        <div class="comp-name">Intercom</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);">1 change</div>
+      </div>
+      <div class="comp-change">+1</div>
+    </div>
+
+    <div class="competitor-item">
+      <div class="comp-avatar" style="background:#2A1A44; color:#A78BFA;">PF</div>
+      <div>
+        <div class="comp-name">Pipedrive</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);">Price change</div>
+      </div>
+      <div class="comp-change red">!</div>
+    </div>
+
+    <div class="competitor-item">
+      <div class="comp-avatar" style="background:#1A2E1A; color:#4ADE80;">ZD</div>
+      <div>
+        <div class="comp-name">Zendesk</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);">No changes</div>
+      </div>
+    </div>
+
+    <div class="competitor-item">
+      <div class="comp-avatar" style="background:#2E1A1A; color:#F87171;">CW</div>
+      <div>
+        <div class="comp-name">Copper CRM</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);">No changes</div>
+      </div>
+    </div>
+
+    <div class="competitor-item">
+      <div class="comp-avatar" style="background:#1A2835; color:#7DD3FC;">SF</div>
+      <div>
+        <div class="comp-name">Salesforce</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);">No changes</div>
+      </div>
+    </div>
+
+    <div style="height:1px; background:rgba(255,255,255,0.07); margin: 14px 0;"></div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <div style="font-size:11px; color:rgba(255,255,255,0.35); background:rgba(255,255,255,0.05); padding:4px 9px; border-radius:5px; cursor:pointer;">+ Add competitor</div>
+    </div>
+  </div>
+
+  <!-- Main panel -->
+  <div class="main">
+    <div class="main-header">
+      <div>
+        <div class="main-title">HubSpot — Recent changes</div>
+        <div class="main-sub">Detected in the last 48 hours</div>
+      </div>
+      <div class="badge">3 new</div>
+    </div>
+
+    <div class="changes-grid">
+      <div class="change-card highlight">
+        <div class="change-icon orange">💰</div>
+        <div class="change-body">
+          <div class="change-type">Pricing change</div>
+          <div class="change-title">Starter plan price increased</div>
+          <div class="price-diff">
+            <span class="price-old">$45/mo</span>
+            <span class="price-new">$60/mo → +33%</span>
+          </div>
+          <div class="change-detail" style="margin-top:6px;">Starter CRM Suite now requires annual commitment for base price. Monthly billing adds 25% premium.</div>
+        </div>
+        <div class="change-time">2h ago</div>
+      </div>
+
+      <div class="change-card">
+        <div class="change-icon teal">✦</div>
+        <div class="change-body">
+          <div class="change-type">New feature</div>
+          <div class="change-title">AI email writer added to all plans</div>
+          <div class="change-detail">HubSpot AI Copilot now available in Starter tier. Previously Pro-only feature, now default for all users.</div>
+        </div>
+        <div class="change-time">18h ago</div>
+      </div>
+
+      <div class="change-card">
+        <div class="change-icon purple">📄</div>
+        <div class="change-body">
+          <div class="change-type">Landing page copy</div>
+          <div class="change-title">Homepage hero headline updated</div>
+          <div class="change-detail">Changed from "Grow better" to "Your customers, your growth" — shift in messaging toward ownership narrative.</div>
+        </div>
+        <div class="change-time">1d ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="right-panel">
+    <div class="panel-label">Activity summary</div>
+
+    <div class="stat-row">
+      <div class="stat-label">Changes this week</div>
+      <div class="stat-value orange">12</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label">Competitors tracked</div>
+      <div class="stat-value">6</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label">Price changes (30d)</div>
+      <div class="stat-value green">3</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label">New features (30d)</div>
+      <div class="stat-value">8</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label">Next scan</div>
+      <div class="stat-value" style="color:rgba(255,255,255,0.5);">15 min</div>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">⚡ Price alert triggered</div>
+      <div class="alert-text">A competitor raised prices — potential opportunity to capture price-sensitive prospects.</div>
+      <div class="alert-comp">
+        <div class="mini-avatar" style="background:#2A1A44; color:#A78BFA;">PF</div>
+        <div class="alert-comp-name">Pipedrive</div>
+        <div class="alert-since">6h ago</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

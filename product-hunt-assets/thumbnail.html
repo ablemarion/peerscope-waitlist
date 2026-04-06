@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Thumbnail</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { width: 240px; height: 240px; }
+body {
+  width: 240px;
+  height: 240px;
+  background: #0D0F1A;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.icon { display: block; flex-shrink: 0; }
+.wordmark {
+  font-family: 'Syne', 'Arial Black', Impact, sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  color: #FFFFFF;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.wordmark .accent { color: #F07C35; }
+</style>
+</head>
+<body>
+  <svg class="icon" width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="34" cy="34" r="29" stroke="#F07C35" stroke-width="3"/>
+    <circle cx="34" cy="34" r="17" stroke="#F07C35" stroke-width="1.8" stroke-opacity="0.5"/>
+    <line x1="34" y1="5" x2="34" y2="17" stroke="#F07C35" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="34" y1="51" x2="34" y2="63" stroke="#F07C35" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="5" y1="34" x2="17" y2="34" stroke="#F07C35" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="51" y1="34" x2="63" y2="34" stroke="#F07C35" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="34" cy="34" r="6" fill="#F07C35"/>
+  </svg>
+  <div class="wordmark">Peer<span class="accent">scope</span></div>
+</body>
+</html>

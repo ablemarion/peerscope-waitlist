@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Gallery 2 - Problem</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 500;
+  src: url('../public/fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+</style>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1270px;
+    height: 760px;
+    background: #0D0F1A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Subtle radial glow */
+  .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(240,124,53,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Top corner logo */
+  .logo {
+    position: absolute;
+    top: 32px;
+    left: 40px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo span { color: rgba(240,124,53,0.6); }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 920px;
+    padding: 0 60px;
+  }
+
+  /* The two-line problem statement */
+  .problem-line-1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 72px;
+    line-height: 1.05;
+    color: #FFFFFF;
+    letter-spacing: -2px;
+    margin-bottom: 0;
+  }
+
+  .problem-line-2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 72px;
+    line-height: 1.05;
+    color: #F07C35;
+    letter-spacing: -2px;
+    margin-bottom: 40px;
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: #F07C35;
+    margin: 0 auto 36px auto;
+  }
+
+  .subtext {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  /* Bottom brand bar */
+  .brand-bar {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: rgba(255,255,255,0.3);
+  }
+  .brand-bar span { color: rgba(240,124,53,0.6); }
+  .brand-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .tagline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="logo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="9.5" stroke="rgba(240,124,53,0.6)" stroke-width="1.5"/>
+      <circle cx="11" cy="11" r="5" stroke="rgba(240,124,53,0.4)" stroke-width="1.2"/>
+      <circle cx="11" cy="11" r="2" fill="rgba(240,124,53,0.7)"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+
+  <div class="content">
+    <div class="problem-line-1">Your competitors update their pricing.</div>
+    <div class="problem-line-2">You find out 3 weeks later.</div>
+    <div class="divider"></div>
+    <div class="subtext">
+      Most SMBs learn about competitor moves from customers — not intelligence tools.<br>
+      That's a problem Peerscope fixes.
+    </div>
+  </div>
+
+  <div class="brand-bar">
+    <span>Peer</span>scope
+    <div class="brand-dot"></div>
+    <span class="tagline">Track your competitors. Not your budget.</span>
+  </div>
+</body>
+</html>
