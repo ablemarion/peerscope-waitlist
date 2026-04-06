@@ -81,7 +81,7 @@ function SetupFlow() {
             style={{ borderColor: 'rgba(250,250,246,0.06)' }}
           >
             <span
-              className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold font-mono transition-all"
+              className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center text-sm font-bold font-mono transition-all"
               style={{
                 background: step === i ? '#B8622A' : 'rgba(184,98,42,0.1)',
                 color: step === i ? 'white' : 'rgba(184,98,42,0.45)',
