@@ -4,6 +4,7 @@ import { Logo, EmailForm } from './components/shared'
 import { FoundingBanner } from './components/FoundingBanner'
 import { HeroA } from './components/HeroA'
 import { HeroB } from './components/HeroB'
+import { HeroC } from './components/HeroC'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
 
 function RevealDiv({
@@ -27,16 +28,20 @@ function RevealDiv({
   )
 }
 
-// Read ?variant=a or ?variant=b from the URL. Defaults to 'b'.
-function useHeroVariant(): 'a' | 'b' {
+// Read ?variant=a, ?variant=b, or ?variant=c from the URL. Defaults to 'b'.
+function useHeroVariant(): 'a' | 'b' | 'c' {
   const params = new URLSearchParams(window.location.search)
   const v = params.get('variant')?.toLowerCase()
-  return v === 'a' ? 'a' : 'b'
+  if (v === 'a') return 'a'
+  if (v === 'c') return 'c'
+  return 'b'
 }
 
 function Hero() {
   const variant = useHeroVariant()
-  return variant === 'a' ? <HeroA /> : <HeroB />
+  if (variant === 'a') return <HeroA />
+  if (variant === 'c') return <HeroC />
+  return <HeroB />
 }
 
 // Diagonal SVG divider — "to" colour fills a triangle in the lower-left corner
