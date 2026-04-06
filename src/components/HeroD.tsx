@@ -178,8 +178,8 @@ function CompetitorFeedMockup() {
         </div>
 
         {/* Feed rows */}
-        <div className="divide-y" style={{ divideColor: 'rgba(255,255,255,0.04)' }}>
-          {filtered.map((row, i) => {
+        <div className="divide-y divide-white/[0.04]">
+          {filtered.map((row) => {
             const globalIndex = FEED_DATA.indexOf(row)
             const isVisible = visibleRows.includes(globalIndex)
             const colours = TYPE_COLOURS[row.type]
