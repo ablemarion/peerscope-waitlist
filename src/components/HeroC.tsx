@@ -245,11 +245,16 @@ export function HeroC() {
             <div className="max-w-lg mb-6">
               <EmailForm
                 placeholder="Enter your work email"
-                buttonText="Claim my founding seat"
+                buttonText="Claim founding price"
                 size="large"
                 variant="dark"
               />
-              <p className="mt-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              {waitlistCount !== null && waitlistCount > 0 && (
+                <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                  <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
+                </p>
+              )}
+              <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 Founding price locked forever &middot; No credit card now &middot; Cancel anytime
               </p>
             </div>

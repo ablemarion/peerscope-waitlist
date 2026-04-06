@@ -568,6 +568,17 @@ const annualPrices: Record<string, { monthly: string; annual: string; billed: st
 
 export default function App() {
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
+  const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/waitlist/count')
+      .then(res => res.ok ? res.json() : null)
+      .then((data: { count: number } | null) => {
+        if (data && typeof data.count === 'number') setWaitlistCount(data.count)
+      })
+      .catch(() => {/* show nothing on error */})
+  }, [])
+
   return (
     <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
 
@@ -1110,7 +1121,12 @@ export default function App() {
             className="max-w-md mx-auto rounded-2xl p-5"
             style={{ background: 'rgba(0,0,0,0.18)' }}
           >
-            <EmailForm placeholder="Enter your work email" buttonText="Join the waitlist" size="large" variant="dark" />
+            <EmailForm placeholder="Enter your work email" buttonText="Claim your founding price" size="large" variant="dark" />
+            {waitlistCount !== null && waitlistCount > 0 && (
+              <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
+              </p>
+            )}
           </div>
         </div>
       </section>
