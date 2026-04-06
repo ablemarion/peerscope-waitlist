@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import { Logo, EmailForm } from './components/shared'
 import { FoundingBanner } from './components/FoundingBanner'
@@ -68,8 +68,55 @@ function DiagonalRight({ from, to }: { from: string; to: string }) {
 
 // Realistic Peerscope live feed — replaces generic icon+text cards
 function ProductFeed() {
+  const [entered, setEntered] = useState(false)
+  const [newCount, setNewCount] = useState(3)
+  const [elapsedSec, setElapsedSec] = useState(0)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const mountTimeRef = useRef(Date.now())
+
+  // Detect viewport entry → trigger staggered animation and counter increment
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el) return
+    let counterTimer: ReturnType<typeof setTimeout>
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true)
+          observer.unobserve(el)
+          counterTimer = setTimeout(() => setNewCount(4), 4000)
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => {
+      observer.disconnect()
+      clearTimeout(counterTimer)
+    }
+  }, [])
+
+  // Live timestamp: tick every second for the first 60s since mount
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const sec = Math.floor((Date.now() - mountTimeRef.current) / 1000)
+      setElapsedSec(sec)
+      if (sec >= 60) clearInterval(interval)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const timestamp = elapsedSec < 60 ? `${elapsedSec} sec ago` : '2 min ago'
+
+  // Inner wrapper style: invisible before entry, then animation takes over
+  const itemInner = (delay: number): { className: string; style: React.CSSProperties } => ({
+    className: entered ? 'feed-item-enter' : '',
+    style: entered ? { animationDelay: `${delay}ms` } : { opacity: 0 },
+  })
+
   return (
     <div
+      ref={rootRef}
       className="rounded-2xl overflow-hidden"
       style={{
         background: '#06080F',
@@ -92,82 +139,88 @@ function ProductFeed() {
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#B8622A] animate-pulse" />
-          <span className="text-xs font-mono" style={{ color: '#B8622A' }}>3 new</span>
+          <span className="text-xs font-mono" style={{ color: '#B8622A' }}>{newCount} new</span>
         </div>
       </div>
 
       {/* Feed item 1 — pricing change */}
       <div className="px-4 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-        <div className="flex items-start justify-between gap-3 mb-2.5">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span
-              className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
-              style={{ color: '#F07C35', background: 'rgba(184,98,42,0.12)', border: '1px solid rgba(184,98,42,0.28)' }}
+        <div {...itemInner(0)}>
+          <div className="flex items-start justify-between gap-3 mb-2.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span
+                className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
+                style={{ color: '#F07C35', background: 'rgba(184,98,42,0.12)', border: '1px solid rgba(184,98,42,0.28)' }}
+              >
+                PRICE ↑
+              </span>
+              <span className="text-sm font-semibold text-white">Acme Corp</span>
+            </div>
+            <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>{timestamp}</span>
+          </div>
+          <p className="text-xs font-mono mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>acmecorp.com/pricing</p>
+          <div className="space-y-1 font-mono text-xs">
+            <div
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded"
+              style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.14)' }}
             >
-              PRICE ↑
-            </span>
-            <span className="text-sm font-semibold text-white">Acme Corp</span>
-          </div>
-          <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>2 min ago</span>
-        </div>
-        <p className="text-xs font-mono mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>acmecorp.com/pricing</p>
-        <div className="space-y-1 font-mono text-xs">
-          <div
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded"
-            style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.14)' }}
-          >
-            <span style={{ color: '#EF4444' }}>−</span>
-            <span style={{ color: 'rgba(252,165,165,0.6)', textDecoration: 'line-through' }}>Pro Plan: $79/mo</span>
-          </div>
-          <div
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded"
-            style={{ background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.14)' }}
-          >
-            <span style={{ color: '#10B981' }}>+</span>
-            <span style={{ color: 'rgba(167,243,208,0.9)' }}>Pro Plan: $99/mo</span>
-            <span className="ml-auto font-sans font-semibold text-xs" style={{ color: 'rgba(16,185,129,0.65)' }}>+25%</span>
+              <span style={{ color: '#EF4444' }}>−</span>
+              <span style={{ color: 'rgba(252,165,165,0.6)', textDecoration: 'line-through' }}>Pro Plan: $79/mo</span>
+            </div>
+            <div
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded"
+              style={{ background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.14)' }}
+            >
+              <span style={{ color: '#10B981' }}>+</span>
+              <span style={{ color: 'rgba(167,243,208,0.9)' }}>Pro Plan: $99/mo</span>
+              <span className="ml-auto font-sans font-semibold text-xs" style={{ color: 'rgba(16,185,129,0.65)' }}>+25%</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Feed item 2 — feature launch */}
       <div className="px-4 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.04)', opacity: 0.78 }}>
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <div className="flex items-center gap-2">
-            <span
-              className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
-              style={{ color: '#34D6B7', background: 'rgba(26,122,110,0.14)', border: '1px solid rgba(26,122,110,0.28)' }}
-            >
-              LAUNCH
-            </span>
-            <span className="text-sm font-semibold text-white">Rival Inc</span>
+        <div {...itemInner(150)}>
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex items-center gap-2">
+              <span
+                className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
+                style={{ color: '#34D6B7', background: 'rgba(26,122,110,0.14)', border: '1px solid rgba(26,122,110,0.28)' }}
+              >
+                LAUNCH
+              </span>
+              <span className="text-sm font-semibold text-white">Rival Inc</span>
+            </div>
+            <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>1 hr ago</span>
           </div>
-          <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>1 hr ago</span>
+          <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>rivalinc.com/changelog</p>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
+            New feature: <span className="text-white font-medium">"AI-powered battlecards"</span>
+          </p>
         </div>
-        <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>rivalinc.com/changelog</p>
-        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
-          New feature: <span className="text-white font-medium">"AI-powered battlecards"</span>
-        </p>
       </div>
 
       {/* Feed item 3 — hiring signal */}
       <div className="px-4 py-4" style={{ opacity: 0.52 }}>
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <div className="flex items-center gap-2">
-            <span
-              className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
-              style={{ color: '#D4A843', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.2)' }}
-            >
-              HIRING
-            </span>
-            <span className="text-sm font-semibold text-white">Competitor X</span>
+        <div {...itemInner(300)}>
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex items-center gap-2">
+              <span
+                className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
+                style={{ color: '#D4A843', background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.2)' }}
+              >
+                HIRING
+              </span>
+              <span className="text-sm font-semibold text-white">Competitor X</span>
+            </div>
+            <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>3 hrs ago</span>
           </div>
-          <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>3 hrs ago</span>
+          <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>competitorx.com/careers</p>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
+            Sr. Engineer — <span className="text-white font-medium">AI/ML Platform</span>
+          </p>
         </div>
-        <p className="text-xs font-mono mb-1.5" style={{ color: 'rgba(255,255,255,0.28)' }}>competitorx.com/careers</p>
-        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.62)' }}>
-          Sr. Engineer — <span className="text-white font-medium">AI/ML Platform</span>
-        </p>
       </div>
 
       {/* Status bar */}
