@@ -7,6 +7,7 @@ import { HeroB } from './components/HeroB'
 
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
+const HeroD = lazy(() => import('./components/HeroD').then(m => ({ default: m.HeroD })))
 
 function RevealDiv({
   staggerMs = 0,
@@ -236,12 +237,13 @@ function SetupFlow() {
   )
 }
 
-// Read ?variant=a, ?variant=b, or ?variant=c from the URL. Defaults to 'b'.
-function useHeroVariant(): 'a' | 'b' | 'c' {
+// Read ?variant=a/b/c/d from the URL. Defaults to 'b'.
+function useHeroVariant(): 'a' | 'b' | 'c' | 'd' {
   const params = new URLSearchParams(window.location.search)
   const v = params.get('variant')?.toLowerCase()
   if (v === 'a') return 'a'
   if (v === 'c') return 'c'
+  if (v === 'd') return 'd'
   return 'b'
 }
 
@@ -249,6 +251,7 @@ function Hero() {
   const variant = useHeroVariant()
   if (variant === 'a') return <Suspense fallback={null}><HeroA /></Suspense>
   if (variant === 'c') return <Suspense fallback={null}><HeroC /></Suspense>
+  if (variant === 'd') return <Suspense fallback={null}><HeroD /></Suspense>
   return <HeroB />
 }
 
