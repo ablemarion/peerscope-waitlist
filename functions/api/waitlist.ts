@@ -95,10 +95,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       )
     }
 
+    const now = new Date().toISOString()
     const result = await context.env.DB.prepare(
-      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, created_at) VALUES (?, ?, ?, ?, ?)'
+      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, created_at, signup_ts) VALUES (?, ?, ?, ?, ?, ?)'
     )
-      .bind(email, source, sessionId, variant, new Date().toISOString())
+      .bind(email, source, sessionId, variant, now, now)
       .run()
 
     // Notify and email on new signups only (not duplicates)
