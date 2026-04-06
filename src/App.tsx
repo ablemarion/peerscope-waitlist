@@ -558,6 +558,26 @@ export default function App() {
                   >
                     {item.desc}
                   </p>
+                  {item.num === '3' && (
+                    <div className="flex gap-2 mt-4 flex-wrap">
+                      {[
+                        { label: 'Slack', color: '#B8622A' },
+                        { label: 'Email', color: '#1A7A6E' },
+                      ].map(tag => (
+                        <span
+                          key={tag.label}
+                          className="text-xs font-mono font-medium px-3 py-1.5 rounded-full"
+                          style={{
+                            background: `${tag.color}18`,
+                            border: `1px solid ${tag.color}35`,
+                            color: tag.color,
+                          }}
+                        >
+                          {tag.label}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </RevealDiv>
             ))}
