@@ -320,7 +320,14 @@ function FAQ() {
   )
 }
 
+const annualPrices: Record<string, { monthly: string; annual: string; billed: string }> = {
+  Starter: { monthly: '$49', annual: '$39', billed: '$468' },
+  Pro:     { monthly: '$99', annual: '$79', billed: '$948' },
+  Team:    { monthly: '$199', annual: '$159', billed: '$1,908' },
+}
+
 export default function App() {
+  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
   return (
     <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
 
@@ -666,6 +673,37 @@ export default function App() {
             </div>
           </div>
 
+          {/* Billing toggle */}
+          <div className="flex justify-center sm:justify-end mb-6">
+            <div
+              className="inline-flex rounded-full p-1"
+              style={{ background: 'rgba(250,250,246,0.04)', border: '1px solid rgba(250,250,246,0.08)' }}
+              role="group"
+              aria-label="Billing period"
+            >
+              {(['monthly', 'annual'] as const).map(option => (
+                <button
+                  key={option}
+                  onClick={() => setBilling(option)}
+                  className="text-sm px-4 py-1.5 rounded-full transition font-mono"
+                  style={billing === option ? {
+                    background: 'rgba(184,98,42,0.15)',
+                    border: '1px solid rgba(184,98,42,0.35)',
+                    color: '#F07C35',
+                    fontWeight: 600,
+                  } : {
+                    background: 'transparent',
+                    border: '1px solid transparent',
+                    color: 'rgba(250,250,246,0.45)',
+                  }}
+                  aria-pressed={billing === option}
+                >
+                  {option === 'monthly' ? 'Monthly' : 'Annual  save 20%'}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Comparison table */}
           <RevealDiv scale>
             <div
@@ -706,13 +744,26 @@ export default function App() {
                             {plan.name}
                           </div>
                           <div className="mt-1.5">
+                            {billing === 'annual' && (
+                              <span
+                                className="text-lg font-bold mr-1"
+                                style={{ color: 'rgba(250,250,246,0.3)', textDecoration: 'line-through' }}
+                              >
+                                {annualPrices[plan.name].monthly}
+                              </span>
+                            )}
                             <span
                               className="text-2xl font-bold"
-                              style={{ color: plan.popular ? '#F07C35' : 'rgba(250,250,246,0.88)' }}
+                              style={{ color: billing === 'annual' ? '#F07C35' : plan.popular ? '#F07C35' : 'rgba(250,250,246,0.88)' }}
                             >
-                              {plan.price}
+                              {billing === 'annual' ? annualPrices[plan.name].annual : plan.price}
                             </span>
                             <span className="text-sm" style={{ color: 'rgba(250,250,246,0.38)' }}>{plan.period}</span>
+                            {billing === 'annual' && (
+                              <div className="text-xs mt-0.5" style={{ color: 'rgba(250,250,246,0.35)' }}>
+                                billed {annualPrices[plan.name].billed}/yr
+                              </div>
+                            )}
                           </div>
                         </th>
                       ))}
@@ -771,7 +822,7 @@ export default function App() {
             </div>
           </RevealDiv>
           <p className="text-center text-sm mt-6" style={{ color: 'rgba(250,250,246,0.28)' }}>
-            All prices in USD &middot; Annual billing available at 20% discount
+            All prices in USD
           </p>
         </div>
       </section>
