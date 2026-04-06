@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>Peerscope — Hero Card 1200×628</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 628px;
+    overflow: hidden;
+    background: #0D0F1A;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 628px;
+    background: #0D0F1A;
+    overflow: hidden;
+  }
+
+  /* Grid pattern */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(52, 214, 183, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52, 214, 183, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Top accent bar */
+  .accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #34D6B7 0%, #F07C35 50%, #34D6B7 100%);
+  }
+
+  /* Radial glow left */
+  .glow-left {
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(26,122,110,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Radial glow right */
+  .glow-right {
+    position: absolute;
+    bottom: -100px;
+    right: -50px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(240,124,53,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Left content */
+  .content-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 640px;
+    height: 628px;
+    padding: 56px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wordmark-dot {
+    width: 10px;
+    height: 10px;
+    background: #34D6B7;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(52, 214, 183, 0.6);
+  }
+
+  .wordmark-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #FAFAF6;
+    letter-spacing: -0.02em;
+  }
+
+  .headline-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0 24px;
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #34D6B7;
+    margin-bottom: 20px;
+  }
+
+  .headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 46px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #FAFAF6;
+    margin-bottom: 20px;
+  }
+
+  .headline em {
+    font-style: normal;
+    background: linear-gradient(135deg, #34D6B7, #1A7A6E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subline {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(250, 250, 246, 0.55);
+    line-height: 1.5;
+    max-width: 480px;
+  }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .url-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(52, 214, 183, 0.1);
+    border: 1px solid rgba(52, 214, 183, 0.25);
+    border-radius: 100px;
+    padding: 8px 16px;
+  }
+
+  .url-dot {
+    width: 6px;
+    height: 6px;
+    background: #34D6B7;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .url-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #34D6B7;
+    letter-spacing: 0.01em;
+  }
+
+  .tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(250, 250, 246, 0.3);
+  }
+
+  /* Right panel: alert cards */
+  .content-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 560px;
+    height: 628px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    padding: 60px 60px 60px 20px;
+  }
+
+  /* Vertical divider line */
+  .divider {
+    position: absolute;
+    left: 640px;
+    top: 80px;
+    bottom: 80px;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(52,214,183,0.2) 30%, rgba(52,214,183,0.2) 70%, transparent);
+  }
+
+  .alert-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .alert-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 12px 0 0 12px;
+  }
+
+  .alert-card.teal::before { background: #34D6B7; }
+  .alert-card.orange::before { background: #F07C35; }
+  .alert-card.violet::before { background: #7C3AED; }
+
+  .alert-body { flex: 1; }
+
+  .alert-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .alert-card.teal .alert-label { color: #34D6B7; }
+  .alert-card.orange .alert-label { color: #F07C35; }
+  .alert-card.violet .alert-label { color: #A78BFA; }
+
+  .alert-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FAFAF6;
+    margin-bottom: 4px;
+  }
+
+  .alert-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: rgba(250,250,246,0.35);
+  }
+
+  .alert-time {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: rgba(250,250,246,0.25);
+    white-space: nowrap;
+    align-self: flex-start;
+    padding-top: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid-bg"></div>
+  <div class="accent-bar"></div>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <div class="divider"></div>
+
+  <!-- Left: headline content -->
+  <div class="content-left">
+    <div class="wordmark">
+      <div class="wordmark-dot"></div>
+      <div class="wordmark-text">peerscope</div>
+    </div>
+
+    <div class="headline-block">
+      <div class="eyebrow">Competitive Intelligence for SaaS</div>
+      <h1 class="headline">Finally&nbsp;— intel that doesn't need a <em>full-time analyst</em></h1>
+      <p class="subline">Peerscope tracks your competitors so you don't have to.</p>
+    </div>
+
+    <div class="footer-row">
+      <div class="url-pill">
+        <div class="url-dot"></div>
+        <span class="url-text">peerscope-waitlist.pages.dev</span>
+      </div>
+      <span class="tagline">Track your competitors. Not your budget.</span>
+    </div>
+  </div>
+
+  <!-- Right: live alert cards -->
+  <div class="content-right">
+    <div class="alert-card teal">
+      <div class="alert-body">
+        <div class="alert-label">Pricing Change Detected</div>
+        <div class="alert-title">Competitor A raised Pro plan</div>
+        <div class="alert-meta">$79 → $99 · opportunity window open</div>
+      </div>
+      <div class="alert-time">2 min ago</div>
+    </div>
+
+    <div class="alert-card orange">
+      <div class="alert-body">
+        <div class="alert-label">New Job Posting</div>
+        <div class="alert-title">Competitor B hiring for Sales</div>
+        <div class="alert-meta">Head of Partnerships — expansion signal</div>
+      </div>
+      <div class="alert-time">1h ago</div>
+    </div>
+
+    <div class="alert-card violet">
+      <div class="alert-body">
+        <div class="alert-label">Feature Launch</div>
+        <div class="alert-title">Competitor C shipped AI tools</div>
+        <div class="alert-meta">New /features page · changelog updated</div>
+      </div>
+      <div class="alert-time">3h ago</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
