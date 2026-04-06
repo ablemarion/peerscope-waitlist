@@ -71,7 +71,7 @@ Founding member pricing - $49/mo locked in for life - closes on April 15.
 
 After that, early access moves to $99/mo before general launch.
 
-Reply "I'm in" to reserve your spot before Thursday.
+Reply "I'm in" to reserve your spot before April 15.
 
 Henrik at Peerscope`,
   }
@@ -80,18 +80,29 @@ Henrik at Peerscope`,
 async function sendDripEmail(
   resend: Resend,
   email: string,
+  emailNumber: number,
   subject: string,
   text: string,
-): Promise<void> {
-  await resend.emails.send({ from: FROM, to: email, subject, text })
+): Promise<string> {
+  const result = await resend.emails.send({ from: FROM, to: email, subject, text })
+  const resendId = (result.data as { id?: string } | null)?.id ?? 'unknown'
+  console.log(JSON.stringify({
+    event: 'drip_email_sent',
+    email,
+    email_number: emailNumber,
+    resend_id: resendId,
+    success: true,
+  }))
+  return resendId
 }
 
 export default {
   async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
     if (!env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY not set — drip cron skipped')
+      console.log(JSON.stringify({ event: 'drip_cron_skipped', reason: 'RESEND_API_KEY not set' }))
       return
     }
+    console.log(JSON.stringify({ event: 'drip_cron_start', ts: new Date().toISOString() }))
 
     const resend = new Resend(env.RESEND_API_KEY)
     const now = Date.now()
@@ -121,13 +132,13 @@ export default {
           if (row.email_sent_2 === null && signupAge >= MS_24H) {
             try {
               const { subject, text } = buildEmail2(firstName)
-              await sendDripEmail(resend, row.email, subject, text)
+              await sendDripEmail(resend, row.email, 2, subject, text)
               await env.DB.prepare(
                 'UPDATE waitlist SET email_sent_2 = ? WHERE id = ?'
               ).bind(new Date().toISOString(), row.id).run()
               sent2++
             } catch (err) {
-              console.error(`Email 2 failed for ${row.email}:`, err)
+              console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 2, success: false, error: String(err) }))
             }
             return
           }
@@ -135,13 +146,13 @@ export default {
           if (row.email_sent_3 === null && row.email_sent_2 !== null && signupAge >= MS_48H) {
             try {
               const { subject, text } = buildEmail3(firstName)
-              await sendDripEmail(resend, row.email, subject, text)
+              await sendDripEmail(resend, row.email, 3, subject, text)
               await env.DB.prepare(
                 'UPDATE waitlist SET email_sent_3 = ? WHERE id = ?'
               ).bind(new Date().toISOString(), row.id).run()
               sent3++
             } catch (err) {
-              console.error(`Email 3 failed for ${row.email}:`, err)
+              console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 3, success: false, error: String(err) }))
             }
             return
           }
@@ -149,13 +160,13 @@ export default {
           if (row.email_sent_4 === null && row.email_sent_3 !== null && signupAge >= MS_7D) {
             try {
               const { subject, text } = buildEmail4(firstName)
-              await sendDripEmail(resend, row.email, subject, text)
+              await sendDripEmail(resend, row.email, 4, subject, text)
               await env.DB.prepare(
                 'UPDATE waitlist SET email_sent_4 = ? WHERE id = ?'
               ).bind(new Date().toISOString(), row.id).run()
               sent4++
             } catch (err) {
-              console.error(`Email 4 failed for ${row.email}:`, err)
+              console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 4, success: false, error: String(err) }))
             }
           }
         })()
@@ -163,6 +174,6 @@ export default {
     )
 
     await Promise.allSettled(tasks)
-    console.log(`Drip cron complete: email2=${sent2} email3=${sent3} email4=${sent4}`)
+    console.log(JSON.stringify({ event: 'drip_cron_complete', email2: sent2, email3: sent3, email4: sent4, ts: new Date().toISOString() }))
   },
 }

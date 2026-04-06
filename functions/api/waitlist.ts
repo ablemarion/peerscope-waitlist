@@ -6,49 +6,32 @@ interface Env {
   RESEND_API_KEY?: string
 }
 
-const CONFIRMATION_EMAIL_HTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You're on the Peerscope waitlist</title>
-</head>
-<body style="margin:0;padding:0;background:#0D0F1A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0D0F1A;min-height:100vh;">
-    <tr>
-      <td align="center" style="padding:48px 24px;">
-        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
-          <tr>
-            <td style="padding-bottom:32px;">
-              <span style="font-size:18px;font-weight:700;color:#B8622A;letter-spacing:-0.02em;">Peerscope</span>
-            </td>
-          </tr>
-          <tr>
-            <td style="background:#13162A;border-radius:12px;padding:40px 40px 36px;">
-              <h1 style="margin:0 0 20px;font-size:28px;font-weight:700;color:#F5F5F5;letter-spacing:-0.03em;line-height:1.2;">You're on the list.</h1>
-              <p style="margin:0 0 16px;font-size:16px;color:#A0A3B1;line-height:1.6;">We'll alert you the moment Peerscope launches.</p>
-              <p style="margin:0;font-size:16px;color:#A0A3B1;line-height:1.6;">In the meantime, know a founder who'd benefit? Forward this email.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding-top:28px;text-align:center;">
-              <p style="margin:0;font-size:13px;color:#4A4D5E;">Track your competitors. Not your budget.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`
+const FROM = 'Henrik from Peerscope <hello@peerscope.io>'
 
-async function sendConfirmationEmail(apiKey: string, email: string): Promise<void> {
+function extractFirstName(email: string): string {
+  const local = email.split('@')[0]
+  const segment = local.split(/[._+\-0-9]/)[0]
+  if (!segment || segment.length < 2) return 'there'
+  return segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
+}
+
+async function sendWelcomeEmail(apiKey: string, email: string): Promise<void> {
   const resend = new Resend(apiKey)
+  const firstName = extractFirstName(email)
   await resend.emails.send({
-    from: 'Peerscope <onboarding@resend.dev>',
+    from: FROM,
     to: email,
     subject: "You're on the Peerscope waitlist",
-    html: CONFIRMATION_EMAIL_HTML,
+    text: `Hi ${firstName},
+
+You're in. Founding price locked: $49/mo for life.
+
+Peerscope gives you a live feed of what your competitors are changing — pricing, features, job posts, messaging. Know before your customers tell you.
+
+I'm building this as a solo founder and I'm reading every reply. What competitor move has cost you the most?
+
+Henrik
+Peerscope — Track your competitors, not your budget.`,
   })
 }
 
@@ -125,8 +108,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
       if (context.env.RESEND_API_KEY) {
         context.waitUntil(
-          sendConfirmationEmail(context.env.RESEND_API_KEY, email).catch((err: unknown) => {
-            console.error('Failed to send confirmation email:', err)
+          sendWelcomeEmail(context.env.RESEND_API_KEY, email).catch((err: unknown) => {
+            console.error('Failed to send welcome email:', err)
           })
         )
       }
