@@ -174,7 +174,7 @@ export function HeroA() {
 
             {/* CTA */}
             <div className="max-w-lg mb-6">
-              <EmailForm placeholder="Enter your work email" buttonText="Start monitoring free" size="large" variant="dark" />
+              <EmailForm placeholder="Enter your work email" buttonText="Claim founding price" size="large" variant="dark" />
               {waitlistCount !== null && waitlistCount > 0 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
                   <span aria-hidden="true">✓ </span>
@@ -185,11 +185,14 @@ export function HeroA() {
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
               </p>
+              <p className="mt-3 text-xs font-semibold" style={{ color: 'rgba(240,124,53,0.8)' }}>
+                &#9889; Founding price closes April 15 &mdash; locked for life after signup
+              </p>
             </div>
           </div>
 
-          {/* Right — alert mockup */}
-          <div className="relative">
+          {/* Right — alert mockup (desktop only) */}
+          <div className="relative hidden md:block">
             {/* Decorative glow */}
             <div
               className="absolute inset-0 rounded-3xl pointer-events-none"
