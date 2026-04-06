@@ -20,6 +20,14 @@ interface CountRow {
   count: number
 }
 
+interface DripStats {
+  email1: number
+  email2: number
+  email3: number
+  email4: number
+  pipeline: number
+}
+
 interface PageviewRow {
   date: string
   pageviews: number
@@ -51,8 +59,9 @@ function renderHtml(data: {
   pageviewsYesterday: number
   generatedAt: string
   bestVariant: string | null
+  dripStats: DripStats
 }): string {
-  const { totalSignups, recentSignups, variantStats, pageviewsToday, pageviewsYesterday, generatedAt, bestVariant } =
+  const { totalSignups, recentSignups, variantStats, pageviewsToday, pageviewsYesterday, generatedAt, bestVariant, dripStats } =
     data
 
   const pvDelta = pageviewsToday - pageviewsYesterday
@@ -120,6 +129,37 @@ function renderHtml(data: {
     </div>
 
     <div style="margin-bottom:32px;">
+      <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">Drip Email Stats</h2>
+      <div style="background:#13162A;border-radius:10px;padding:20px 24px;display:flex;gap:0;flex-wrap:wrap;">
+        <div style="flex:1;min-width:120px;text-align:center;padding:0 12px;border-right:1px solid #1e2133;">
+          <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Email 1</div>
+          <div style="font-size:28px;font-weight:700;color:#f5f5f5;">${dripStats.email1}</div>
+          <div style="font-size:11px;color:#4a4d5e;margin-top:2px;">welcome</div>
+        </div>
+        <div style="flex:1;min-width:120px;text-align:center;padding:0 12px;border-right:1px solid #1e2133;">
+          <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Email 2</div>
+          <div style="font-size:28px;font-weight:700;color:#f5f5f5;">${dripStats.email2}</div>
+          <div style="font-size:11px;color:#4a4d5e;margin-top:2px;">day 1</div>
+        </div>
+        <div style="flex:1;min-width:120px;text-align:center;padding:0 12px;border-right:1px solid #1e2133;">
+          <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Email 3</div>
+          <div style="font-size:28px;font-weight:700;color:#f5f5f5;">${dripStats.email3}</div>
+          <div style="font-size:11px;color:#4a4d5e;margin-top:2px;">day 2</div>
+        </div>
+        <div style="flex:1;min-width:120px;text-align:center;padding:0 12px;border-right:1px solid #1e2133;">
+          <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Email 4</div>
+          <div style="font-size:28px;font-weight:700;color:#f5f5f5;">${dripStats.email4}</div>
+          <div style="font-size:11px;color:#4a4d5e;margin-top:2px;">day 7</div>
+        </div>
+        <div style="flex:1;min-width:120px;text-align:center;padding:0 12px;">
+          <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Pipeline</div>
+          <div style="font-size:28px;font-weight:700;color:${dripStats.pipeline > 0 ? '#facc15' : '#f5f5f5'};">${dripStats.pipeline}</div>
+          <div style="font-size:11px;color:#4a4d5e;margin-top:2px;">pending</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:32px;">
       <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">A/B Variant Conversion</h2>
       <div style="background:#13162A;border-radius:10px;overflow:hidden;">
         <table style="width:100%;border-collapse:collapse;">
@@ -170,33 +210,55 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const todayUtc = new Date().toISOString().slice(0, 10)
   const yesterdayUtc = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
 
-  const [signupCountResult, recentResult, pvSessionResult, waitlistVariantResult, pvTodayResult, pvYesterdayResult] =
-    await context.env.DB.batch([
-      context.env.DB.prepare(
-        `SELECT COUNT(*) as count FROM waitlist
-         WHERE email NOT LIKE '%test%'
-         AND email NOT LIKE '%example%'
-         AND email NOT LIKE '%peerscope.app'`,
-      ),
-      context.env.DB.prepare(
-        `SELECT email, variant, source, created_at FROM waitlist
-         ORDER BY created_at DESC LIMIT 10`,
-      ),
-      context.env.DB.prepare(
-        `SELECT variant, COUNT(DISTINCT session_id) as sessions
-         FROM page_views WHERE variant IS NOT NULL GROUP BY variant`,
-      ),
-      context.env.DB.prepare(
-        `SELECT variant, COUNT(*) as signups
-         FROM waitlist WHERE variant IS NOT NULL GROUP BY variant`,
-      ),
-      context.env.DB.prepare(
-        `SELECT COUNT(*) as pageviews FROM page_views WHERE DATE(created_at) = '${todayUtc}'`,
-      ),
-      context.env.DB.prepare(
-        `SELECT COUNT(*) as pageviews FROM page_views WHERE DATE(created_at) = '${yesterdayUtc}'`,
-      ),
-    ])
+  const [
+    signupCountResult,
+    recentResult,
+    pvSessionResult,
+    waitlistVariantResult,
+    pvTodayResult,
+    pvYesterdayResult,
+    drip2Result,
+    drip3Result,
+    drip4Result,
+    dripPending2Result,
+    dripPending3Result,
+  ] = await context.env.DB.batch([
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as count FROM waitlist
+       WHERE email NOT LIKE '%test%'
+       AND email NOT LIKE '%example%'
+       AND email NOT LIKE '%peerscope.app'`,
+    ),
+    context.env.DB.prepare(
+      `SELECT email, variant, source, created_at FROM waitlist
+       ORDER BY created_at DESC LIMIT 10`,
+    ),
+    context.env.DB.prepare(
+      `SELECT variant, COUNT(DISTINCT session_id) as sessions
+       FROM page_views WHERE variant IS NOT NULL GROUP BY variant`,
+    ),
+    context.env.DB.prepare(
+      `SELECT variant, COUNT(*) as signups
+       FROM waitlist WHERE variant IS NOT NULL GROUP BY variant`,
+    ),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as pageviews FROM page_views WHERE DATE(created_at) = '${todayUtc}'`,
+    ),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as pageviews FROM page_views WHERE DATE(created_at) = '${yesterdayUtc}'`,
+    ),
+    context.env.DB.prepare(`SELECT COUNT(*) as count FROM waitlist WHERE email_sent_2 IS NOT NULL`),
+    context.env.DB.prepare(`SELECT COUNT(*) as count FROM waitlist WHERE email_sent_3 IS NOT NULL`),
+    context.env.DB.prepare(`SELECT COUNT(*) as count FROM waitlist WHERE email_sent_4 IS NOT NULL`),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as count FROM waitlist
+       WHERE email_sent_2 IS NULL AND signup_ts < datetime('now', '-1 day')`,
+    ),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as count FROM waitlist
+       WHERE email_sent_2 IS NOT NULL AND email_sent_3 IS NULL AND signup_ts < datetime('now', '-2 days')`,
+    ),
+  ])
 
   const totalSignups = (signupCountResult.results[0] as CountRow | undefined)?.count ?? 0
   const recentSignups = recentResult.results as SignupRow[]
@@ -223,6 +285,16 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const bestVariant = variantStats.length > 0 ? (variantStats[0].variant ?? null) : null
 
+  const dripStats: DripStats = {
+    email1: totalSignups,
+    email2: (drip2Result.results[0] as CountRow | undefined)?.count ?? 0,
+    email3: (drip3Result.results[0] as CountRow | undefined)?.count ?? 0,
+    email4: (drip4Result.results[0] as CountRow | undefined)?.count ?? 0,
+    pipeline:
+      ((dripPending2Result.results[0] as CountRow | undefined)?.count ?? 0) +
+      ((dripPending3Result.results[0] as CountRow | undefined)?.count ?? 0),
+  }
+
   const html = renderHtml({
     totalSignups,
     recentSignups,
@@ -231,6 +303,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     pageviewsYesterday,
     generatedAt: new Date().toISOString(),
     bestVariant,
+    dripStats,
   })
 
   return new Response(html, {
