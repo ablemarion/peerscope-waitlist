@@ -29,6 +29,209 @@ function RevealDiv({
   )
 }
 
+// Animated 3-state setup flow — replaces generic numbered steps
+function SetupFlow() {
+  const [step, setStep] = useState(0)
+  const [typedUrl, setTypedUrl] = useState('')
+  const [scanLines, setScanLines] = useState<string[]>([])
+
+  const STEPS = [
+    { label: 'Paste a URL', desc: 'Add any competitor URL — pricing page, homepage, job board. No engineering required.' },
+    { label: 'We scan 24/7', desc: 'Peerscope continuously monitors for changes around the clock. Zero effort from you.' },
+    { label: 'You get alerted', desc: 'Instant Slack or email the moment something changes. Not a weekly digest.' },
+  ]
+
+  const URL_TARGET = 'bluestoneplumbing.com/pricing'
+
+  useEffect(() => {
+    if (step !== 0) return
+    setTypedUrl('')
+    let i = 0
+    const timer = setInterval(() => {
+      i++
+      setTypedUrl(URL_TARGET.slice(0, i))
+      if (i >= URL_TARGET.length) clearInterval(timer)
+    }, 60)
+    return () => clearInterval(timer)
+  }, [step])
+
+  useEffect(() => {
+    if (step !== 1) return
+    setScanLines([])
+    const lines = ['↳ pricing page scanned', '↳ feature page scanned', '↳ job board scanned', '↳ G2 reviews checked']
+    lines.forEach((line, i) => {
+      setTimeout(() => setScanLines(prev => [...prev, line]), i * 420)
+    })
+  }, [step])
+
+  useEffect(() => {
+    const timer = setInterval(() => setStep(s => (s + 1) % 3), 3800)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Step list */}
+      <div className="flex flex-col">
+        {STEPS.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setStep(i)}
+            className="flex items-start gap-6 py-8 border-b last:border-b-0 text-left transition-all"
+            style={{ borderColor: 'rgba(250,250,246,0.06)' }}
+          >
+            <span
+              className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold font-mono transition-all"
+              style={{
+                background: step === i ? '#B8622A' : 'rgba(184,98,42,0.1)',
+                color: step === i ? 'white' : 'rgba(184,98,42,0.45)',
+                border: `2px solid ${step === i ? '#B8622A' : 'rgba(184,98,42,0.2)'}`,
+              }}
+            >
+              {i + 1}
+            </span>
+            <div className="pt-1">
+              <h3
+                className="text-xl font-bold mb-1.5"
+                style={{
+                  fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+                  color: step === i ? 'white' : 'rgba(250,250,246,0.35)',
+                }}
+              >
+                {s.label}
+              </h3>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: step === i ? 'rgba(250,250,246,0.55)' : 'rgba(250,250,246,0.18)', maxWidth: '36ch' }}
+              >
+                {s.desc}
+              </p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Demo panel */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: '#06080F',
+          border: '1px solid rgba(184,98,42,0.22)',
+          boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+          minHeight: '280px',
+        }}
+      >
+        <div
+          className="flex items-center gap-2 px-4 py-3 border-b"
+          style={{ background: '#03050A', borderColor: 'rgba(255,255,255,0.05)' }}
+        >
+          <div className="w-3 h-3 rounded-full" style={{ background: '#1e2030' }} />
+          <div className="w-3 h-3 rounded-full" style={{ background: '#1e2030' }} />
+          <div className="w-3 h-3 rounded-full" style={{ background: '#1e2030' }} />
+          <span className="ml-2 text-xs font-mono" style={{ color: 'rgba(255,255,255,0.18)' }}>peerscope — setup</span>
+        </div>
+
+        <div className="p-6 min-h-[200px]">
+          {step === 0 && (
+            <div>
+              <p className="text-xs font-mono mb-3" style={{ color: 'rgba(255,255,255,0.35)' }}>Add a competitor URL</p>
+              <div
+                className="flex items-center gap-1 rounded-lg px-4 py-3 font-mono text-sm mb-4"
+                style={{ background: '#111320', border: '1px solid rgba(184,98,42,0.4)' }}
+              >
+                <span style={{ color: 'rgba(255,255,255,0.25)' }}>https://</span>
+                <span style={{ color: 'white' }}>{typedUrl}</span>
+                <span className="w-0.5 h-4 ml-0.5 animate-pulse" style={{ background: '#B8622A' }} />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['Pricing page', 'Features', 'Jobs', 'G2 reviews'].map(tag => (
+                  <span
+                    key={tag}
+                    className="text-xs px-2.5 py-1 rounded font-mono"
+                    style={{ background: 'rgba(184,98,42,0.08)', color: 'rgba(184,98,42,0.6)', border: '1px solid rgba(184,98,42,0.15)' }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 1 && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-2 h-2 rounded-full bg-[#B8622A] animate-pulse" />
+                <span className="text-xs font-mono" style={{ color: '#B8622A' }}>scanning bluestoneplumbing.com</span>
+              </div>
+              <div className="space-y-2">
+                {scanLines.map((line, i) => (
+                  <div
+                    key={i}
+                    className="text-xs font-mono py-1.5 px-3 rounded"
+                    style={{ color: 'rgba(52,214,183,0.8)', background: 'rgba(20,184,166,0.05)' }}
+                  >
+                    {line}
+                  </div>
+                ))}
+                {scanLines.length < 4 && (
+                  <div className="text-xs font-mono py-1.5 px-3 flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                    <span className="inline-block w-3 h-0.5 rounded animate-pulse" style={{ background: 'rgba(184,98,42,0.4)' }} />
+                    scanning...
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div>
+              <p className="text-xs font-mono mb-4" style={{ color: 'rgba(255,255,255,0.3)' }}>Slack alert fired</p>
+              <div className="rounded-xl p-4" style={{ background: '#1a1d2e', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-xs font-bold"
+                    style={{ background: '#B8622A', color: 'white' }}
+                  >
+                    P
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-white">Peerscope</span>
+                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(52,214,183,0.1)', color: '#34D6B7' }}>App</span>
+                    </div>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                      🔔 <strong>Bluestone Plumbing Co.</strong> changed their pricing
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                      Pro Plan:{' '}
+                      <span style={{ textDecoration: 'line-through' }}>$79/mo</span>
+                      {' → '}
+                      <span style={{ color: '#F07C35' }}>$99/mo</span>
+                    </p>
+                    <p className="text-xs mt-2" style={{ color: 'rgba(255,255,255,0.25)' }}>just now · #competitor-intel</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-1.5 px-6 pb-5">
+          {[0, 1, 2].map(i => (
+            <button
+              key={i}
+              onClick={() => setStep(i)}
+              className="h-1 rounded-full flex-1 transition-all"
+              style={{ background: step === i ? '#B8622A' : 'rgba(184,98,42,0.15)' }}
+              aria-label={`Go to step ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // Read ?variant=a, ?variant=b, or ?variant=c from the URL. Defaults to 'b'.
 function useHeroVariant(): 'a' | 'b' | 'c' {
   const params = new URLSearchParams(window.location.search)
@@ -520,32 +723,44 @@ export default function App() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <RevealDiv
                   staggerMs={80}
-                  className="rounded-2xl p-6 card-hover"
-                  style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.1)' }}
+                  className="rounded-2xl p-7 card-hover"
+                  style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.14)' }}
                 >
-                  <svg className="w-6 h-6 mb-4" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5" />
-                    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M12 10v4M10 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
-                  </svg>
-                  <h3 className="font-semibold text-white mb-2">Crayon costs $20k/year</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
-                    Enterprise platforms like Crayon and Klue start at $12,500/year. Built for analyst teams, not founders.
+                  <div
+                    className="leading-none mb-5 select-none"
+                    style={{
+                      fontFamily: "'Syne', system-ui, sans-serif",
+                      fontWeight: 900,
+                      fontSize: 'clamp(48px, 7vw, 72px)',
+                      color: '#F07C35',
+                    }}
+                    aria-hidden="true"
+                  >
+                    $20,000/yr
+                  </div>
+                  <p className="text-base leading-snug" style={{ color: 'rgba(250,250,246,0.65)' }}>
+                    Crayon. Klue. Built for analyst teams. Not for you.
                   </p>
                 </RevealDiv>
                 <RevealDiv
                   staggerMs={160}
-                  className="rounded-2xl p-6 card-hover"
-                  style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.1)' }}
+                  className="rounded-2xl p-7 card-hover"
+                  style={{ background: '#0D0F1A', border: '1px solid rgba(26,122,110,0.18)' }}
                 >
-                  <svg className="w-6 h-6 mb-4" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ color: '#B8622A' }}>
-                    <circle cx="12" cy="13" r="8" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
-                    <path d="M12 9v4l2.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M9 2h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5" />
-                  </svg>
-                  <h3 className="font-semibold text-white mb-2">Manual checks waste hours</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(250,250,246,0.5)' }}>
-                    Manually checking 5 competitor websites every Monday takes an hour - and you still miss things.
+                  <div
+                    className="leading-none mb-5 select-none"
+                    style={{
+                      fontFamily: "'Syne', system-ui, sans-serif",
+                      fontWeight: 900,
+                      fontSize: 'clamp(48px, 7vw, 72px)',
+                      color: '#34D6B7',
+                    }}
+                    aria-hidden="true"
+                  >
+                    4 hrs/week
+                  </div>
+                  <p className="text-base leading-snug" style={{ color: 'rgba(250,250,246,0.65)' }}>
+                    Manually checking competitor websites. Every Monday.
                   </p>
                 </RevealDiv>
               </div>
@@ -583,86 +798,7 @@ export default function App() {
             </h2>
           </div>
 
-          <div>
-            {[
-              {
-                num: '1',
-                title: 'Add competitors',
-                desc: 'Paste their URLs. Takes two minutes. No engineering required.',
-                accent: '#B8622A',
-              },
-              {
-                num: '2',
-                title: 'We monitor 24/7',
-                desc: 'We watch pricing pages, feature pages, job boards, and reviews around the clock.',
-                accent: '#1A7A6E',
-              },
-              {
-                num: '3',
-                title: 'You get alerts',
-                desc: 'Instant Slack or email notification the moment something changes. Not a weekly digest.',
-                accent: '#B8622A',
-              },
-            ].map((item, i) => (
-              <RevealDiv
-                key={item.num}
-                staggerMs={i * 100}
-                className="relative flex items-start gap-8 lg:gap-20 py-10 border-b last:border-b-0"
-                style={{ borderColor: 'rgba(250,250,246,0.06)' }}
-              >
-                {/* Big decorative number */}
-                <div className="flex-shrink-0 w-16 lg:w-28 pt-1">
-                  <span
-                    className="block leading-none select-none"
-                    style={{
-                      fontFamily: "'Syne', system-ui, sans-serif",
-                      fontWeight: 800,
-                      fontSize: 'clamp(72px, 10vw, 112px)',
-                      color: item.accent,
-                      opacity: 0.14,
-                    }}
-                  >
-                    {item.num}
-                  </span>
-                </div>
-                {/* Content */}
-                <div className="flex-1 pt-2">
-                  <h3
-                    className="text-2xl sm:text-3xl font-bold text-white mb-3"
-                    style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p
-                    className="text-lg leading-relaxed"
-                    style={{ color: 'rgba(250,250,246,0.52)', maxWidth: '42ch' }}
-                  >
-                    {item.desc}
-                  </p>
-                  {item.num === '3' && (
-                    <div className="flex gap-2 mt-4 flex-wrap">
-                      {[
-                        { label: 'Slack', color: '#B8622A' },
-                        { label: 'Email', color: '#1A7A6E' },
-                      ].map(tag => (
-                        <span
-                          key={tag.label}
-                          className="text-xs font-mono font-medium px-3 py-1.5 rounded-full"
-                          style={{
-                            background: `${tag.color}18`,
-                            border: `1px solid ${tag.color}35`,
-                            color: tag.color,
-                          }}
-                        >
-                          {tag.label}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </RevealDiv>
-            ))}
-          </div>
+          <SetupFlow />
         </div>
       </section>
 
@@ -940,25 +1076,37 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer CTA */}
+      {/* Footer CTA — full-bleed amber inversion */}
       <section
         id="waitlist-footer"
-        className="py-20 px-4 sm:px-6 lg:px-8"
-        style={{ background: '#0D0F1A' }}
+        className="py-24 px-4 sm:px-6 lg:px-8"
+        style={{ background: '#B8622A' }}
       >
         <div className="max-w-2xl mx-auto text-center">
-          <h2
-            className="text-3xl sm:text-4xl font-bold mb-4 text-white"
-            style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+          <div
+            className="leading-none mb-6 select-none"
+            style={{
+              fontFamily: "'Syne', system-ui, sans-serif",
+              fontWeight: 900,
+              fontSize: 'clamp(56px, 10vw, 80px)',
+              color: 'white',
+              letterSpacing: '-0.03em',
+            }}
           >
-            Still thinking about it?
-            <br />
-            Start free. Your first competitor alert in under 15 minutes.
-          </h2>
-          <p className="text-lg mb-10" style={{ color: 'rgba(250,250,246,0.48)' }}>
-            No setup fees. No annual commitment. Cancel before you're charged.
+            Start free.
+          </div>
+          <p
+            className="text-lg sm:text-xl mb-10 leading-relaxed"
+            style={{ color: 'rgba(255,255,255,0.78)' }}
+          >
+            Your first competitor alert in under 15 minutes.
+            <br className="hidden sm:block" />
+            No setup fees. No annual commitment. Cancel anytime.
           </p>
-          <div className="max-w-md mx-auto">
+          <div
+            className="max-w-md mx-auto rounded-2xl p-5"
+            style={{ background: 'rgba(0,0,0,0.18)' }}
+          >
             <EmailForm placeholder="Enter your work email" buttonText="Join the waitlist" size="large" variant="dark" />
           </div>
         </div>

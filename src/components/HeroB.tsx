@@ -168,11 +168,18 @@ export function HeroB() {
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
               </p>
+              {/* Mobile trust line — replaces hidden pricing table */}
+              <p
+                className="mt-4 text-sm font-medium md:hidden"
+                style={{ color: 'rgba(52,214,183,0.85)' }}
+              >
+                From $49/mo &middot; Save ~$19,400/yr vs Crayon
+              </p>
             </div>
           </div>
 
-          {/* Right — pricing comparison visual */}
-          <div className="relative">
+          {/* Right — pricing comparison visual (desktop only) */}
+          <div className="relative hidden md:block">
             {/* Decorative glow behind card */}
             <div
               className="absolute inset-0 rounded-3xl pointer-events-none"
