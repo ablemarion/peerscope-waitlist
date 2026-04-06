@@ -456,6 +456,15 @@ export default function App() {
                   </p>
                 </RevealDiv>
               </div>
+              <div className="flex justify-end mt-8">
+                <a
+                  href="#pricing"
+                  className="text-sm font-medium transition hover:opacity-80"
+                  style={{ color: '#B8622A' }}
+                >
+                  Already convinced? Skip to pricing →
+                </a>
+              </div>
             </div>
 
           </div>
@@ -606,6 +615,13 @@ export default function App() {
                     </span>
                   ))}
                 </div>
+                <a
+                  href="#waitlist-footer"
+                  className="text-sm font-medium mt-6 block transition hover:opacity-80"
+                  style={{ color: '#B8622A' }}
+                >
+                  See all signals Peerscope tracks →
+                </a>
               </div>
             </div>
 
