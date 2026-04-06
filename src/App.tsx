@@ -8,6 +8,7 @@ import { HeroB } from './components/HeroB'
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
 const HeroD = lazy(() => import('./components/HeroD').then(m => ({ default: m.HeroD })))
+const CompetitorFeedMockup = lazy(() => import('./components/HeroD').then(m => ({ default: m.CompetitorFeedMockup })))
 
 function RevealDiv({
   staggerMs = 0,
@@ -621,185 +622,214 @@ export default function App() {
       {/* Hero — swap via ?variant=a (problem-led) or ?variant=b (value-led, default) */}
       <Hero />
 
-      {/* Problem — asymmetric editorial layout */}
+      {/* Problem — before/after comparison */}
       <section
-        className="relative py-24 px-4 sm:px-6 lg:px-8 scan-grid overflow-hidden"
+        className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
         style={{ background: '#111320' }}
       >
-        <div className="max-w-6xl mx-auto">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-16 lg:items-start">
+        {/* Subtle grid texture */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+          aria-hidden="true"
+        />
 
-            {/* Left column — section label + headline */}
-            <div className="lg:col-span-5 mb-14 lg:mb-0 relative">
-              <span
-                aria-hidden="true"
-                className="section-num"
-                style={{ top: '-8px', left: '-8px' }}
-              >01</span>
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <span
-                  className="text-xs font-mono tracking-[0.2em] uppercase mb-6 block"
-                  style={{ color: '#B8622A' }}
-                >
-                  The Problem
-                </span>
-                <h2
-                  className="text-4xl sm:text-5xl font-bold leading-tight text-white"
-                  style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
-                >
-                  Enterprise CI costs $20k/year.
-                  <br />
-                  Manual monitoring costs you hours.
-                </h2>
-                <p
-                  className="text-lg mt-6 leading-relaxed"
-                  style={{ color: 'rgba(250,250,246,0.5)' }}
-                >
-                  There's nothing in between - until now.
-                </p>
-              </div>
-            </div>
+        <div className="max-w-6xl mx-auto relative">
 
-            {/* Right column — cards */}
-            <div className="lg:col-span-7 flex flex-col gap-5">
-              {/* Stat Card Cluster — Option A social proof */}
-              <RevealDiv
-                className="rounded-2xl p-6 card-hover"
-                style={{
-                  background: '#0D0F1A',
-                  border: '1px solid rgba(184,98,42,0.14)',
-                }}
+          {/* Section header */}
+          <div className="text-center mb-14">
+            <span
+              className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
+              style={{ color: '#B8622A' }}
+            >
+              The Problem
+            </span>
+            <h2
+              className="text-4xl sm:text-5xl font-bold leading-tight text-white"
+              style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800, letterSpacing: '-0.02em' }}
+            >
+              Stop finding out from customers.
+            </h2>
+            <p
+              className="text-lg mt-4 leading-relaxed mx-auto"
+              style={{ color: 'rgba(250,250,246,0.45)', maxWidth: '48ch' }}
+            >
+              Right now, your competitors are making moves. Here's how most founders find out — and how Peerscope changes that.
+            </p>
+          </div>
+
+          {/* Before / After panels */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-5 lg:gap-0 items-stretch">
+
+            {/* BEFORE panel */}
+            <RevealDiv
+              className="rounded-2xl overflow-hidden flex flex-col"
+              style={{
+                background: 'rgba(30, 8, 8, 0.7)',
+                border: '1px solid rgba(239,68,68,0.25)',
+              }}
+            >
+              {/* Panel header */}
+              <div
+                className="flex items-center gap-2.5 px-5 py-3.5 border-b"
+                style={{ background: 'rgba(239,68,68,0.06)', borderColor: 'rgba(239,68,68,0.18)' }}
               >
-                <div className="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-white/[0.06] gap-5 sm:gap-0">
-                  <div className="sm:pr-5 flex flex-col gap-1.5 pb-5 sm:pb-0 border-b sm:border-b-0 border-white/[0.06]">
-                    {/* Top accent line */}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="6.5" stroke="rgba(239,68,68,0.6)" />
+                  <path d="M7 4v3.5M7 9.5v.5" stroke="#EF4444" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+                <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(239,68,68,0.8)' }}>
+                  How you find out now
+                </span>
+              </div>
+
+              {/* Slack-style DM mockup */}
+              <div className="flex-1 p-5 space-y-4">
+                {/* Incoming message from a customer */}
+                <div
+                  className="rounded-xl p-4"
+                  style={{ background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.12)' }}
+                >
+                  <div className="flex items-center gap-2.5 mb-2.5">
                     <div
-                      className="w-8 h-0.5 mb-3 rounded-full"
-                      style={{ background: 'linear-gradient(90deg, #F07C35 0%, #B8622A 100%)' }}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="text-3xl sm:text-4xl font-bold leading-none"
-                      style={{ fontFamily: "'Syne', system-ui, sans-serif", color: '#F07C35' }}
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                      style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.25)' }}
                     >
-                      4+
-                    </span>
-                    <span
-                      className="text-xs font-semibold uppercase tracking-widest mt-1"
-                      style={{ color: 'rgba(250,250,246,0.35)' }}
-                    >
-                      hrs/week
-                    </span>
-                    <p className="text-sm leading-snug mt-2" style={{ color: 'rgba(250,250,246,0.55)' }}>
-                      spent manually monitoring competitors
+                      SC
+                    </div>
+                    <div>
+                      <span className="text-xs font-semibold text-white">Sarah Chen</span>
+                      <span className="text-xs ml-2" style={{ color: 'rgba(255,255,255,0.25)' }}>Customer · 2:47 PM</span>
+                    </div>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                    Hey, quick question — I just saw your competitor dropped their price to <span className="text-white font-semibold">$49/mo</span>. Are you planning to match it? We're mid-renewal review...
+                  </p>
+                </div>
+
+                {/* Consequence cards */}
+                <div className="space-y-2.5">
+                  <div
+                    className="flex items-start gap-3 rounded-lg px-3.5 py-2.5"
+                    style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.12)' }}
+                  >
+                    <span className="text-sm mt-0.5 flex-shrink-0" style={{ color: '#EF4444' }}>✗</span>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                      You check their site. 30% price cut. Live for <span className="text-white font-medium">3 weeks</span>.
                     </p>
                   </div>
-
-                  <div className="sm:px-5 flex flex-col gap-1.5 pb-5 sm:pb-0 border-b sm:border-b-0 border-white/[0.06]">
-                    <div
-                      className="w-8 h-0.5 mb-3 rounded-full"
-                      style={{ background: 'linear-gradient(90deg, #F07C35 0%, #B8622A 100%)' }}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="text-3xl sm:text-4xl font-bold leading-none"
-                      style={{ fontFamily: "'Syne', system-ui, sans-serif", color: '#F07C35' }}
-                    >
-                      23%
-                    </span>
-                    <span
-                      className="text-xs font-semibold uppercase tracking-widest mt-1"
-                      style={{ color: 'rgba(250,250,246,0.35)' }}
-                    >
-                      of founders
-                    </span>
-                    <p className="text-sm leading-snug mt-2" style={{ color: 'rgba(250,250,246,0.55)' }}>
-                      learned of a competitor price change from a customer first
+                  <div
+                    className="flex items-start gap-3 rounded-lg px-3.5 py-2.5"
+                    style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.12)' }}
+                  >
+                    <span className="text-sm mt-0.5 flex-shrink-0" style={{ color: '#EF4444' }}>✗</span>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                      You've already lost <span className="text-white font-medium">2 deals</span> this month.
                     </p>
                   </div>
-
-                  <div className="sm:pl-5 flex flex-col gap-1.5">
-                    <div
-                      className="w-8 h-0.5 mb-3 rounded-full"
-                      style={{ background: 'linear-gradient(90deg, #F07C35 0%, #B8622A 100%)' }}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="text-3xl sm:text-4xl font-bold leading-none"
-                      style={{ fontFamily: "'Syne', system-ui, sans-serif", color: '#F07C35' }}
-                    >
-                      1 in 3
-                    </span>
-                    <span
-                      className="text-xs font-semibold uppercase tracking-widest mt-1"
-                      style={{ color: 'rgba(250,250,246,0.35)' }}
-                    >
-                      SaaS founders
-                    </span>
-                    <p className="text-sm leading-snug mt-2" style={{ color: 'rgba(250,250,246,0.55)' }}>
-                      lost a deal to a competitor move they never saw coming
+                  <div
+                    className="flex items-start gap-3 rounded-lg px-3.5 py-2.5"
+                    style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.12)' }}
+                  >
+                    <span className="text-sm mt-0.5 flex-shrink-0" style={{ color: '#EF4444' }}>✗</span>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                      Your sales deck is <span className="text-white font-medium">3 weeks out of date</span>.
                     </p>
                   </div>
                 </div>
-                <p className="text-xs mt-5 pt-4 border-t border-white/[0.06]" style={{ color: 'rgba(250,250,246,0.2)' }}>
-                  Based on founder surveys · SMB SaaS segment
-                </p>
-              </RevealDiv>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <RevealDiv
-                  staggerMs={80}
-                  className="rounded-2xl p-7 card-hover"
-                  style={{ background: '#0D0F1A', border: '1px solid rgba(184,98,42,0.14)' }}
+                {/* Timestamp callout */}
+                <div
+                  className="rounded-lg px-3.5 py-2.5 flex items-center gap-2"
+                  style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}
                 >
-                  <div
-                    className="leading-none mb-5 select-none"
-                    style={{
-                      fontFamily: "'Syne', system-ui, sans-serif",
-                      fontWeight: 900,
-                      fontSize: 'clamp(48px, 7vw, 72px)',
-                      color: '#F07C35',
-                    }}
-                    aria-hidden="true"
-                  >
-                    $20,000/yr
-                  </div>
-                  <p className="text-base leading-snug" style={{ color: 'rgba(250,250,246,0.65)' }}>
-                    Crayon. Klue. Built for analyst teams. Not for you.
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <circle cx="6" cy="6" r="5.5" stroke="#EF4444" strokeWidth="1" />
+                    <path d="M6 3.5V6.5l2 1.5" stroke="#EF4444" strokeWidth="1.25" strokeLinecap="round" />
+                  </svg>
+                  <p className="text-xs font-mono" style={{ color: 'rgba(239,68,68,0.75)' }}>
+                    You're always the last to know
                   </p>
-                </RevealDiv>
-                <RevealDiv
-                  staggerMs={160}
-                  className="rounded-2xl p-7 card-hover"
-                  style={{ background: '#0D0F1A', border: '1px solid rgba(26,122,110,0.18)' }}
-                >
-                  <div
-                    className="leading-none mb-5 select-none"
-                    style={{
-                      fontFamily: "'Syne', system-ui, sans-serif",
-                      fontWeight: 900,
-                      fontSize: 'clamp(48px, 7vw, 72px)',
-                      color: '#34D6B7',
-                    }}
-                    aria-hidden="true"
-                  >
-                    4 hrs/week
-                  </div>
-                  <p className="text-base leading-snug" style={{ color: 'rgba(250,250,246,0.65)' }}>
-                    Manually checking competitor websites. Every Monday.
-                  </p>
-                </RevealDiv>
+                </div>
               </div>
-              <a
-                href="#pricing"
-                className="text-sm font-medium transition hover:opacity-80 mt-8 inline-flex items-center py-3"
-                style={{ color: '#B8622A' }}
+            </RevealDiv>
+
+            {/* VS divider */}
+            <div className="flex lg:flex-col items-center justify-center py-4 lg:py-0 px-0 lg:px-0 relative z-10">
+              <div
+                className="hidden lg:block w-px flex-1"
+                style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent)' }}
+              />
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mx-4 lg:mx-0 lg:my-4"
+                style={{
+                  background: '#111320',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  color: 'rgba(255,255,255,0.3)',
+                  boxShadow: '0 0 0 6px #111320',
+                }}
               >
-                Already convinced? Skip to pricing →
-              </a>
+                vs
+              </div>
+              <div
+                className="hidden lg:block w-px flex-1"
+                style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent)' }}
+              />
+              {/* Horizontal line for mobile */}
+              <div
+                className="lg:hidden flex-1 h-px"
+                style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent)' }}
+              />
             </div>
 
+            {/* AFTER panel */}
+            <RevealDiv
+              staggerMs={120}
+              className="rounded-2xl overflow-hidden flex flex-col"
+              style={{
+                background: 'rgba(4, 20, 14, 0.7)',
+                border: '1px solid rgba(52,214,183,0.25)',
+              }}
+            >
+              {/* Panel header */}
+              <div
+                className="flex items-center gap-2.5 px-5 py-3.5 border-b"
+                style={{ background: 'rgba(52,214,183,0.05)', borderColor: 'rgba(52,214,183,0.15)' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="6.5" stroke="rgba(52,214,183,0.6)" />
+                  <path d="M4.5 7l2 2 3.5-4" stroke="#34D6B7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(52,214,183,0.8)' }}>
+                  With Peerscope
+                </span>
+              </div>
+
+              {/* Competitor feed mockup */}
+              <div className="flex-1 p-4">
+                <Suspense fallback={
+                  <div className="rounded-xl" style={{ background: '#06080F', border: '1px solid rgba(255,255,255,0.06)', height: '280px' }} />
+                }>
+                  <CompetitorFeedMockup />
+                </Suspense>
+              </div>
+            </RevealDiv>
+
           </div>
+
+          <div className="text-center mt-10">
+            <a
+              href="#pricing"
+              className="text-sm font-medium transition hover:opacity-80 inline-flex items-center gap-1.5 py-3"
+              style={{ color: '#B8622A' }}
+            >
+              Already convinced? Skip to pricing →
+            </a>
+          </div>
+
         </div>
       </section>
 

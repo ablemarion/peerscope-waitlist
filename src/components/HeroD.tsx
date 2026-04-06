@@ -84,7 +84,7 @@ const TYPE_COLOURS: Record<ChangeType, { bg: string; text: string; border: strin
 
 type FilterTab = 'all' | ChangeType
 
-function CompetitorFeedMockup() {
+export function CompetitorFeedMockup() {
   const [activeTab, setActiveTab] = useState<FilterTab>('all')
   const [visibleRows, setVisibleRows] = useState<number[]>([])
   const [pulseNew, setPulseNew] = useState(true)
