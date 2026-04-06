@@ -69,8 +69,20 @@ export function EmailForm({
   }
 
   if (status === 'success') {
-    function handleShare() {
-      navigator.clipboard.writeText('https://peerscope-waitlist.pages.dev').catch(() => {})
+    const SHARE_URL = 'https://peerscope-waitlist.pages.dev'
+    const SHARE_TEXT = `I just claimed founding pricing for @Peerscope — competitive intel for SMBs at $49/mo. Closes April 15: ${SHARE_URL}`
+
+    async function handleShare() {
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: 'Peerscope', text: SHARE_TEXT, url: SHARE_URL })
+          return
+        } catch {
+          // User cancelled or share failed — fall through to Twitter
+        }
+      }
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TEXT)}`
+      window.open(twitterUrl, '_blank', 'noopener,noreferrer')
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }
@@ -102,8 +114,8 @@ export function EmailForm({
           className={`text-sm transition flex items-center gap-1.5 min-h-[44px] px-2 ${variant === 'dark' ? 'text-white/40 hover:text-white/70' : 'text-gray-400 hover:text-gray-600'}`}
         >
           {copied
-            ? <><span className="text-[#34D6B7]">✓</span> Link copied!</>
-            : <>Know a founder who'd want this? Share the link <span aria-hidden="true">→</span></>
+            ? <><span className="text-[#34D6B7]">✓</span> Shared!</>
+            : <>Share with a founder friend <span aria-hidden="true">↗</span></>
           }
         </button>
       </div>
