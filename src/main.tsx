@@ -13,6 +13,28 @@ if (analyticsToken) {
   document.head.appendChild(script)
 }
 
+// Server-side page view tracking — fires once per session
+;(function trackPageView() {
+  const SESSION_KEY = 'ps_sid'
+  let sessionId = sessionStorage.getItem(SESSION_KEY)
+  if (!sessionId) {
+    sessionId = crypto.randomUUID()
+    sessionStorage.setItem(SESSION_KEY, sessionId)
+  }
+
+  const params = new URLSearchParams(window.location.search)
+  const payload = {
+    session_id: sessionId,
+    variant: params.get('variant') ?? 'b',
+    referrer: document.referrer || null,
+    utm_source: params.get('utm_source'),
+    utm_medium: params.get('utm_medium'),
+    utm_campaign: params.get('utm_campaign'),
+  }
+
+  navigator.sendBeacon('/api/analytics/pageview', JSON.stringify(payload))
+})()
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
