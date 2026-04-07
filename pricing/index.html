@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peerscope Pricing — Competitive Intelligence for $49/mo</title>
+    <meta name="description" content="SMB competitive intelligence at $49/mo. Monitor competitor pricing, features, and hiring in real-time. Founding rate locked for life — waitlist closes April 15." />
+    <meta property="og:site_name" content="Peerscope" />
+    <meta property="og:title" content="Peerscope Pricing — Competitive Intelligence for $49/mo" />
+    <meta property="og:description" content="SMB competitive intelligence at $49/mo. Monitor competitor pricing, features, and hiring in real-time. Founding rate locked for life — waitlist closes April 15." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:url" content="https://peerscope-waitlist.pages.dev/pricing/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+    <meta name="twitter:title" content="Peerscope Pricing — Competitive Intelligence for $49/mo" />
+    <meta name="twitter:description" content="SMB competitive intelligence at $49/mo. Monitor competitor pricing, features, and hiring in real-time. Founding rate locked for life — waitlist closes April 15." />
+    <link rel="canonical" href="https://peerscope-waitlist.pages.dev/pricing/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0D0F1A" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Peerscope",
+      "description": "Competitive intelligence platform for SMBs. Monitor competitor pricing, feature launches, job postings, and reviews in real-time.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://peerscope-waitlist.pages.dev",
+      "offers": {
+        "@type": "Offer",
+        "price": "49",
+        "priceCurrency": "USD",
+        "priceValidUntil": "2026-04-15",
+        "description": "Founding Member rate — locked for life. Waitlist closes April 15."
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "Peerscope"
+      }
+    }
+    </script>
+    <link rel="preload" as="font" href="/fonts/syne-latin.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/inter-latin.woff2" type="font/woff2" crossorigin>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      @font-face {
+        font-family: 'Syne';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: swap;
+        src: url('/fonts/syne-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400 600;
+        font-display: swap;
+        src: url('/fonts/inter-latin.woff2') format('woff2');
+      }
+
+      :root {
+        --bg: #0D0F1A;
+        --surface: #13162A;
+        --border: rgba(250,250,246,0.08);
+        --text: rgba(250,250,246,0.9);
+        --muted: rgba(250,250,246,0.45);
+        --accent: #B8622A;
+        --accent-light: #F07C35;
+        --teal: #34D6B7;
+      }
+
+      html { background: var(--bg); color: var(--text); scroll-behavior: smooth; }
+
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 1rem;
+        line-height: 1.7;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      a { color: var(--accent-light); text-decoration: none; }
+      a:hover { color: var(--accent-light); text-decoration: underline; }
+
+      /* Nav */
+      .nav-outer {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid rgba(184,98,42,0.12);
+        background: rgba(13,15,26,0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      nav {
+        max-width: 1152px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .logo-svg text { font-family: 'Syne', system-ui, sans-serif; }
+      .nav-links { display: flex; align-items: center; gap: 1rem; }
+      .nav-link {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: rgba(250,250,246,0.5);
+        transition: color 0.15s;
+        padding: 0.75rem 0.25rem;
+        display: none;
+      }
+      @media (min-width: 640px) { .nav-link { display: block; } }
+      .nav-link:hover { color: #FAFAFF; text-decoration: none; }
+      .nav-cta {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #FAFAFF;
+        background: var(--accent);
+        padding: 0.875rem 1rem;
+        border-radius: 8px;
+        transition: filter 0.15s;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .nav-cta:hover { filter: brightness(1.1); text-decoration: none; color: #FAFAFF; }
+
+      /* Hero */
+      .hero {
+        text-align: center;
+        padding: 5rem 1.5rem 3rem;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .hero-label {
+        font-size: 0.75rem;
+        font-family: 'Inter', monospace;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        margin-bottom: 1rem;
+        display: block;
+      }
+      h1 {
+        font-family: 'Syne', system-ui, sans-serif;
+        font-weight: 800;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: #FAFAFF;
+        margin-bottom: 1rem;
+      }
+      .hero-sub {
+        font-size: 1.125rem;
+        color: var(--muted);
+        max-width: 44ch;
+        margin: 0 auto 3rem;
+      }
+
+      /* Pricing card */
+      .pricing-section {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 0 1.5rem 4rem;
+      }
+      .pricing-card {
+        background: var(--surface);
+        border: 1px solid rgba(184,98,42,0.3);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .pricing-card-header {
+        background: rgba(184,98,42,0.08);
+        border-bottom: 1px solid rgba(184,98,42,0.2);
+        padding: 1.5rem 2rem;
+      }
+      .plan-badge {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        background: rgba(184,98,42,0.15);
+        border: 1px solid rgba(184,98,42,0.3);
+        border-radius: 6px;
+        padding: 0.25rem 0.625rem;
+        margin-bottom: 1rem;
+      }
+      .plan-name {
+        font-family: 'Syne', system-ui, sans-serif;
+        font-weight: 700;
+        font-size: 1.375rem;
+        color: #FAFAFF;
+        margin-bottom: 0.5rem;
+      }
+      .price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .price-dollar {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--accent-light);
+        margin-top: 0.25rem;
+      }
+      .price-amount {
+        font-family: 'Syne', system-ui, sans-serif;
+        font-weight: 800;
+        font-size: 3.5rem;
+        line-height: 1;
+        color: #FAFAFF;
+        letter-spacing: -0.03em;
+      }
+      .price-period {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-left: 0.25rem;
+      }
+      .price-note {
+        font-size: 0.8125rem;
+        color: var(--teal);
+        font-weight: 600;
+      }
+      .pricing-card-body { padding: 1.75rem 2rem; }
+      .features-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      .features-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.625rem;
+        font-size: 0.9375rem;
+        color: var(--text);
+      }
+      .check {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+        color: var(--teal);
+      }
+
+      /* Email form */
+      .form-wrap { margin-bottom: 1rem; }
+      .email-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+      }
+      @media (min-width: 480px) {
+        .email-form { flex-direction: row; }
+      }
+      .email-input {
+        flex: 1;
+        border-radius: 8px;
+        border: 1px solid rgba(250,250,246,0.2);
+        background: rgba(250,250,246,0.06);
+        color: #FAFAFF;
+        padding: 0.75rem 1rem;
+        font-size: 0.9375rem;
+        outline: none;
+        transition: border-color 0.15s, background 0.15s;
+        min-height: 48px;
+        font-family: inherit;
+      }
+      .email-input::placeholder { color: rgba(250,250,246,0.35); }
+      .email-input:focus {
+        border-color: rgba(184,98,42,0.6);
+        background: rgba(250,250,246,0.1);
+      }
+      .email-btn {
+        white-space: nowrap;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #FAFAFF;
+        font-family: inherit;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        padding: 0.75rem 1.375rem;
+        min-height: 48px;
+        transition: filter 0.15s, transform 0.15s;
+      }
+      .email-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-1px); }
+      .email-btn:active:not(:disabled) { transform: translateY(0); }
+      .email-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+      .form-error { font-size: 0.8125rem; color: #f87171; margin-top: 0.5rem; }
+      .form-success {
+        text-align: center;
+        padding: 1rem 0;
+      }
+      .form-success .success-icon {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .form-success p {
+        font-weight: 600;
+        color: var(--teal);
+        margin-bottom: 0.25rem;
+      }
+      .form-success small { color: var(--muted); font-size: 0.875rem; }
+      .form-disclaimer {
+        font-size: 0.8rem;
+        color: rgba(250,250,246,0.3);
+        text-align: center;
+      }
+
+      /* Comparison */
+      .comparison-section {
+        background: #111320;
+        padding: 4rem 1.5rem;
+      }
+      .comparison-inner {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 0.75rem;
+        font-family: 'Inter', monospace;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        margin-bottom: 0.75rem;
+        display: block;
+      }
+      h2 {
+        font-family: 'Syne', system-ui, sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        color: #FAFAFF;
+        margin-bottom: 2rem;
+      }
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .comparison-table th, .comparison-table td {
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9375rem;
+      }
+      .comparison-table th {
+        font-family: 'Syne', system-ui, sans-serif;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: var(--muted);
+        background: rgba(250,250,246,0.03);
+        letter-spacing: -0.01em;
+      }
+      .comparison-table td:first-child { text-align: left; color: var(--muted); font-size: 0.875rem; }
+      .comparison-table tr:last-child td { border-bottom: none; }
+      .col-peerscope { background: rgba(184,98,42,0.06); }
+      .col-peerscope-val {
+        color: var(--accent-light);
+        font-weight: 700;
+        font-family: 'Syne', system-ui, sans-serif;
+      }
+      .col-competitor { color: rgba(250,250,246,0.35); }
+      .th-peerscope {
+        background: rgba(184,98,42,0.1) !important;
+        color: var(--accent-light) !important;
+        border-bottom: 1px solid rgba(184,98,42,0.2) !important;
+      }
+
+      /* Urgency strip */
+      .urgency-strip {
+        background: rgba(184,98,42,0.1);
+        border-top: 1px solid rgba(184,98,42,0.2);
+        border-bottom: 1px solid rgba(184,98,42,0.2);
+        padding: 1rem 1.5rem;
+        text-align: center;
+      }
+      .urgency-strip p {
+        font-size: 0.9375rem;
+        color: rgba(250,250,246,0.8);
+      }
+      .urgency-strip strong { color: var(--accent-light); }
+
+      /* FAQ */
+      .faq-section {
+        padding: 4rem 1.5rem;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .faq-list { display: flex; flex-direction: column; gap: 0; }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 0;
+      }
+      .faq-item:first-child { border-top: 1px solid var(--border); }
+      .faq-q {
+        font-family: 'Syne', system-ui, sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #FAFAFF;
+        margin-bottom: 0.5rem;
+      }
+      .faq-a { font-size: 0.9375rem; color: var(--muted); line-height: 1.6; }
+      .faq-a a { color: var(--accent-light); }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid rgba(250,250,246,0.06);
+        padding: 2rem 1.5rem;
+        background: var(--bg);
+      }
+      .footer-inner {
+        max-width: 1152px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: rgba(250,250,246,0.3);
+      }
+      @media (min-width: 640px) {
+        .footer-inner {
+          flex-direction: row;
+          justify-content: space-between;
+          text-align: left;
+        }
+      }
+      .footer-links { display: flex; gap: 1.25rem; }
+      .footer-links a {
+        color: rgba(250,250,246,0.3);
+        text-decoration: none;
+        transition: color 0.15s;
+        padding: 0.75rem 0;
+        display: inline-block;
+      }
+      .footer-links a:hover { color: #FAFAFF; text-decoration: none; }
+
+      /* Logo inline SVG helper */
+      .logo-wrap { display: inline-flex; align-items: center; }
+    </style>
+  </head>
+  <body>
+
+    <div class="nav-outer">
+      <nav>
+        <a href="/" class="logo-wrap" aria-label="Peerscope home">
+          <svg width="140" height="28" viewBox="0 0 140 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="14" cy="14" r="12" stroke="#FAFAF6" stroke-width="2" fill="none"/>
+            <circle cx="14" cy="14" r="4" fill="#34D6B7"/>
+            <line x1="14" y1="2" x2="14" y2="8" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <line x1="14" y1="20" x2="14" y2="26" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="14" x2="8" y2="14" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="14" x2="26" y2="14" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <text x="32" y="19" font-family="'Syne', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" font-weight="400" fill="#FAFAF6">peer</text>
+            <text x="64" y="19" font-family="'Syne', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" font-weight="700" fill="#F07C35">scope</text>
+          </svg>
+        </a>
+        <div class="nav-links">
+          <a href="/blog/" class="nav-link">Blog</a>
+          <a href="/pricing/" class="nav-link" style="color: #F07C35;">Pricing</a>
+          <a href="/#waitlist-footer" class="nav-cta">Join waitlist</a>
+        </div>
+      </nav>
+    </div>
+
+    <main>
+
+      <!-- Hero -->
+      <section class="hero">
+        <span class="hero-label">Pricing</span>
+        <h1>Simple pricing for SMBs</h1>
+        <p class="hero-sub">No enterprise contracts. No sales calls. No annual commitments that require board approval.</p>
+      </section>
+
+      <!-- Pricing card -->
+      <section class="pricing-section">
+        <div class="pricing-card">
+          <div class="pricing-card-header">
+            <div class="plan-badge">Founding Member</div>
+            <div class="plan-name">Everything you need to stay ahead</div>
+            <div class="price-row">
+              <span class="price-dollar">$</span>
+              <span class="price-amount">49</span>
+              <span class="price-period">/mo</span>
+            </div>
+            <div class="price-note">&#10003; Founding rate locked for life</div>
+          </div>
+
+          <div class="pricing-card-body">
+            <ul class="features-list">
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Real-time competitor pricing monitoring
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Feature launch and website change alerts
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Job posting intelligence — spot hiring signals early
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Messaging and positioning change tracking
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Monitor up to 5 competitors
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Daily or weekly email digest — your choice
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Slack and email alerts for critical changes
+              </li>
+              <li>
+                <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="6,10 9,13 14,7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Cancel anytime — no lock-in, no annual contracts
+              </li>
+            </ul>
+
+            <div class="form-wrap">
+              <div id="form-container">
+                <form class="email-form" id="waitlist-form" novalidate>
+                  <input
+                    type="email"
+                    class="email-input"
+                    id="email-input"
+                    placeholder="Enter your work email"
+                    aria-label="Work email address"
+                    required
+                  />
+                  <button type="submit" class="email-btn" id="submit-btn">
+                    Claim founding rate
+                  </button>
+                </form>
+                <p class="form-error" id="form-error" style="display:none;"></p>
+              </div>
+            </div>
+            <p class="form-disclaimer">No credit card required &middot; Founding rate locked for life</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Urgency strip -->
+      <div class="urgency-strip">
+        <p>
+          <strong>Founding rate closes April 15.</strong>
+          After that, pricing moves to $99/mo. Join the waitlist now to lock $49/mo for life.
+        </p>
+      </div>
+
+      <!-- Comparison -->
+      <section class="comparison-section">
+        <div class="comparison-inner">
+          <span class="section-label">The comparison</span>
+          <h2>$588/yr vs $12,000–$20,000+/yr</h2>
+          <div style="overflow-x:auto;">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">What you get</th>
+                  <th class="th-peerscope">Peerscope</th>
+                  <th>Crayon</th>
+                  <th>Klue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Annual cost</td>
+                  <td class="col-peerscope col-peerscope-val">$588/yr</td>
+                  <td class="col-competitor">~$12,000/yr</td>
+                  <td class="col-competitor">$20,000+/yr</td>
+                </tr>
+                <tr>
+                  <td>Sales call required</td>
+                  <td class="col-peerscope col-peerscope-val">No</td>
+                  <td class="col-competitor">Yes</td>
+                  <td class="col-competitor">Yes</td>
+                </tr>
+                <tr>
+                  <td>Annual contract</td>
+                  <td class="col-peerscope col-peerscope-val">No</td>
+                  <td class="col-competitor">Yes</td>
+                  <td class="col-competitor">Yes</td>
+                </tr>
+                <tr>
+                  <td>Built for SMBs</td>
+                  <td class="col-peerscope col-peerscope-val">Yes</td>
+                  <td class="col-competitor">No</td>
+                  <td class="col-competitor">No</td>
+                </tr>
+                <tr>
+                  <td>Real-time pricing alerts</td>
+                  <td class="col-peerscope col-peerscope-val">Yes</td>
+                  <td class="col-competitor">Yes</td>
+                  <td class="col-competitor">Yes</td>
+                </tr>
+                <tr>
+                  <td>Job posting signals</td>
+                  <td class="col-peerscope col-peerscope-val">Yes</td>
+                  <td class="col-competitor">Yes</td>
+                  <td class="col-competitor">Yes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="faq-section">
+        <span class="section-label">FAQ</span>
+        <h2>Common questions</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <div class="faq-q">What's included in the founding rate?</div>
+            <p class="faq-a">
+              Everything — competitor pricing monitoring, feature launch alerts, job posting intelligence,
+              messaging change tracking, daily or weekly digests, and Slack alerts. Up to 5 competitors.
+              The founding rate of $49/mo is locked for life as long as you stay subscribed.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">When does Peerscope launch?</div>
+            <p class="faq-a">
+              We're in the final stages of building. Founding members get first access and will be
+              notified by email the moment we open up. The waitlist closes 15 April 2026 — after that,
+              pricing moves to $99/mo.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">Can I cancel?</div>
+            <p class="faq-a">
+              Yes, any time. No annual contracts, no cancellation fees, no lock-in. Cancel in one click.
+              We want you to stay because Peerscope is valuable, not because leaving is painful.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">Do you support currencies other than USD?</div>
+            <p class="faq-a">
+              Billing is in USD. Australian and other international customers are welcome —
+              your bank converts at the current rate. Have questions? Email us at
+              <a href="mailto:hello@peerscope.io">hello@peerscope.io</a>.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <a href="/" aria-label="Peerscope home">
+          <svg width="120" height="24" viewBox="0 0 140 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="14" cy="14" r="12" stroke="#FAFAF6" stroke-width="2" fill="none"/>
+            <circle cx="14" cy="14" r="4" fill="#34D6B7"/>
+            <line x1="14" y1="2" x2="14" y2="8" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <line x1="14" y1="20" x2="14" y2="26" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="14" x2="8" y2="14" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="14" x2="26" y2="14" stroke="#FAFAF6" stroke-width="2" stroke-linecap="round"/>
+            <text x="32" y="19" font-family="'Syne', system-ui, sans-serif" font-size="16" font-weight="400" fill="#FAFAF6">peer</text>
+            <text x="64" y="19" font-family="'Syne', system-ui, sans-serif" font-size="16" font-weight="700" fill="#F07C35">scope</text>
+          </svg>
+        </a>
+        <p>&copy; 2026 Peerscope. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/blog/">Blog</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="mailto:hello@peerscope.io">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var form = document.getElementById('waitlist-form');
+        var input = document.getElementById('email-input');
+        var btn = document.getElementById('submit-btn');
+        var errorEl = document.getElementById('form-error');
+        var container = document.getElementById('form-container');
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var email = input.value.trim();
+          if (!email) return;
+
+          btn.disabled = true;
+          btn.textContent = 'Joining\u2026';
+          errorEl.style.display = 'none';
+
+          var params = new URLSearchParams(window.location.search);
+          var source = params.get('utm_source') || params.get('ref') || 'pricing-page';
+          var variant = params.get('variant') || 'pricing';
+
+          fetch('/api/waitlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, source: source, variant: variant }),
+          })
+            .then(function (res) {
+              if (res.ok) {
+                container.innerHTML =
+                  '<div class="form-success">' +
+                  '<span class="success-icon">&#10003;</span>' +
+                  "<p>You're in!</p>" +
+                  "<small>We'll alert you the moment Peerscope launches. Founding rate locked.</small>" +
+                  '</div>';
+              } else {
+                return res.json().then(function (data) {
+                  errorEl.textContent = (data && data.error) || 'Something went wrong. Please try again.';
+                  errorEl.style.display = 'block';
+                  btn.disabled = false;
+                  btn.textContent = 'Claim founding rate';
+                });
+              }
+            })
+            .catch(function () {
+              errorEl.textContent = 'Something went wrong. Please try again.';
+              errorEl.style.display = 'block';
+              btn.disabled = false;
+              btn.textContent = 'Claim founding rate';
+            });
+        });
+      })();
+    </script>
+
+  </body>
+</html>
