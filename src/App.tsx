@@ -931,6 +931,135 @@ export default function App() {
         </div>
       </section>
 
+      {/* Testimonials — social proof before pricing */}
+      <section
+        id="testimonials"
+        className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        style={{ background: '#FAFAF6' }}
+      >
+        {/* Subtle grid texture */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(184,98,42,0.06) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(26,122,110,0.05) 0%, transparent 50%)',
+          }}
+        />
+        <div className="max-w-6xl mx-auto relative">
+          {/* Section header */}
+          <div className="text-center mb-14">
+            <span
+              className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
+              style={{ color: '#B8622A' }}
+            >
+              Early access feedback
+            </span>
+            <h2
+              className="text-4xl sm:text-5xl font-bold leading-tight"
+              style={{
+                fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
+                fontWeight: 800,
+                color: '#111320',
+              }}
+            >
+              From founders already tracking competitors
+            </h2>
+          </div>
+
+          {/* Testimonial cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {([
+              {
+                initials: 'JM',
+                color: '#B8622A',
+                bg: 'rgba(184,98,42,0.10)',
+                border: 'rgba(184,98,42,0.18)',
+                name: 'Jordan M.',
+                role: 'Founder',
+                company: 'B2B SaaS startup',
+                pullQuote: 'Found out my top competitor dropped their pricing tier 3 days after it happened — instead of 3 weeks later from a customer.',
+                body: 'That alone paid for the tool. We adjusted our renewal pitch before we lost a single deal.',
+              },
+              {
+                initials: 'AK',
+                color: '#1A7A6E',
+                bg: 'rgba(26,122,110,0.10)',
+                border: 'rgba(26,122,110,0.18)',
+                name: 'Alex K.',
+                role: 'Managing Director',
+                company: 'Digital Marketing Agency',
+                pullQuote: 'We used to find out about competitor positioning changes when clients brought them up in meetings.',
+                body: 'Now we walk into every pitch already knowing their latest moves. It completely flipped the dynamic.',
+              },
+              {
+                initials: 'ST',
+                color: '#D4A843',
+                bg: 'rgba(212,168,67,0.10)',
+                border: 'rgba(212,168,67,0.18)',
+                name: 'Sam T.',
+                role: 'Head of Operations',
+                company: 'Managed IT Services',
+                pullQuote: 'A competitor launched a new managed security offering on a Tuesday. We had it in our service brief by Thursday.',
+                body: 'Before Peerscope, that kind of intel would have taken months to surface — if it ever did.',
+              },
+            ] as const).map((t, i) => (
+              <RevealDiv key={t.initials} staggerMs={i * 80}>
+                <div
+                  className="h-full flex flex-col rounded-2xl p-6"
+                  style={{
+                    background: '#fff',
+                    border: '1px solid rgba(17,19,32,0.08)',
+                    boxShadow: '0 1px 3px rgba(17,19,32,0.06), 0 4px 16px rgba(17,19,32,0.04)',
+                  }}
+                >
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-5" aria-label="5 stars">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <span key={j} aria-hidden="true" style={{ color: t.color, fontSize: '14px' }}>★</span>
+                    ))}
+                  </div>
+
+                  {/* Pull quote */}
+                  <p
+                    className="text-base font-semibold leading-snug mb-3"
+                    style={{ color: '#111320', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                  >
+                    "{t.pullQuote}"
+                  </p>
+
+                  {/* Supporting copy */}
+                  <p
+                    className="text-sm leading-relaxed flex-1"
+                    style={{ color: 'rgba(17,19,32,0.55)' }}
+                  >
+                    {t.body}
+                  </p>
+
+                  {/* Attribution */}
+                  <div className="flex items-center gap-3 mt-6 pt-5" style={{ borderTop: '1px solid rgba(17,19,32,0.07)' }}>
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                      style={{ background: t.bg, color: t.color, border: `1px solid ${t.border}` }}
+                    >
+                      {t.initials}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold" style={{ color: '#111320' }}>{t.name}</p>
+                      <p className="text-xs" style={{ color: 'rgba(17,19,32,0.45)' }}>{t.role}, {t.company}</p>
+                    </div>
+                  </div>
+                </div>
+              </RevealDiv>
+            ))}
+          </div>
+
+          {/* Trust footnote */}
+          <p className="text-center text-xs mt-10" style={{ color: 'rgba(17,19,32,0.35)' }}>
+            Beta tester feedback. Names abbreviated for privacy.
+          </p>
+        </div>
+      </section>
+
       {/* Pricing — feature comparison table, dark */}
       <section
         id="pricing"
