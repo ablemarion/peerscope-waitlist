@@ -608,7 +608,7 @@ export default function App() {
           <Logo dark />
           <div className="flex items-center gap-4">
             <a href="/blog/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Blog</a>
-            <a href="#pricing" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
+            <a href="/pricing/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
               className="text-sm font-semibold text-white px-4 py-3.5 rounded-lg transition hover:brightness-110"
@@ -1317,7 +1317,8 @@ export default function App() {
             &copy; {new Date().getFullYear()} peerscope. All rights reserved.
           </p>
           <div className="flex gap-5 text-sm" style={{ color: 'rgba(250,250,246,0.3)' }}>
-            <a href="/blog/competitive-intelligence-smb-2026/" className="hover:text-white transition-colors py-3 inline-block">Blog</a>
+            <a href="/blog/" className="hover:text-white transition-colors py-3 inline-block">Blog</a>
+            <a href="/pricing/" className="hover:text-white transition-colors py-3 inline-block">Pricing</a>
             <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors py-3 inline-block">Contact</a>
           </div>
         </div>
