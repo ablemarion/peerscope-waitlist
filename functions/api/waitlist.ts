@@ -93,7 +93,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (isNew && sessionId) {
       context.waitUntil(
         context.env.DB.prepare(
-          'UPDATE page_views SET converted = 1 WHERE session_id = ? ORDER BY created_at DESC LIMIT 1'
+          'UPDATE page_views SET converted = 1 WHERE id = (SELECT id FROM page_views WHERE session_id = ? ORDER BY created_at DESC LIMIT 1)'
         )
           .bind(sessionId)
           .run()
