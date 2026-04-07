@@ -108,8 +108,10 @@ export default {
     const now = Date.now()
 
     const MS_24H = 24 * 60 * 60 * 1000
-    const MS_48H = 48 * 60 * 60 * 1000
-    const MS_7D = 7 * 24 * 60 * 60 * 1000
+    // Email 3 fires 24h after Email 2 (not 48h from signup), so back-to-back sends
+    // are impossible even when Email 2 was delayed past the 48h mark.
+    // Email 4 fires 5 days after Email 3 (~7 days from signup on a normal cadence).
+    const MS_5D = 5 * 24 * 60 * 60 * 1000
 
     // Fetch all rows that may need a drip email
     const { results } = await env.DB.prepare(
@@ -129,6 +131,7 @@ export default {
           const signupAge = now - new Date(row.signup_ts).getTime()
           const firstName = extractFirstName(row.email)
 
+          // Email 2: 24 hours after signup
           if (row.email_sent_2 === null && signupAge >= MS_24H) {
             try {
               const { subject, text } = buildEmail2(firstName)
@@ -143,30 +146,39 @@ export default {
             return
           }
 
-          if (row.email_sent_3 === null && row.email_sent_2 !== null && signupAge >= MS_48H) {
-            try {
-              const { subject, text } = buildEmail3(firstName)
-              await sendDripEmail(resend, row.email, 3, subject, text)
-              await env.DB.prepare(
-                'UPDATE waitlist SET email_sent_3 = ? WHERE id = ?'
-              ).bind(new Date().toISOString(), row.id).run()
-              sent3++
-            } catch (err) {
-              console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 3, success: false, error: String(err) }))
+          // Email 3: 24 hours after Email 2 was sent (not 48h from signup).
+          // This prevents Email 3 firing 1 hour after a delayed Email 2.
+          if (row.email_sent_3 === null && row.email_sent_2 !== null) {
+            const email2Age = now - new Date(row.email_sent_2).getTime()
+            if (email2Age >= MS_24H) {
+              try {
+                const { subject, text } = buildEmail3(firstName)
+                await sendDripEmail(resend, row.email, 3, subject, text)
+                await env.DB.prepare(
+                  'UPDATE waitlist SET email_sent_3 = ? WHERE id = ?'
+                ).bind(new Date().toISOString(), row.id).run()
+                sent3++
+              } catch (err) {
+                console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 3, success: false, error: String(err) }))
+              }
             }
             return
           }
 
-          if (row.email_sent_4 === null && row.email_sent_3 !== null && signupAge >= MS_7D) {
-            try {
-              const { subject, text } = buildEmail4(firstName)
-              await sendDripEmail(resend, row.email, 4, subject, text)
-              await env.DB.prepare(
-                'UPDATE waitlist SET email_sent_4 = ? WHERE id = ?'
-              ).bind(new Date().toISOString(), row.id).run()
-              sent4++
-            } catch (err) {
-              console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 4, success: false, error: String(err) }))
+          // Email 4: 5 days after Email 3 was sent (~7 days from signup on normal cadence).
+          if (row.email_sent_4 === null && row.email_sent_3 !== null) {
+            const email3Age = now - new Date(row.email_sent_3).getTime()
+            if (email3Age >= MS_5D) {
+              try {
+                const { subject, text } = buildEmail4(firstName)
+                await sendDripEmail(resend, row.email, 4, subject, text)
+                await env.DB.prepare(
+                  'UPDATE waitlist SET email_sent_4 = ? WHERE id = ?'
+                ).bind(new Date().toISOString(), row.id).run()
+                sent4++
+              } catch (err) {
+                console.log(JSON.stringify({ event: 'drip_email_failed', email: row.email, email_number: 4, success: false, error: String(err) }))
+              }
             }
           }
         })()
