@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Competitive Analysis Builder — Peerscope</title>
+  <meta name="description" content="Build a competitive analysis in 5 minutes. Compare up to 5 competitors across pricing, features, positioning, strengths and weaknesses. Free, no sign-up required." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://peerscope-waitlist.pages.dev/tools/competitive-analysis-builder/" />
+  <meta property="og:title" content="Free Competitive Analysis Builder" />
+  <meta property="og:description" content="Compare up to 5 competitors in 5 minutes. Free interactive tool — no account needed." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peerscope-waitlist.pages.dev/tools/competitive-analysis-builder/" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111827;
+      --surface2: #1a1a2e;
+      --border: #1e1e2e;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { cursor: pointer; font-family: inherit; }
+    input, textarea, select { font-family: inherit; }
+
+    /* Nav */
+    nav { background: #0d0d14; border-bottom: 1px solid var(--border); padding: 0.9rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { font-weight: 700; font-size: 1rem; color: var(--accent); }
+    nav .back-link { font-size: 0.82rem; color: var(--muted); }
+    nav .back-link:hover { color: var(--text); text-decoration: none; }
+
+    /* Header */
+    .hero { text-align: center; padding: 2.5rem 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+    .tool-badge { display: inline-block; background: var(--surface2); color: var(--accent); font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; color: #f8fafc; line-height: 1.2; margin-bottom: 0.75rem; }
+    .hero p { color: var(--muted); font-size: 1rem; max-width: 44ch; margin: 0 auto; }
+
+    /* Main layout */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    /* Step indicator */
+    .steps-bar { display: flex; gap: 0; margin-bottom: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .step-btn { flex: 1; padding: 0.75rem 0.5rem; font-size: 0.8rem; font-weight: 600; background: none; border: none; color: var(--muted); transition: all 0.15s; border-right: 1px solid var(--border); }
+    .step-btn:last-child { border-right: none; }
+    .step-btn.active { background: var(--accent); color: white; }
+    .step-btn.done { color: var(--green); }
+
+    /* Step panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* Your product setup */
+    .setup-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .setup-card h2 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .field-row.one { grid-template-columns: 1fr; }
+    @media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.35rem; }
+    input[type="text"], textarea, select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.6rem 0.85rem; color: var(--text); font-size: 0.9rem; outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Competitor columns */
+    .competitors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .competitor-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; position: relative; }
+    .competitor-card h3 { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .competitor-card .comp-num { position: absolute; top: 1rem; right: 1rem; background: var(--surface2); color: var(--accent); font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; }
+    .add-competitor-btn { border: 2px dashed var(--border); background: none; border-radius: 10px; padding: 2rem; width: 100%; color: var(--muted); font-size: 0.85rem; font-weight: 600; transition: all 0.15s; }
+    .add-competitor-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .remove-btn { background: none; border: none; color: var(--red); font-size: 0.75rem; cursor: pointer; margin-top: 0.5rem; opacity: 0.6; }
+    .remove-btn:hover { opacity: 1; }
+
+    /* Comparison matrix (step 3) */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .matrix-table th { background: var(--surface2); padding: 0.75rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid var(--border); white-space: nowrap; }
+    .matrix-table th.your-col { background: rgba(124,58,237,0.12); color: var(--accent); }
+    .matrix-table td { padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .matrix-table .row-label { font-size: 0.82rem; font-weight: 600; color: var(--text); white-space: nowrap; min-width: 120px; }
+    .matrix-table .cell-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 0.45rem 0.6rem; color: var(--text); font-size: 0.82rem; min-width: 120px; }
+    .matrix-table .cell-input:focus { outline: none; border-color: var(--accent); }
+    .matrix-table .cell-input.your-cell { border-color: rgba(124,58,237,0.3); }
+    .rating-select { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 0.4rem 0.5rem; color: var(--text); font-size: 0.82rem; width: 100%; min-width: 100px; }
+
+    /* Output panel */
+    .output-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .output-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.25rem; background: var(--surface2); border-bottom: 1px solid var(--border); gap: 1rem; flex-wrap: wrap; }
+    .output-toolbar span { font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+    .toolbar-actions { display: flex; gap: 0.5rem; }
+    .btn-sm { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; transition: all 0.15s; }
+    .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-sm.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn-sm.primary:hover { background: var(--accent-hover); }
+    #output-content { padding: 1.5rem; font-size: 0.88rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; min-height: 300px; }
+
+    /* Navigation buttons */
+    .nav-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; gap: 1rem; }
+    .btn { padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.9rem; font-weight: 700; border: none; transition: all 0.15s; }
+    .btn-prev { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+    .btn-prev:hover { color: var(--text); border-color: var(--muted); }
+    .btn-next { background: var(--accent); color: white; }
+    .btn-next:hover { background: var(--accent-hover); }
+
+    /* CTA box */
+    .cta-box { background: linear-gradient(135deg, #1a0a2e 0%, #0a0a1f 100%); border: 1px solid #2d1b4e; border-radius: 12px; padding: 2rem; margin-top: 2rem; text-align: center; }
+    .cta-box h3 { color: #f8fafc; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .cta-box p { color: #a78bfa; font-size: 0.9rem; margin-bottom: 1.25rem; max-width: 44ch; margin-left: auto; margin-right: auto; }
+    .cta-box .cta-btn { display: inline-block; background: var(--accent); color: white; padding: 0.8rem 1.75rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; border: none; }
+    .cta-box .cta-btn:hover { background: var(--accent-hover); text-decoration: none; }
+    .cta-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.65rem; }
+
+    /* Progress info */
+    .progress-note { font-size: 0.8rem; color: var(--muted); text-align: center; }
+
+    /* Copied toast */
+    #copy-toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 999; }
+    #copy-toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="logo">Peerscope</span>
+    <a href="https://peerscope-waitlist.pages.dev/blog/" class="back-link">← Blog &amp; resources</a>
+  </nav>
+
+  <div class="hero">
+    <div class="tool-badge">Free tool</div>
+    <h1>Competitive Analysis Builder</h1>
+    <p>Map your competitors in 5 minutes. Compare pricing, features, and positioning — then export for your team.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- Step indicator -->
+    <div class="steps-bar">
+      <button class="step-btn active" onclick="goStep(1)" id="step-btn-1">1. Your product</button>
+      <button class="step-btn" onclick="goStep(2)" id="step-btn-2">2. Competitors</button>
+      <button class="step-btn" onclick="goStep(3)" id="step-btn-3">3. Compare</button>
+      <button class="step-btn" onclick="goStep(4)" id="step-btn-4">4. Export</button>
+    </div>
+
+    <!-- Step 1: Your product -->
+    <div class="step-panel active" id="panel-1">
+      <div class="setup-card">
+        <h2>Tell us about your product</h2>
+        <div class="field-row one">
+          <div>
+            <label for="your-name">Product / company name</label>
+            <input type="text" id="your-name" placeholder="e.g. Acme CRM" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label for="your-category">Category</label>
+            <input type="text" id="your-category" placeholder="e.g. CRM for SMBs" />
+          </div>
+          <div>
+            <label for="your-pricing">Your starting price</label>
+            <input type="text" id="your-pricing" placeholder="e.g. $49/mo" />
+          </div>
+        </div>
+        <div class="field-row one">
+          <div>
+            <label for="your-icp">Ideal customer</label>
+            <input type="text" id="your-icp" placeholder="e.g. B2B SaaS founders, 5-50 employees" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label for="your-strengths">Top 3 strengths</label>
+            <textarea id="your-strengths" placeholder="1. Easier to set up than competitors&#10;2. Transparent pricing&#10;3. No annual contract required"></textarea>
+          </div>
+          <div>
+            <label for="your-weaknesses">Known weaknesses / gaps</label>
+            <textarea id="your-weaknesses" placeholder="1. Newer brand, less recognition&#10;2. Fewer integrations than Competitor A&#10;3. Mobile app still on roadmap"></textarea>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div>
+            <label for="your-tagline">One-line positioning statement</label>
+            <input type="text" id="your-tagline" placeholder="e.g. Competitor tracking without the enterprise price tag" />
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <span class="progress-note">Step 1 of 4</span>
+        <button class="btn btn-next" onclick="goStep(2)">Add competitors →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Competitors -->
+    <div class="step-panel" id="panel-2">
+      <div id="competitors-grid" class="competitors-grid">
+        <!-- Competitor cards injected here -->
+      </div>
+      <div class="nav-buttons">
+        <button class="btn btn-prev" onclick="goStep(1)">← Back</button>
+        <button class="btn btn-next" onclick="goStep(3)">Compare them →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Matrix -->
+    <div class="step-panel" id="panel-3">
+      <div class="matrix-wrap">
+        <table class="matrix-table" id="matrix-table">
+          <!-- Built dynamically -->
+        </table>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn btn-prev" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-next" onclick="buildOutput(); goStep(4)">Generate report →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Export -->
+    <div class="step-panel" id="panel-4">
+      <div class="output-panel">
+        <div class="output-toolbar">
+          <span>Your competitive analysis</span>
+          <div class="toolbar-actions">
+            <button class="btn-sm" onclick="copyOutput()">Copy to clipboard</button>
+            <button class="btn-sm primary" onclick="downloadOutput()">Download .txt</button>
+          </div>
+        </div>
+        <div id="output-content">Your analysis will appear here after completing step 3.</div>
+      </div>
+
+      <div class="cta-box">
+        <h3>This snapshot gets stale in 2 weeks</h3>
+        <p>Competitor pricing changes, features launch, teams get hired. Peerscope monitors it automatically and pings you in Slack when something changes.</p>
+        <a href="https://peerscope-waitlist.pages.dev/?utm_source=tool&utm_medium=cta&utm_campaign=comp-builder" class="cta-btn">Join the Peerscope waitlist — free</a>
+        <p class="cta-sub">AUD$49/mo at launch &bull; No annual contract &bull; Founding rate locked for life</p>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-prev" onclick="goStep(3)">← Edit analysis</button>
+        <span class="progress-note">Done! Share this tool with your team.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="copy-toast">Copied to clipboard!</div>
+
+  <script>
+    // ---- State ----
+    let competitors = [];
+    let currentStep = 1;
+    const MAX_COMPETITORS = 5;
+
+    const ROWS = [
+      { key: 'pricing',    label: 'Pricing' },
+      { key: 'model',      label: 'Pricing model' },
+      { key: 'target',     label: 'Target customer' },
+      { key: 'topFeature', label: 'Top 3 features' },
+      { key: 'strengths',  label: 'Strengths' },
+      { key: 'weaknesses', label: 'Weaknesses' },
+      { key: 'freeTrial',  label: 'Free trial / demo' },
+      { key: 'contract',   label: 'Contract required?' },
+      { key: 'integration',label: 'Key integrations' },
+      { key: 'objection',  label: 'Common objection from buyers' },
+      { key: 'winHow',     label: 'How we win vs them' },
+    ];
+
+    // ---- Step navigation ----
+    function goStep(n) {
+      if (n === 2) renderCompetitorCards();
+      if (n === 3) renderMatrix();
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + n).classList.add('active');
+      document.querySelectorAll('.step-btn').forEach((b, i) => {
+        b.classList.remove('active', 'done');
+        if (i + 1 === n) b.classList.add('active');
+        if (i + 1 < n) b.classList.add('done');
+      });
+      currentStep = n;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---- Competitor management ----
+    function addCompetitor() {
+      if (competitors.length >= MAX_COMPETITORS) return;
+      competitors.push({ name: '', data: {} });
+      renderCompetitorCards();
+    }
+
+    function removeCompetitor(idx) {
+      competitors.splice(idx, 1);
+      renderCompetitorCards();
+    }
+
+    function saveCompetitorField(idx, field, value) {
+      if (!competitors[idx]) return;
+      competitors[idx][field] = value;
+    }
+
+    function renderCompetitorCards() {
+      const grid = document.getElementById('competitors-grid');
+      grid.innerHTML = '';
+      competitors.forEach((comp, idx) => {
+        const card = document.createElement('div');
+        card.className = 'competitor-card';
+        card.innerHTML = `
+          <div class="comp-num">${idx + 1}</div>
+          <h3>Competitor ${idx + 1}</h3>
+          <div style="margin-bottom:0.75rem">
+            <label>Name</label>
+            <input type="text" class="cell-input" value="${esc(comp.name)}"
+              oninput="saveCompetitorField(${idx},'name',this.value)" placeholder="e.g. Acme Pro" />
+          </div>
+          <div style="margin-bottom:0.75rem">
+            <label>Starting price</label>
+            <input type="text" class="cell-input" value="${esc(comp.pricing||'')}"
+              oninput="saveCompetitorField(${idx},'pricing',this.value)" placeholder="e.g. $299/mo" />
+          </div>
+          <div style="margin-bottom:0.75rem">
+            <label>Positioning / tagline</label>
+            <input type="text" class="cell-input" value="${esc(comp.tagline||'')}"
+              oninput="saveCompetitorField(${idx},'tagline',this.value)" placeholder="e.g. The #1 CRM for teams" />
+          </div>
+          <div>
+            <label>Website</label>
+            <input type="text" class="cell-input" value="${esc(comp.website||'')}"
+              oninput="saveCompetitorField(${idx},'website',this.value)" placeholder="e.g. acmepro.com" />
+          </div>
+          <button class="remove-btn" onclick="removeCompetitor(${idx})">✕ Remove</button>
+        `;
+        grid.appendChild(card);
+      });
+      if (competitors.length < MAX_COMPETITORS) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-competitor-btn';
+        addBtn.onclick = addCompetitor;
+        addBtn.innerHTML = `+ Add competitor${competitors.length === 0 ? ' (up to 5)' : ''}`;
+        grid.appendChild(addBtn);
+      }
+      if (competitors.length === 0) {
+        // Auto-add first card
+        addCompetitor();
+      }
+    }
+
+    // ---- Matrix ----
+    function renderMatrix() {
+      const yourName = val('your-name') || 'Your product';
+      const table = document.getElementById('matrix-table');
+      const validComps = competitors.filter(c => c.name && c.name.trim());
+
+      let html = '<thead><tr><th>Category</th>';
+      html += `<th class="your-col">${esc(yourName)}</th>`;
+      validComps.forEach(c => { html += `<th>${esc(c.name)}</th>`; });
+      html += '</tr></thead><tbody>';
+
+      ROWS.forEach(row => {
+        html += `<tr><td class="row-label">${row.label}</td>`;
+        // Your column
+        const yourVal = getMatrixVal('yours', row.key);
+        html += `<td><input class="cell-input your-cell" type="text"
+          value="${esc(yourVal)}"
+          oninput="setMatrixVal('yours','${row.key}',this.value)"
+          placeholder="Enter yours..." /></td>`;
+        // Competitor columns
+        validComps.forEach((comp, ci) => {
+          const cVal = getMatrixVal('comp_' + ci, row.key);
+          html += `<td><input class="cell-input" type="text"
+            value="${esc(cVal)}"
+            oninput="setMatrixVal('comp_${ci}','${row.key}',this.value)"
+            placeholder="Enter..." /></td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody>';
+      table.innerHTML = html;
+
+      // Pre-fill from step 1 data
+      prefillMatrix(validComps);
+    }
+
+    const matrixData = {};
+    function getMatrixVal(col, row) { return (matrixData[col] && matrixData[col][row]) || ''; }
+    function setMatrixVal(col, row, val) {
+      if (!matrixData[col]) matrixData[col] = {};
+      matrixData[col][row] = val;
+    }
+
+    function prefillMatrix(validComps) {
+      // Pre-fill "yours" column from step 1
+      if (!matrixData['yours']) matrixData['yours'] = {};
+      if (!matrixData['yours']['pricing'] && val('your-pricing')) setMatrixVal('yours', 'pricing', val('your-pricing'));
+      if (!matrixData['yours']['target'] && val('your-icp')) setMatrixVal('yours', 'target', val('your-icp'));
+      if (!matrixData['yours']['strengths'] && val('your-strengths')) setMatrixVal('yours', 'strengths', val('your-strengths').replace(/\n/g, ' | '));
+      if (!matrixData['yours']['weaknesses'] && val('your-weaknesses')) setMatrixVal('yours', 'weaknesses', val('your-weaknesses').replace(/\n/g, ' | '));
+      // Pre-fill competitor pricing
+      validComps.forEach((comp, ci) => {
+        if (!matrixData['comp_' + ci]) matrixData['comp_' + ci] = {};
+        if (!matrixData['comp_' + ci]['pricing'] && comp.pricing) setMatrixVal('comp_' + ci, 'pricing', comp.pricing);
+      });
+      renderMatrix();
+    }
+
+    // ---- Output generation ----
+    function buildOutput() {
+      const yourName = val('your-name') || 'Your product';
+      const validComps = competitors.filter(c => c.name && c.name.trim());
+      const now = new Date().toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      let out = `COMPETITIVE ANALYSIS — ${yourName.toUpperCase()}\n`;
+      out += `Generated: ${now}\n`;
+      out += `Tool: peerscope-waitlist.pages.dev/tools/competitive-analysis-builder/\n`;
+      out += '─'.repeat(60) + '\n\n';
+
+      // Your product summary
+      out += `YOUR PRODUCT: ${yourName}\n`;
+      if (val('your-category')) out += `Category: ${val('your-category')}\n`;
+      if (val('your-pricing')) out += `Pricing: ${val('your-pricing')}\n`;
+      if (val('your-icp')) out += `ICP: ${val('your-icp')}\n`;
+      if (val('your-tagline')) out += `Positioning: ${val('your-tagline')}\n`;
+      if (val('your-strengths')) out += `\nStrengths:\n${val('your-strengths')}\n`;
+      if (val('your-weaknesses')) out += `\nWeaknesses:\n${val('your-weaknesses')}\n`;
+      out += '\n' + '─'.repeat(60) + '\n\n';
+
+      // Competitors
+      validComps.forEach((comp, ci) => {
+        out += `COMPETITOR ${ci + 1}: ${comp.name.toUpperCase()}\n`;
+        if (comp.website) out += `Website: ${comp.website}\n`;
+        if (comp.tagline) out += `Positioning: ${comp.tagline}\n`;
+        out += '\n';
+        ROWS.forEach(row => {
+          const v = getMatrixVal('comp_' + ci, row.key);
+          if (v) out += `${row.label}: ${v}\n`;
+        });
+        out += '\n' + '─'.repeat(40) + '\n\n';
+      });
+
+      // Matrix summary
+      if (validComps.length > 0) {
+        out += `COMPARISON MATRIX\n\n`;
+        const colWidth = 22;
+        // Header
+        let header = 'Category'.padEnd(20) + ' | ' + yourName.substring(0,colWidth).padEnd(colWidth);
+        validComps.forEach(c => { header += ' | ' + c.name.substring(0,colWidth).padEnd(colWidth); });
+        out += header + '\n' + '-'.repeat(header.length) + '\n';
+        ROWS.forEach(row => {
+          let line = row.label.padEnd(20) + ' | ' + (getMatrixVal('yours', row.key)||'-').substring(0,colWidth).padEnd(colWidth);
+          validComps.forEach((c, ci) => {
+            line += ' | ' + (getMatrixVal('comp_' + ci, row.key)||'-').substring(0,colWidth).padEnd(colWidth);
+          });
+          out += line + '\n';
+        });
+        out += '\n';
+      }
+
+      out += '─'.repeat(60) + '\n';
+      out += `NOTE: This analysis was created on ${now}. Competitor pricing,\n`;
+      out += `features, and positioning change frequently. Review monthly\n`;
+      out += `or use an automated monitoring tool to stay current.\n\n`;
+      out += `Peerscope monitors this automatically: peerscope-waitlist.pages.dev\n`;
+
+      document.getElementById('output-content').textContent = out;
+      window._outputText = out;
+    }
+
+    function copyOutput() {
+      const text = window._outputText || document.getElementById('output-content').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copy-toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+      });
+    }
+
+    function downloadOutput() {
+      const text = window._outputText || document.getElementById('output-content').textContent;
+      const productName = val('your-name') || 'competitive-analysis';
+      const filename = productName.toLowerCase().replace(/\s+/g, '-') + '-competitive-analysis.txt';
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ---- Helpers ----
+    function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+    function esc(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ---- Init ----
+    renderCompetitorCards();
+  </script>
+</body>
+</html>
