@@ -6,6 +6,7 @@ import { SocialProofStrip } from './components/SocialProofStrip'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
 import { HeroB } from './components/HeroB'
 import { HowItWorks } from './components/HowItWorks'
+import { ExitIntentModal } from './components/ExitIntentModal'
 
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
@@ -638,6 +639,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
+
+      {/* Exit-intent modal — fires once on cursor-to-chrome (desktop) or 60s inactivity (mobile) */}
+      <ExitIntentModal />
 
       {/* Urgency banner — deadline + founding spot count, all variants */}
       <FoundingBanner />
