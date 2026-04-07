@@ -21,17 +21,20 @@ async function sendWelcomeEmail(apiKey: string, email: string): Promise<void> {
   await resend.emails.send({
     from: FROM,
     to: email,
-    subject: "You're on the Peerscope waitlist",
+    subject: "You're on the Peerscope waitlist — founding price locked",
     text: `Hi ${firstName},
 
-You're in. Founding price locked: $49/mo for life.
+You're in. Founding price locked at $49/mo for life — as long as you stay subscribed.
 
-Peerscope gives you a live feed of what your competitors are changing — pricing, features, job posts, messaging. Know before your customers tell you.
+Peerscope monitors your competitors 24/7 and sends you an instant Slack or email alert the moment they change pricing, launch features, or post jobs. Know before your customers tell you.
 
-I'm building this as a solo founder and I'm reading every reply. What competitor move has cost you the most?
+I'm building this as a solo founder and I read every reply. Two questions:
+
+1. What's the biggest competitor move that caught you off guard?
+2. Know another founder who'd find this useful? Forward this or share the link: https://peerscope-waitlist.pages.dev
 
 Henrik
-Peerscope — Track your competitors, not your budget.`,
+Peerscope — Track your competitors. Not your budget.`,
   })
 }
 

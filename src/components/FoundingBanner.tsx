@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'peerscope_urgency_banner_v1'
 const FOUNDING_CAP = 100
-const DEADLINE = '15 April'
+const DEADLINE_DATE = new Date('2026-04-15T23:59:59+08:00') // AWST
+
+function getDaysLeft(): number {
+  const now = new Date()
+  const diff = DEADLINE_DATE.getTime() - now.getTime()
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
+}
 
 export function FoundingBanner() {
   const [dismissed, setDismissed] = useState(() => {
@@ -13,6 +19,7 @@ export function FoundingBanner() {
     }
   })
   const [spotsLeft, setSpotsLeft] = useState<number | null>(null)
+  const [daysLeft, setDaysLeft] = useState(getDaysLeft)
 
   useEffect(() => {
     fetch('/api/waitlist/count')
@@ -26,21 +33,32 @@ export function FoundingBanner() {
       .catch(() => {})
   }, [])
 
+  // Recalculate days left once per minute
+  useEffect(() => {
+    const timer = setInterval(() => setDaysLeft(getDaysLeft()), 60_000)
+    return () => clearInterval(timer)
+  }, [])
+
   if (dismissed) return null
 
   function dismiss() {
     try {
       localStorage.setItem(STORAGE_KEY, '1')
     } catch {
-      // ignore storage errors (e.g. private browsing)
     }
     setDismissed(true)
   }
 
   const spotsFragment =
     spotsLeft !== null && spotsLeft > 0
-      ? ` — ${spotsLeft} founding spot${spotsLeft === 1 ? '' : 's'} left`
+      ? ` · ${spotsLeft} founding spot${spotsLeft === 1 ? '' : 's'} left`
       : ''
+
+  const urgencyLabel = daysLeft <= 0
+    ? 'Closes today'
+    : daysLeft === 1
+      ? '1 day left'
+      : `${daysLeft} days left`
 
   return (
     <div
@@ -53,10 +71,9 @@ export function FoundingBanner() {
       }}
     >
       <p className="text-center text-xs sm:text-sm leading-snug text-white">
-        <strong className="font-semibold">Waitlist closes {DEADLINE}</strong>
-        <span className="opacity-90">{spotsFragment}</span>
-        <span className="opacity-70 hidden sm:inline"> · Founding rate $49/mo locked for life</span>
-        <span className="opacity-70 sm:hidden"> · $49/mo for life</span>
+        <strong className="font-semibold">⚡ {urgencyLabel}</strong>
+        <span className="opacity-90"> — founding rate $49/mo locked for life</span>
+        <span className="opacity-70 hidden sm:inline">{spotsFragment}</span>
       </p>
       <button
         onClick={dismiss}
