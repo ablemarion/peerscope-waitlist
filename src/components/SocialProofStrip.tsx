@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react'
 
 export function SocialProofStrip() {
   const [count, setCount] = useState<number | null>(null)
+  const [showCount, setShowCount] = useState(false)
 
   useEffect(() => {
-    fetch('/api/waitlist/count')
+    fetch('/api/public/stats')
       .then(res => (res.ok ? res.json() : null))
-      .then((data: { count: number } | null) => {
-        if (data && typeof data.count === 'number') setCount(data.count)
+      .then((data: { count: number; show_count: boolean } | null) => {
+        if (data && typeof data.count === 'number') {
+          setCount(data.count)
+          setShowCount(data.show_count)
+        }
       })
       .catch(() => {})
   }, [])
@@ -29,7 +33,7 @@ export function SocialProofStrip() {
               className="inline-block w-36 h-4 rounded animate-pulse align-middle"
               style={{ background: 'rgba(184,98,42,0.15)' }}
             />
-          ) : count >= 20 ? (
+          ) : showCount ? (
             <>
               <span style={{ color: '#B8622A', fontWeight: 700 }}>{count.toLocaleString()}</span>
               {' founder'}{count === 1 ? '' : 's'} on the waitlist
