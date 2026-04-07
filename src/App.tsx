@@ -611,8 +611,15 @@ export default function App() {
             <a href="/pricing/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
-              className="text-sm font-semibold text-white px-4 py-3.5 rounded-lg transition hover:brightness-110"
-              style={{ background: '#B8622A' }}
+              className="text-sm font-semibold rounded-lg transition"
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(184,98,42,0.45)',
+                color: 'rgba(250,250,246,0.75)',
+                padding: '10px 16px',
+              }}
+              onMouseEnter={e => { const el = e.currentTarget; el.style.borderColor = '#B8622A'; el.style.color = 'white'; }}
+              onMouseLeave={e => { const el = e.currentTarget; el.style.borderColor = 'rgba(184,98,42,0.45)'; el.style.color = 'rgba(250,250,246,0.75)'; }}
             >
               Join waitlist
             </a>
@@ -639,28 +646,6 @@ export default function App() {
         />
 
         <div className="max-w-6xl mx-auto relative">
-
-          {/* Section header */}
-          <div className="text-center mb-14">
-            <span
-              className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
-              style={{ color: '#B8622A' }}
-            >
-              The Problem
-            </span>
-            <h2
-              className="text-4xl sm:text-5xl font-bold leading-tight text-white"
-              style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800, letterSpacing: '-0.02em' }}
-            >
-              Stop finding out from customers.
-            </h2>
-            <p
-              className="text-lg mt-4 leading-relaxed mx-auto"
-              style={{ color: 'rgba(250,250,246,0.45)', maxWidth: '48ch' }}
-            >
-              Right now, your competitors are making moves. Here's how most founders find out — and how Peerscope changes that.
-            </p>
-          </div>
 
           {/* Before / After panels */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-5 lg:gap-0 items-stretch">
@@ -950,109 +935,84 @@ export default function App() {
           }}
         />
         <div className="max-w-6xl mx-auto relative">
-          {/* Section header */}
-          <div className="text-center mb-14">
-            <span
-              className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
-              style={{ color: '#B8622A' }}
-            >
-              Early access feedback
-            </span>
+          {/* Section header — first-person fragment, no eyebrow */}
+          <div className="mb-16">
             <h2
               className="text-4xl sm:text-5xl font-bold leading-tight"
               style={{
                 fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
                 fontWeight: 800,
                 color: '#111320',
+                letterSpacing: '-0.02em',
               }}
             >
-              From founders already tracking competitors
+              "We would have lost that deal."
             </h2>
           </div>
 
-          {/* Testimonial cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Testimonials — offset staircase, no cards */}
+          <div className="flex flex-col md:flex-row md:items-start gap-12 md:gap-0" style={{ columnGap: '60px' }}>
             {([
               {
-                initials: 'JM',
-                color: '#B8622A',
-                bg: 'rgba(184,98,42,0.10)',
-                border: 'rgba(184,98,42,0.18)',
                 name: 'Jordan M.',
                 role: 'Founder',
                 company: 'B2B SaaS startup',
                 pullQuote: 'Found out my top competitor dropped their pricing tier 3 days after it happened — instead of 3 weeks later from a customer.',
                 body: 'That alone paid for the tool. We adjusted our renewal pitch before we lost a single deal.',
+                offset: 'md:mt-0',
               },
               {
-                initials: 'AK',
-                color: '#1A7A6E',
-                bg: 'rgba(26,122,110,0.10)',
-                border: 'rgba(26,122,110,0.18)',
                 name: 'Alex K.',
                 role: 'Managing Director',
                 company: 'Digital Marketing Agency',
                 pullQuote: 'We used to find out about competitor positioning changes when clients brought them up in meetings.',
                 body: 'Now we walk into every pitch already knowing their latest moves. It completely flipped the dynamic.',
+                offset: 'md:mt-12',
               },
               {
-                initials: 'ST',
-                color: '#D4A843',
-                bg: 'rgba(212,168,67,0.10)',
-                border: 'rgba(212,168,67,0.18)',
                 name: 'Sam T.',
                 role: 'Head of Operations',
                 company: 'Managed IT Services',
                 pullQuote: 'A competitor launched a new managed security offering on a Tuesday. We had it in our service brief by Thursday.',
                 body: 'Before Peerscope, that kind of intel would have taken months to surface — if it ever did.',
+                offset: 'md:mt-24',
               },
             ] as const).map((t, i) => (
-              <RevealDiv key={t.initials} staggerMs={i * 80}>
-                <div
-                  className="h-full flex flex-col rounded-2xl p-6"
+              <RevealDiv key={t.name} staggerMs={i * 80} className={`flex-1 ${t.offset}`} style={{ maxWidth: '38ch' }}>
+                {/* Pull quote */}
+                <p
+                  className="leading-snug mb-4"
                   style={{
-                    background: '#fff',
-                    border: '1px solid rgba(17,19,32,0.08)',
-                    boxShadow: '0 1px 3px rgba(17,19,32,0.06), 0 4px 16px rgba(17,19,32,0.04)',
+                    fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    color: '#111320',
                   }}
                 >
-                  {/* Stars */}
-                  <div className="flex gap-0.5 mb-5" aria-label="5 stars">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <span key={j} aria-hidden="true" style={{ color: t.color, fontSize: '14px' }}>★</span>
-                    ))}
-                  </div>
+                  "{t.pullQuote}"
+                </p>
 
-                  {/* Pull quote */}
-                  <p
-                    className="text-base font-semibold leading-snug mb-3"
-                    style={{ color: '#111320', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
-                  >
-                    "{t.pullQuote}"
-                  </p>
+                {/* Supporting copy */}
+                <p
+                  className="text-sm leading-relaxed mb-5"
+                  style={{ color: 'rgba(17,19,32,0.55)' }}
+                >
+                  {t.body}
+                </p>
 
-                  {/* Supporting copy */}
-                  <p
-                    className="text-sm leading-relaxed flex-1"
-                    style={{ color: 'rgba(17,19,32,0.55)' }}
-                  >
-                    {t.body}
-                  </p>
-
-                  {/* Attribution */}
-                  <div className="flex items-center gap-3 mt-6 pt-5" style={{ borderTop: '1px solid rgba(17,19,32,0.07)' }}>
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                      style={{ background: t.bg, color: t.color, border: `1px solid ${t.border}` }}
-                    >
-                      {t.initials}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold" style={{ color: '#111320' }}>{t.name}</p>
-                      <p className="text-xs" style={{ color: 'rgba(17,19,32,0.45)' }}>{t.role}, {t.company}</p>
-                    </div>
-                  </div>
-                </div>
+                {/* Attribution — mono, name in brand colour */}
+                <p
+                  className="font-mono"
+                  style={{ fontSize: '12px', color: '#B8622A' }}
+                >
+                  {t.name}
+                </p>
+                <p
+                  className="font-mono"
+                  style={{ fontSize: '12px', color: 'rgba(17,19,32,0.45)' }}
+                >
+                  {t.role}, {t.company}
+                </p>
               </RevealDiv>
             ))}
           </div>
