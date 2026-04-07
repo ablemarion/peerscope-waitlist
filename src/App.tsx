@@ -4,15 +4,16 @@ import { Logo, EmailForm } from './components/shared'
 import { FoundingBanner } from './components/FoundingBanner'
 import { SocialProofStrip } from './components/SocialProofStrip'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
-import { HeroB } from './components/HeroB'
-import { HowItWorks } from './components/HowItWorks'
-import { ExitIntentModal } from './components/ExitIntentModal'
+import { CommunityHero, KNOWN_CHANNELS } from './components/CommunityHero'
 
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
+const HeroB = lazy(() => import('./components/HeroB').then(m => ({ default: m.HeroB })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
 const HeroD = lazy(() => import('./components/HeroD').then(m => ({ default: m.HeroD })))
 const HeroE = lazy(() => import('./components/HeroE').then(m => ({ default: m.HeroE })))
 const CompetitorFeedMockup = lazy(() => import('./components/HeroD').then(m => ({ default: m.CompetitorFeedMockup })))
+const HowItWorks = lazy(() => import('./components/HowItWorks').then(m => ({ default: m.HowItWorks })))
+const ExitIntentModal = lazy(() => import('./components/ExitIntentModal').then(m => ({ default: m.ExitIntentModal })))
 
 function RevealDiv({
   staggerMs = 0,
@@ -267,7 +268,7 @@ function Hero() {
   if (variant === 'c') return <Suspense fallback={null}><HeroC /></Suspense>
   if (variant === 'd') return <Suspense fallback={null}><HeroD /></Suspense>
   if (variant === 'e') return <Suspense fallback={null}><HeroE /></Suspense>
-  return <HeroB />
+  return <Suspense fallback={null}><HeroB /></Suspense>
 }
 
 
@@ -632,24 +633,39 @@ function MobileScrollSticky() {
   )
 }
 
+// Extract community channel from /for/[channel] paths.
+// Returns the channel slug if valid, 'redirect' for unknown /for/* paths, null otherwise.
+function getCommunityChannel(): string | 'redirect' | null {
+  const match = window.location.pathname.match(/^\/for\/([^/]+)\/?$/)
+  if (!match) return null
+  const slug = match[1]
+  return KNOWN_CHANNELS.includes(slug) ? slug : 'redirect'
+}
+
 export default function App() {
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
+  const communityChannel = getCommunityChannel()
 
   useEffect(() => {
+    // Redirect unknown /for/* paths to homepage
+    if (communityChannel === 'redirect') {
+      window.location.replace('/')
+      return
+    }
     fetch('/api/waitlist/count')
       .then(res => res.ok ? res.json() : null)
       .then((data: { count: number } | null) => {
         if (data && typeof data.count === 'number') setWaitlistCount(data.count)
       })
       .catch(() => {/* show nothing on error */})
-  }, [])
+  }, [communityChannel])
 
   return (
     <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
 
       {/* Exit-intent modal — fires once on cursor-to-chrome (desktop) or 60s inactivity (mobile) */}
-      <ExitIntentModal />
+      <Suspense fallback={null}><ExitIntentModal /></Suspense>
 
       {/* Urgency banner — deadline + founding spot count, all variants */}
       <FoundingBanner />
@@ -686,8 +702,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Hero — swap via ?variant=a (problem-led) or ?variant=b (value-led, default) */}
-      <Hero />
+      {/* Hero — community-specific for /for/[channel], otherwise A/B variants */}
+      {communityChannel ? <CommunityHero channel={communityChannel} /> : <Hero />}
 
       {/* Problem — before/after comparison */}
       <section
@@ -879,7 +895,7 @@ export default function App() {
       </section>
 
       {/* How it works — quick 3-step visual overview */}
-      <HowItWorks />
+      <Suspense fallback={null}><HowItWorks /></Suspense>
 
       {/* Setup flow — interactive animated demo, dark */}
       <section
