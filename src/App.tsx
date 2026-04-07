@@ -612,13 +612,19 @@ function MobileScrollSticky() {
       className="fixed bottom-0 inset-x-0 z-50 lg:hidden px-4 pt-3 pb-4"
       style={{ background: '#0D0F1A', borderTop: '1px solid rgba(184,98,42,0.5)' }}
     >
-      <p className="text-center text-xs mb-2 font-medium" style={{ color: 'rgba(240,124,53,0.85)' }}>
-        ⚡ Founding price closes April 15 — $49/mo locked for life
-      </p>
+      <div className="flex items-center justify-center gap-2 mb-2">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F07C35] opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B8622A]" />
+        </span>
+        <p className="text-xs font-medium" style={{ color: 'rgba(240,124,53,0.85)' }}>
+          Founding price closes April 15 - $49/mo locked for life
+        </p>
+      </div>
       <EmailForm
         placeholder="Enter your work email"
         buttonText="Claim founding price"
-        size="default"
+        size="large"
         variant="dark"
         onSuccess={() => setDone(true)}
       />
