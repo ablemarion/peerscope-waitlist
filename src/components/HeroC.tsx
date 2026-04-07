@@ -11,6 +11,7 @@
  */
 import { useState, useEffect } from 'react'
 import { EmailForm } from './shared'
+import { CountdownTimer } from './CountdownTimer'
 
 const TOTAL_SEATS = 50
 
@@ -254,6 +255,7 @@ export function HeroC() {
                   <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
                 </p>
               )}
+              <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 Founding price locked forever &middot; No credit card now &middot; Cancel anytime
               </p>

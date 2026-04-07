@@ -8,6 +8,7 @@
  */
 import { useState, useEffect } from 'react'
 import { EmailForm } from './shared'
+import { CountdownTimer } from './CountdownTimer'
 
 function AlertMockup() {
   return (
@@ -182,6 +183,7 @@ export function HeroA() {
                   <span className="sm:hidden">Join {waitlistCount.toLocaleString()} founders on the waitlist</span>
                 </p>
               )}
+              <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
               </p>

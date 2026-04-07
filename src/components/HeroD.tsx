@@ -10,6 +10,7 @@
  */
 import { useState, useEffect, useRef } from 'react'
 import { EmailForm } from './shared'
+import { CountdownTimer } from './CountdownTimer'
 
 type ChangeType = 'pricing' | 'feature' | 'jobs' | 'content'
 
@@ -365,6 +366,7 @@ export function HeroD() {
                   <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
                 </p>
               )}
+              <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 Founding price $49/mo &middot; No credit card now &middot; Cancel anytime
               </p>
