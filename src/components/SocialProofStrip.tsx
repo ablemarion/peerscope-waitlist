@@ -29,11 +29,13 @@ export function SocialProofStrip() {
               className="inline-block w-36 h-4 rounded animate-pulse align-middle"
               style={{ background: 'rgba(184,98,42,0.15)' }}
             />
-          ) : (
+          ) : count >= 20 ? (
             <>
               <span style={{ color: '#B8622A', fontWeight: 700 }}>{count.toLocaleString()}</span>
               {' founder'}{count === 1 ? '' : 's'} on the waitlist
             </>
+          ) : (
+            <>Join the <span style={{ color: '#B8622A', fontWeight: 700 }}>founding members</span></>
           )}
         </span>
 
