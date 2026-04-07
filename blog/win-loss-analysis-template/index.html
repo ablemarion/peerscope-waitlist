@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Win/Loss Analysis Template (Free) + How to Actually Use It</title>
+  <meta name="description" content="A free win/loss analysis template for B2B SaaS teams. Includes the interview questions that surface why you're really losing deals, plus how to turn findings into competitive action." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://peerscope-waitlist.pages.dev/blog/win-loss-analysis-template/" />
+  <meta property="og:title" content="Win/Loss Analysis Template (Free) + How to Actually Use It" />
+  <meta property="og:description" content="Free win/loss analysis template for SaaS teams. Interview questions, scoring framework, and how to turn findings into competitive advantage." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://peerscope-waitlist.pages.dev/blog/win-loss-analysis-template/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Win/Loss Analysis Template (Free) + How to Actually Use It",
+    "datePublished": "2026-04-07",
+    "dateModified": "2026-04-07",
+    "author": {"@type": "Organization", "name": "Peerscope"},
+    "publisher": {"@type": "Organization", "name": "Peerscope"}
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0f; color: #e2e8f0; line-height: 1.7; }
+    a { color: #7c3aed; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    nav { background: #0d0d14; border-bottom: 1px solid #1e1e2e; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { font-weight: 700; font-size: 1.1rem; color: #7c3aed; }
+    nav .cta-nav { background: #7c3aed; color: white; padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+    nav .cta-nav:hover { background: #6d28d9; text-decoration: none; }
+    .container { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    .breadcrumb { font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: #64748b; }
+    .tag { display: inline-block; background: #1e1e2e; color: #7c3aed; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; color: #f8fafc; line-height: 1.2; margin-bottom: 1rem; }
+    .meta { font-size: 0.85rem; color: #64748b; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1e1e2e; }
+    h2 { font-size: 1.4rem; font-weight: 700; color: #f8fafc; margin: 2.5rem 0 1rem; }
+    h3 { font-size: 1.1rem; font-weight: 600; color: #cbd5e1; margin: 1.8rem 0 0.75rem; }
+    p { margin-bottom: 1.2rem; color: #94a3b8; }
+    ul, ol { margin: 0.75rem 0 1.2rem 1.5rem; color: #94a3b8; }
+    li { margin-bottom: 0.6rem; }
+    strong { color: #e2e8f0; }
+    .template-box { background: #06080F; border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+    .template-box h3 { margin-top: 0; color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .template-section { margin-bottom: 1.75rem; }
+    .template-section:last-child { margin-bottom: 0; }
+    .template-section h4 { color: #e2e8f0; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; border-bottom: 1px solid #1e1e2e; padding-bottom: 0.5rem; }
+    .template-section p { font-size: 0.88rem; margin-bottom: 0; }
+    .template-field { background: #111827; border: 1px solid #1e1e2e; border-radius: 6px; padding: 0.6rem 0.85rem; margin-bottom: 0.5rem; font-size: 0.85rem; color: #64748b; font-style: italic; }
+    .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin: 0.5rem 0; }
+    .score-cell { background: #111827; border: 1px solid #1e1e2e; border-radius: 6px; padding: 0.5rem; text-align: center; font-size: 0.8rem; color: #64748b; }
+    .score-cell.header { background: #1a1a2e; color: #94a3b8; font-weight: 600; font-size: 0.75rem; }
+    .highlight-box { background: #111827; border: 1px solid #1e1e2e; border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+    .highlight-box p { margin-bottom: 0; }
+    .warning-box { background: #1c1300; border: 1px solid #92400e; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .warning-box p { margin-bottom: 0; color: #fcd34d; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; font-size: 0.9rem; }
+    th { background: #1a1a2e; color: #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid #2d2d44; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e1e2e; color: #94a3b8; vertical-align: top; }
+    tr:hover td { background: #0f0f1a; }
+    td:first-child { color: #e2e8f0; font-weight: 500; }
+    .cta-section { background: linear-gradient(135deg, #1a0a2e 0%, #0a0a1f 100%); border: 1px solid #2d1b4e; border-radius: 12px; padding: 2.5rem 2rem; margin: 3rem 0 2rem; text-align: center; }
+    .cta-section h2 { margin-top: 0; color: #f8fafc; }
+    .cta-section p { color: #a78bfa; max-width: 480px; margin: 0 auto 1.5rem; }
+    .cta-btn { display: inline-block; background: #7c3aed; color: white; padding: 0.85rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1rem; }
+    .cta-btn:hover { background: #6d28d9; text-decoration: none; }
+    .cta-sub { font-size: 0.8rem; color: #64748b; margin-top: 0.75rem; }
+    .faq-item { border-bottom: 1px solid #1e1e2e; padding: 1.25rem 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 600; color: #e2e8f0; margin-bottom: 0.5rem; }
+    .faq-a { color: #94a3b8; font-size: 0.95rem; margin: 0; }
+    .copy-note { font-size: 0.8rem; color: #475569; margin-top: 1rem; font-style: italic; }
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="logo">Peerscope</span>
+    <a href="https://peerscope-waitlist.pages.dev/?utm_source=blog&utm_medium=nav&utm_campaign=win-loss" class="cta-nav">Join waitlist</a>
+  </nav>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="https://peerscope-waitlist.pages.dev">Home</a> &rsaquo;
+      <a href="https://peerscope-waitlist.pages.dev/blog/">Blog</a> &rsaquo;
+      Win/Loss Analysis Template
+    </div>
+
+    <span class="tag">Template</span>
+
+    <h1>Win/Loss Analysis Template (Free) + How to Actually Use It</h1>
+    <p class="meta">Updated 7 April 2026 &bull; 13 min read &bull; By Peerscope</p>
+
+    <p>Most win/loss "analysis" is just vibes. Sales lost three deals to a competitor last quarter, someone declares "their pricing is more competitive," and that belief calcifies into your quarterly review deck without anyone actually talking to the customers who left.</p>
+
+    <p>Real win/loss analysis is a structured process: interview buyers after a deal closes (won or lost), record structured data, and identify patterns over time. The output is competitive intelligence you can actually act on - updated battlecards, improved positioning, and a clearer picture of where you're actually strong versus where you're rationalising.</p>
+
+    <p>This page has a free win/loss analysis template you can use immediately, plus guidance on how to make the interviews actually surface useful information (the questions matter more than the format).</p>
+
+    <h2>The free win/loss analysis template</h2>
+
+    <p>Copy this into Notion, Google Docs, or wherever your team works. Run one of these per closed deal (won or lost) within 2 weeks of closing - after that, the buyer's memory fades fast.</p>
+
+    <div class="template-box">
+      <h3>Win/Loss Analysis — Deal Record</h3>
+
+      <div class="template-section">
+        <h4>Deal metadata</h4>
+        <div class="template-field">Company name:</div>
+        <div class="template-field">Deal size (ACV):</div>
+        <div class="template-field">Deal outcome: [ ] Won &nbsp;&nbsp;[ ] Lost &nbsp;&nbsp;[ ] No Decision</div>
+        <div class="template-field">Primary competitor evaluated against:</div>
+        <div class="template-field">Other competitors evaluated:</div>
+        <div class="template-field">Sales cycle length (days):</div>
+        <div class="template-field">Interview date:</div>
+        <div class="template-field">Interviewee role/title:</div>
+        <div class="template-field">Interview conducted by:</div>
+      </div>
+
+      <div class="template-section">
+        <h4>Why they evaluated us (the trigger)</h4>
+        <div class="template-field">What prompted the search? (e.g., pain point, contract renewal, team growth)</div>
+        <div class="template-field">How did they find us? (search, word of mouth, ad, review site, SDR outreach)</div>
+        <div class="template-field">What problem were they trying to solve in their own words?</div>
+      </div>
+
+      <div class="template-section">
+        <h4>Evaluation criteria (scored 1-5)</h4>
+        <div class="score-grid">
+          <div class="score-cell header">Criterion</div>
+          <div class="score-cell header">Importance (1-5)</div>
+          <div class="score-cell header">Us rating (1-5)</div>
+          <div class="score-cell header">Competitor rating (1-5)</div>
+          <div class="score-cell header">Gap</div>
+        </div>
+        <div class="score-grid">
+          <div class="score-cell">Price / value</div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+        </div>
+        <div class="score-grid">
+          <div class="score-cell">Features / functionality</div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+        </div>
+        <div class="score-grid">
+          <div class="score-cell">Ease of use / onboarding</div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+        </div>
+        <div class="score-grid">
+          <div class="score-cell">Integrations</div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+        </div>
+        <div class="score-grid">
+          <div class="score-cell">Support / service</div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+        </div>
+        <div class="score-grid">
+          <div class="score-cell">Vendor trust / brand</div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+          <div class="score-cell template-field" style="padding: 0.3rem;"></div>
+        </div>
+      </div>
+
+      <div class="template-section">
+        <h4>The real reason (open text — most important section)</h4>
+        <div class="template-field">In one sentence, why did they choose [winner] over [loser]?</div>
+        <div class="template-field">What was the deciding factor the buyer mentioned unprompted?</div>
+        <div class="template-field">Was there anything your sales process did well or poorly?</div>
+        <div class="template-field">What would have changed the outcome?</div>
+      </div>
+
+      <div class="template-section">
+        <h4>Competitor intelligence gathered</h4>
+        <div class="template-field">What pricing/plan did the competitor quote?</div>
+        <div class="template-field">Which competitor features came up positively in the comparison?</div>
+        <div class="template-field">What negatives about the competitor did the buyer mention?</div>
+        <div class="template-field">Did the buyer receive any discounts or special terms from the competitor?</div>
+      </div>
+
+      <div class="template-section">
+        <h4>Actions</h4>
+        <div class="template-field">Battlecard update needed? [ ] Yes — [what to change] &nbsp;[ ] No</div>
+        <div class="template-field">Product feedback to log? [ ] Yes — [what] &nbsp;[ ] No</div>
+        <div class="template-field">Positioning change needed? [ ] Yes — [what] &nbsp;[ ] No</div>
+        <div class="template-field">Pricing feedback? [ ] Yes — [what] &nbsp;[ ] No</div>
+      </div>
+    </div>
+
+    <p class="copy-note">Copy this template into Notion, Google Docs, or Airtable. Run one per closed deal (won or lost) within 2 weeks of closing.</p>
+
+    <h2>The questions that actually get honest answers</h2>
+
+    <p>The template above captures the data. The interview questions are what make the data honest. Most win/loss interviews fail because the questions are too direct — buyers give polished, diplomatic answers instead of real ones.</p>
+
+    <p>Here's the framework that works: <strong>start broad, then go specific; ask about process first, decision second.</strong></p>
+
+    <h3>Opening (first 5 minutes)</h3>
+    <p>Don't start with "why did you choose X?" Start with context. The buyer needs to remember the headspace they were in during the evaluation.</p>
+    <ul>
+      <li>"Can you walk me through what prompted you to start looking for a solution in the first place?"</li>
+      <li>"Who else was involved in the decision? Were there different opinions on the team?"</li>
+      <li>"What did your evaluation process look like — how many vendors, how long?"</li>
+    </ul>
+
+    <h3>Evaluation criteria (the honest version)</h3>
+    <p>Don't ask "what was most important to you?" — you'll get the rational answer, not the real one. Instead:</p>
+    <ul>
+      <li>"If you had to pick the one thing that made this decision hard, what was it?"</li>
+      <li>"Was there any point during the evaluation where you felt like you knew which direction you were going?"</li>
+      <li>"Did anyone on your team push back on the direction you went? What were their concerns?"</li>
+    </ul>
+
+    <h3>Competitor questions (handle carefully)</h3>
+    <p>Buyers are often reluctant to criticise competitors (or you). Ask indirectly:</p>
+    <ul>
+      <li>"Without naming names, were there any tools in your shortlist that surprised you — either positively or negatively?"</li>
+      <li>"What did [competitor] demo that you thought was particularly impressive?"</li>
+      <li>"What were you worried about with [competitor] before you made your decision?"</li>
+    </ul>
+
+    <h3>The deciding question (last 10 minutes)</h3>
+    <p>The most important question in any win/loss interview:</p>
+    <ul>
+      <li>"If you had to explain your decision to a colleague who wasn't involved — just one sentence — what would you say?"</li>
+    </ul>
+    <p>This forces them to articulate the real deciding factor, not the rationalisation. Record it word for word. Aggregate these across 10+ interviews and you'll see the patterns your team can't see from inside the sales process.</p>
+
+    <div class="highlight-box">
+      <p><strong>Timing tip:</strong> The best win/loss interviews happen 2-4 weeks after the deal closes. Early enough to remember the details; late enough that the emotional charge has settled and they'll be more candid.</p>
+    </div>
+
+    <h2>Common win/loss mistakes that invalidate your data</h2>
+
+    <div class="warning-box">
+      <p><strong>Mistake 1: Letting sales conduct the interviews.</strong> AEs are too invested in defending their process. Buyers give different answers to a neutral interviewer (PM, marketer, founder) than to the AE who ran the deal.</p>
+    </div>
+
+    <h3>Other common mistakes</h3>
+    <ul>
+      <li><strong>Only interviewing after wins.</strong> Losses are more informative. If you only interview when you win, you'll optimise for the wrong things.</li>
+      <li><strong>Taking "price" at face value.</strong> "Price was the main factor" usually means "we didn't make the value case clearly enough." Dig in: "Was there a price where you would have chosen us regardless of the competitor?"</li>
+      <li><strong>Not documenting competitor intelligence.</strong> Every interview contains pricing data, feature comparisons, and discount intelligence. If you're not capturing this systematically, you're throwing away competitive research.</li>
+      <li><strong>Running it quarterly.</strong> Win/loss analysis needs to run continuously — one interview per closed deal. Quarterly batches mean you're acting on stale data.</li>
+      <li><strong>Not closing the loop.</strong> The analysis means nothing if it doesn't result in a battlecard update, a sales enablement change, or a product conversation. Assign an owner for each action item in the template.</li>
+    </ul>
+
+    <h2>How to turn win/loss data into competitive action</h2>
+
+    <p>After 5-10 interviews, you'll have enough data to look for patterns. Here's the framework:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Pattern in loss data</th>
+          <th>Root cause</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Price was too high" (3+ losses)</td>
+          <td>Value narrative isn't landing in demo</td>
+          <td>Rewrite ROI section of pitch deck; update pricing objection in battlecard</td>
+        </tr>
+        <tr>
+          <td>"They had [feature X]" (3+ losses)</td>
+          <td>Feature gap or poor demo sequencing</td>
+          <td>Add to roadmap OR change demo to avoid feature gap earlier</td>
+        </tr>
+        <tr>
+          <td>"We went with the bigger brand" (3+ losses)</td>
+          <td>Trust / risk gap</td>
+          <td>Add social proof (case studies, logos, references) to late-stage materials</td>
+        </tr>
+        <tr>
+          <td>"Their onboarding looked easier" (3+ losses)</td>
+          <td>Demo not showing simplicity</td>
+          <td>Reorder demo to lead with quick-start; add trial guide</td>
+        </tr>
+        <tr>
+          <td>"Competitor gave us 40% off" (3+ losses)</td>
+          <td>Discount policy gap</td>
+          <td>Review discount authority matrix; create approved discount playbook</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Connecting win/loss to ongoing competitive monitoring</h2>
+
+    <p>Win/loss analysis tells you what happened in past deals. But to stay ahead of your competitors, you also need to know what's happening with them right now.</p>
+
+    <p>The two complement each other:</p>
+    <ul>
+      <li><strong>Win/loss</strong> tells you how you're performing against competitors in live deals — the perception and positioning gaps</li>
+      <li><strong>Competitor monitoring</strong> tells you what's changing at the competitor — pricing, features, messaging — before it shows up in your win/loss data</li>
+    </ul>
+
+    <p>Without ongoing monitoring, your win/loss analysis is always reactive. You find out a competitor dropped their price <em>after</em> it cost you three deals, not before. A competitor monitoring tool like Peerscope fills that gap — automated alerts when a competitor changes their pricing page, launches a feature, or shifts their messaging.</p>
+
+    <div class="cta-section">
+      <h2>Complete the picture: monitor what's changing now</h2>
+      <p>Win/loss tells you what happened. Peerscope tells you what's happening. Automated competitor monitoring for SaaS teams who can't justify $20K/year for Crayon or Klue.</p>
+      <a href="https://peerscope-waitlist.pages.dev/?utm_source=blog&utm_medium=cta&utm_campaign=win-loss" class="cta-btn">Join the Peerscope waitlist</a>
+      <p class="cta-sub">Free during beta &bull; AUD$49/mo at launch &bull; No annual contract</p>
+    </div>
+
+    <h2>FAQ</h2>
+
+    <div class="faq-item">
+      <p class="faq-q">How many win/loss interviews do you need before the data is useful?</p>
+      <p class="faq-a">5-7 interviews will reveal initial patterns. 15-20 gives you statistically meaningful data. Start immediately — even 3 interviews will surface something you didn't know. The goal is a continuous process, not a quarterly project.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Will buyers actually agree to a win/loss interview?</p>
+      <p class="faq-a">Response rates are typically 30-50% if you ask within 2 weeks of a decision. Frame it as a 15-minute call to help you improve. For wins, buyers are usually happy to talk. For losses, a $25 gift card improves response rate significantly. Don't send a survey — call or video.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Should we conduct win/loss interviews internally or hire a third party?</p>
+      <p class="faq-a">For early-stage SaaS: do it internally (founder or PM) but not with the AE who ran the deal. Third-party firms get higher response rates and more candid answers, but at $500-$1,500 per interview, they're worth it only when you have a meaningful deal volume (50+ closed deals/quarter).</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">What's the difference between win/loss analysis and customer success interviews?</p>
+      <p class="faq-a">Win/loss analysis happens at deal close and focuses on the evaluation process and competitive comparison. Customer success interviews happen post-onboarding and focus on product experience and retention risk. Both are valuable; they answer different questions.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">What tools do people use to run win/loss programs?</p>
+      <p class="faq-a">For early-stage teams: Notion or Google Docs with this template + a simple Loom recording. For growing teams: dedicated tools like Clozd, Wynter, or Primary Intelligence. For competitive intel that complements win/loss data, see our <a href="/blog/competitor-tracking-tools-small-business/">competitor tracking tools comparison</a>.</p>
+    </div>
+
+    <p style="margin-top: 2.5rem; font-size: 0.85rem; color: #475569;">
+      See also: <a href="/blog/competitive-battlecard-template/">Free competitive battlecard template</a> &bull;
+      <a href="/blog/competitor-pricing-monitoring/">Competitor pricing monitoring guide</a> &bull;
+      <a href="/blog/how-to-track-competitors-online/">How to track competitors online</a>
+    </p>
+
+    <p style="margin-top: 1rem; font-size: 0.85rem; color: #475569;">
+      &larr; <a href="https://peerscope-waitlist.pages.dev/blog/">Back to all articles</a>
+    </p>
+  </div>
+</body>
+</html>
