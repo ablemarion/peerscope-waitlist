@@ -158,7 +158,7 @@ export function HeroB() {
             {/* CTA */}
             <div className="max-w-lg mb-6">
               <EmailForm placeholder="Enter your work email" buttonText="Claim founding price" size="large" variant="dark" />
-              {waitlistCount !== null && waitlistCount > 0 && (
+              {waitlistCount !== null && waitlistCount >= 20 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
                   <span aria-hidden="true">✓ </span>
                   <span className="hidden sm:inline">Join {waitlistCount.toLocaleString()} founders already tracking their competitors.</span>

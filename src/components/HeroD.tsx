@@ -340,7 +340,7 @@ export function HeroD() {
             </p>
 
             {/* Social proof */}
-            {waitlistCount !== null && waitlistCount > 0 && (
+            {waitlistCount !== null && waitlistCount >= 20 && (
               <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: '#34D6B7' }}>
                 Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
               </p>
@@ -360,7 +360,7 @@ export function HeroD() {
                 variant="dark"
                 onSuccess={() => setSubmitted(true)}
               />
-              {waitlistCount !== null && waitlistCount > 0 && (
+              {waitlistCount !== null && waitlistCount >= 20 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
                   <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
                 </p>

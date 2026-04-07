@@ -227,7 +227,7 @@ export function HeroC() {
             </p>
 
             {/* Trust signal */}
-            {waitlistCount !== null && waitlistCount > 0 && (
+            {waitlistCount !== null && waitlistCount >= 20 && (
               <p
                 className="text-sm font-medium mb-8"
                 style={{ color: '#34D6B7' }}
@@ -249,7 +249,7 @@ export function HeroC() {
                 size="large"
                 variant="dark"
               />
-              {waitlistCount !== null && waitlistCount > 0 && (
+              {waitlistCount !== null && waitlistCount >= 20 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
                   <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
                 </p>
