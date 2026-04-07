@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Free Competitive Battlecard Template for B2B SaaS Teams | Peerscope</title>
+    <meta name="description" content="A free competitive battlecard template for B2B SaaS teams. Includes sections for positioning, objection handling, pricing comparison, and win/loss reasons. Plus how to keep it current automatically." />
+    <meta property="og:site_name" content="Peerscope" />
+    <meta property="og:title" content="Free Competitive Battlecard Template for B2B SaaS Teams | Peerscope" />
+    <meta property="og:description" content="A free competitive battlecard template for B2B SaaS teams. Includes sections for positioning, objection handling, pricing comparison, and win/loss reasons. Plus how to keep it current automatically." />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:url" content="https://peerscope-waitlist.pages.dev/blog/competitive-battlecard-template/" />
+    <meta property="article:published_time" content="2026-04-07T00:00:00+00:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+    <meta name="twitter:title" content="Free Competitive Battlecard Template for B2B SaaS Teams | Peerscope" />
+    <meta name="twitter:description" content="A free competitive battlecard template for B2B SaaS teams. Includes sections for positioning, objection handling, pricing comparison, and win/loss reasons." />
+    <link rel="canonical" href="https://peerscope-waitlist.pages.dev/blog/competitive-battlecard-template/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0D0F1A" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Free Competitive Battlecard Template for B2B SaaS Teams",
+      "description": "A free competitive battlecard template for B2B SaaS teams. Includes sections for positioning, objection handling, pricing comparison, and win/loss reasons. Plus how to keep it current automatically.",
+      "datePublished": "2026-04-07T00:00:00+00:00",
+      "author": {
+        "@type": "Organization",
+        "name": "Peerscope"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Peerscope",
+        "url": "https://peerscope-waitlist.pages.dev"
+      },
+      "url": "https://peerscope-waitlist.pages.dev/blog/competitive-battlecard-template/"
+    }
+    </script>
+    <link rel="preload" as="font" href="/fonts/syne-latin.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/inter-latin.woff2" type="font/woff2" crossorigin>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      @font-face {
+        font-family: 'Syne';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: swap;
+        src: url('/fonts/syne-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400 600;
+        font-display: swap;
+        src: url('/fonts/inter-latin.woff2') format('woff2');
+      }
+
+      :root {
+        --bg: #0D0F1A;
+        --surface: #13162A;
+        --border: rgba(250,250,246,0.08);
+        --text: rgba(250,250,246,0.9);
+        --muted: rgba(250,250,246,0.45);
+        --accent: #F59E0B;
+        --accent-hover: #FBBF24;
+      }
+
+      html { background: var(--bg); color: var(--text); }
+
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 1rem;
+        line-height: 1.7;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+      nav {
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        text-decoration: none;
+      }
+      .logo:hover { color: var(--text); text-decoration: none; }
+      .logo span { color: var(--accent); }
+
+      .nav-cta {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--accent);
+        border: 1px solid rgba(245,158,11,0.4);
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        transition: background 0.15s, border-color 0.15s;
+        text-decoration: none;
+      }
+      .nav-cta:hover {
+        background: rgba(245,158,11,0.1);
+        border-color: var(--accent);
+        text-decoration: none;
+        color: var(--accent-hover);
+      }
+
+      .wrapper {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 5rem;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .back-link:hover { color: var(--accent); text-decoration: none; }
+
+      .article-header {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: rgba(245,158,11,0.12);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+
+      .article-header h1 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        color: #FAFAFF;
+        margin-bottom: 1rem;
+      }
+
+      .article-intro {
+        font-size: 1.0625rem;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      article h2 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.375rem;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        color: #FAFAFF;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      article h3 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.0625rem;
+        color: #FAFAFF;
+        margin-top: 1.75rem;
+        margin-bottom: 0.625rem;
+        letter-spacing: -0.01em;
+      }
+
+      article p {
+        margin-bottom: 1.25rem;
+        color: var(--text);
+      }
+
+      article p:last-child { margin-bottom: 0; }
+
+      article ul, article ol {
+        margin: 1.25rem 0 1.25rem 1.5rem;
+        color: var(--text);
+      }
+
+      article li { margin-bottom: 0.5rem; }
+
+      article strong {
+        color: #FAFAFF;
+        font-weight: 600;
+      }
+
+      .battlecard {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 2.5rem 0;
+      }
+
+      .battlecard-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .battlecard-header h3 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.1875rem;
+        color: #FAFAFF;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .battlecard-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--accent);
+        background: rgba(245,158,11,0.12);
+        padding: 0.2rem 0.625rem;
+        border-radius: 4px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .battlecard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+      }
+
+      @media (max-width: 540px) {
+        .battlecard-grid { grid-template-columns: 1fr; }
+      }
+
+      .battlecard-section {
+        background: rgba(250,250,246,0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1.125rem;
+      }
+
+      .battlecard-section.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .battlecard-section h4 {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        margin-bottom: 0.625rem;
+      }
+
+      .battlecard-section p,
+      .battlecard-section li {
+        font-size: 0.9rem;
+        color: var(--text);
+        margin-bottom: 0.375rem;
+      }
+
+      .battlecard-section ul {
+        margin: 0;
+        padding-left: 1.125rem;
+      }
+
+      .placeholder-text {
+        color: rgba(250,250,246,0.25);
+        font-style: italic;
+        font-size: 0.875rem;
+      }
+
+      .section-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .section-block h3 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--accent);
+        margin: 0 0 0.75rem;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
+        font-size: 0.8125rem;
+        letter-spacing: 0.05em;
+      }
+
+      .section-block p,
+      .section-block li {
+        font-size: 0.9375rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-block ul { padding-left: 1.25rem; }
+
+      .tip-box {
+        background: rgba(245,158,11,0.06);
+        border-left: 3px solid var(--accent);
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .tip-box p {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: var(--text);
+      }
+
+      .tip-box strong {
+        color: var(--accent);
+      }
+
+      .cta-box {
+        background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.04) 100%);
+        border: 1px solid rgba(245,158,11,0.25);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 3rem 0;
+        text-align: center;
+      }
+
+      .cta-box h3 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #FAFAFF;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .cta-box p {
+        color: var(--muted);
+        font-size: 0.9375rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .cta-btn {
+        display: inline-block;
+        background: var(--accent);
+        color: #0D0F1A;
+        font-weight: 700;
+        font-size: 0.9375rem;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background 0.15s;
+        letter-spacing: -0.01em;
+      }
+      .cta-btn:hover { background: var(--accent-hover); color: #0D0F1A; text-decoration: none; }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2rem 1.5rem;
+      }
+      .footer-inner {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+
+      @media (min-width: 640px) {
+        .footer-inner {
+          flex-direction: row;
+          justify-content: space-between;
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="logo">peer<span>scope</span></a>
+        <a href="/?utm_source=blog&utm_medium=organic&utm_campaign=battlecard#waitlist-footer" class="nav-cta">Join waitlist</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="wrapper">
+        <a href="/blog/" class="back-link">← All posts</a>
+
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="tag">Template</span>
+            <time datetime="2026-04-07">7 April 2026</time>
+            <span>·</span>
+            <span>8 min read</span>
+          </div>
+          <h1>Free Competitive Battlecard Template for B2B SaaS Teams</h1>
+          <p class="article-intro">A competitive battlecard is only as good as the data feeding it. Here is a complete template for B2B SaaS teams - sections included, guidance on what to write, and the one problem every team runs into three months after launch.</p>
+        </header>
+
+        <article>
+          <p>Competitive battlecards are one of those things every B2B SaaS team knows they should have, builds once, and then discovers six months later contains outdated pricing, a competitor feature that was deprecated, and objection handling for a positioning the competitor abandoned in Q3.</p>
+
+          <p>The template itself is the easy part. The hard part is keeping it current when your competitors change their pricing page, launch a new integration, or quietly update their positioning. We will get to that. First, here is the complete template structure.</p>
+
+          <h2>The Battlecard Template</h2>
+
+          <p>Copy this structure for each competitor you track. The template is designed for a one-page format - dense enough to be useful, light enough that sales reps will actually read it before a call.</p>
+
+          <div class="battlecard">
+            <div class="battlecard-header">
+              <h3>[Competitor Name] Battlecard</h3>
+              <span class="battlecard-label">Template — copy per competitor</span>
+            </div>
+            <div class="battlecard-grid">
+
+              <div class="battlecard-section">
+                <h4>What they are</h4>
+                <p class="placeholder-text">One sentence. Their positioning as they describe it. Update when their homepage changes.</p>
+              </div>
+
+              <div class="battlecard-section">
+                <h4>Pricing</h4>
+                <p class="placeholder-text">Plans, prices, billing terms. Self-serve vs. sales-led. Free tier if any. Last verified: [date].</p>
+              </div>
+
+              <div class="battlecard-section">
+                <h4>Their strengths (be honest)</h4>
+                <ul>
+                  <li class="placeholder-text">What they do genuinely well</li>
+                  <li class="placeholder-text">Features or integrations we lack</li>
+                  <li class="placeholder-text">Brand or category perception advantage</li>
+                </ul>
+              </div>
+
+              <div class="battlecard-section">
+                <h4>Their weaknesses</h4>
+                <ul>
+                  <li class="placeholder-text">Pricing or contract model friction</li>
+                  <li class="placeholder-text">Missing features your ICP needs</li>
+                  <li class="placeholder-text">Known complaints from G2/Capterra/Reddit</li>
+                </ul>
+              </div>
+
+              <div class="battlecard-section full-width">
+                <h4>When you win against them (and why)</h4>
+                <ul>
+                  <li class="placeholder-text">Deal scenario 1: [describe] — win reason: [reason]</li>
+                  <li class="placeholder-text">Deal scenario 2: [describe] — win reason: [reason]</li>
+                  <li class="placeholder-text">Deal scenario 3: [describe] — win reason: [reason]</li>
+                </ul>
+              </div>
+
+              <div class="battlecard-section full-width">
+                <h4>When you lose against them (and why)</h4>
+                <ul>
+                  <li class="placeholder-text">Loss scenario 1: [describe] — loss reason: [reason]</li>
+                  <li class="placeholder-text">Loss scenario 2: [describe] — loss reason: [reason]</li>
+                  <li class="placeholder-text">Be honest — this is where the real insight lives</li>
+                </ul>
+              </div>
+
+              <div class="battlecard-section full-width">
+                <h4>Top 3 objection responses</h4>
+                <ul>
+                  <li class="placeholder-text"><strong>"They have [feature X] and you don't"</strong> — response: [your answer]</li>
+                  <li class="placeholder-text"><strong>"Your price is higher"</strong> — response: [your answer]</li>
+                  <li class="placeholder-text"><strong>"We've been using them for years"</strong> — response: [your answer]</li>
+                </ul>
+              </div>
+
+              <div class="battlecard-section">
+                <h4>Talk track opener</h4>
+                <p class="placeholder-text">The 2-sentence response when a prospect says "[Competitor] is on our shortlist too." Acknowledge, then redirect.</p>
+              </div>
+
+              <div class="battlecard-section">
+                <h4>Do not say</h4>
+                <ul>
+                  <li class="placeholder-text">Claims you cannot back up</li>
+                  <li class="placeholder-text">Disparaging language (it damages trust)</li>
+                  <li class="placeholder-text">Outdated points (check date first)</li>
+                </ul>
+              </div>
+
+              <div class="battlecard-section full-width">
+                <h4>Watch for changes — last updated</h4>
+                <p class="placeholder-text">Pricing: [date] | Features: [date] | Positioning/homepage: [date] | Job postings: [date]</p>
+              </div>
+
+            </div>
+          </div>
+
+          <h2>How to Fill Each Section</h2>
+
+          <div class="section-block">
+            <h3>Section 1: What they are</h3>
+            <p>Copy this from the competitor's homepage hero text - their own words, not yours. This keeps the battlecard grounded in reality and means the wording matches what prospects have likely already read. When a competitor rebrand happens, this is usually the first section to go stale.</p>
+          </div>
+
+          <div class="section-block">
+            <h3>Section 2: Pricing</h3>
+            <p>Capture every plan, its price, what it includes, and the billing model. Note whether pricing is self-serve (findable without a sales call) or quote-based. If they have a free tier, document the limits. Mark the date you last verified this - pricing changes are among the most common and highest-stakes competitive shifts.</p>
+            <p>If they do not publish pricing, note that too. "Pricing on request" is itself competitive information that tells you something about deal size and sales motion.</p>
+          </div>
+
+          <div class="section-block">
+            <h3>Sections 3 and 4: Strengths and Weaknesses</h3>
+            <p>The strengths section is where most battlecards fail. Teams list weaknesses accurately but sanitise strengths until they are useless. Be honest about what the competitor does well - your sales team will face this in real conversations and needs accurate preparation, not false confidence.</p>
+            <p>For weaknesses: G2, Capterra, and Trustpilot reviews are excellent sources. Filter by 2-3 star reviews to find genuine friction points. Reddit (r/SaaS, r/entrepreneur) often surfaces authentic complaints that polished review sites miss.</p>
+          </div>
+
+          <div class="section-block">
+            <h3>Sections 5 and 6: Win and Loss Scenarios</h3>
+            <p>This is the most valuable section and the hardest to build without data. Start with your last 10 competitive deals - wins and losses. For each one, record the deal context (company size, use case, budget) and the actual reason cited by the prospect. Patterns will emerge.</p>
+            <p>A good win scenario follows this format: <em>"When [prospect type] is evaluating us vs [competitor] and [context], we win because [specific reason]."</em> The more specific, the more useful it is in a live conversation.</p>
+          </div>
+
+          <div class="section-block">
+            <h3>Section 7: Objection Responses</h3>
+            <p>Limit to three. More than three objections means your battlecard is trying to do too much. Pick the three most common competitive objections from your CRM notes or sales team interviews and write a response that is honest, specific, and does not require memorisation.</p>
+            <p>The best objection responses acknowledge the point before pivoting: "You are right that they have [X]. Where we consistently win is [Y] - particularly for teams that [context]. Is that relevant to your situation?"</p>
+          </div>
+
+          <div class="tip-box">
+            <p><strong>Formatting tip:</strong> Keep the entire battlecard to one screen or one printed page. Sales reps consult battlecards in the minutes before a call - not during a deep research session. Dense is better than comprehensive.</p>
+          </div>
+
+          <h2>The Problem Every Team Hits Three Months In</h2>
+
+          <p>You build the battlecards. You brief the sales team. Everyone feels prepared. Three months later, a rep loses a deal because they cited a competitor's old pricing. Someone else spends five minutes on a discovery call explaining why a feature gap matters - the competitor shipped it in February.</p>
+
+          <p>Battlecard decay is not a discipline problem. It is a monitoring problem. Competitor pricing pages, feature lists, and homepage positioning change without any announcement. The only way to keep battlecards current is to know when those changes happen.</p>
+
+          <p>Most small teams handle this one of three ways:</p>
+
+          <ul>
+            <li><strong>Manual quarterly reviews</strong> - Someone visits every competitor page once a quarter and updates the cards. This works until it does not (missed release in month two of the quarter).</li>
+            <li><strong>Google Alerts</strong> - Catches press coverage but misses silent website changes - the quietest and often most significant moves.</li>
+            <li><strong>Automated monitoring</strong> - Tools that watch competitor pages and alert you when pricing, features, or positioning changes. This is where most teams eventually land once they have burned from stale battlecards enough times.</li>
+          </ul>
+
+          <div class="cta-box">
+            <h3>Keep your battlecards current automatically</h3>
+            <p>Peerscope monitors competitor pricing pages, feature lists, and positioning. Get a weekly digest of changes - so your battlecards reflect what competitors are actually doing today, not three months ago.</p>
+            <a href="/?utm_source=blog&utm_medium=organic&utm_campaign=battlecard#waitlist-footer" class="cta-btn">Join the waitlist →</a>
+          </div>
+
+          <h2>How Often Should You Update Battlecards?</h2>
+
+          <p>The honest answer: whenever something changes, not on a fixed schedule. A competitor's pricing update is more time-sensitive than a quarterly calendar entry. A rebrand requires immediate action; a minor copy change may not.</p>
+
+          <p>In practice, for teams without automated monitoring, a monthly review is the minimum that keeps cards reliably current. Quarterly falls short for fast-moving competitors. Weekly manual review is not sustainable without dedicated staff.</p>
+
+          <p>The sections that decay fastest - in rough order:</p>
+
+          <ol>
+            <li><strong>Pricing</strong> - Changes frequently, often without announcement, highest stakes in a competitive deal</li>
+            <li><strong>Feature list / integrations</strong> - New launches happen on product release cycles, which may be monthly</li>
+            <li><strong>Positioning / homepage messaging</strong> - Rebrands and repositioning happen 1-2 times per year for most companies</li>
+            <li><strong>Objection responses</strong> - These follow changes in 1-3 above, lag by a few weeks</li>
+            <li><strong>Win/loss scenarios</strong> - Relatively stable; major shifts happen when market dynamics change</li>
+          </ol>
+
+          <h2>Where to Store and Share Battlecards</h2>
+
+          <p>The best format is wherever your sales team already lives. For most B2B SaaS teams that means one of:</p>
+
+          <ul>
+            <li><strong>Notion or Confluence</strong> - Easy to update, searchable, linkable from CRM. Requires someone with edit access to maintain.</li>
+            <li><strong>Google Slides / Docs</strong> - Universal access, easy to share as a link. Version history helps track changes over time.</li>
+            <li><strong>Dedicated sales enablement tools</strong> (Highspot, Seismic, Showpad) - Integrates with CRM, tracks usage. Overkill for teams under 20 reps.</li>
+            <li><strong>Slack or Teams channel</strong> - Pin the doc link in a dedicated #competitive channel. Low-friction access before calls.</li>
+          </ul>
+
+          <p>Whatever format you choose, the access pattern matters more than the tool. A battlecard that requires three clicks to find is one that will not be consulted. One-click access from wherever your reps work before calls is the target.</p>
+
+          <h2>Frequently Asked Questions</h2>
+
+          <p><strong>How many competitors should I have battlecards for?</strong> Start with your top three active competitors - the ones that appear most often in competitive deals. Expand to five to eight once the process is working. Beyond ten, maintenance overhead starts to outweigh the benefit unless you have dedicated CI staff.</p>
+
+          <p><strong>Should battlecards be public or internal only?</strong> Internal only. Battlecards often contain candid assessments of competitor weaknesses and your own win/loss patterns. Keeping them internal protects that intelligence and keeps the content honest.</p>
+
+          <p><strong>How do I know when a competitor changes their pricing?</strong> Without monitoring, you often do not - until a prospect tells you in a deal. The options are manual periodic checks, Google Alerts (incomplete), or automated page monitoring tools that alert you when content changes.</p>
+
+          <p><strong>What is the difference between a battlecard and a competitive analysis?</strong> A competitive analysis is a strategic document - deep, comprehensive, written for leadership. A battlecard is a tactical tool - brief, action-oriented, written for a sales rep about to get on a call. A competitive analysis might run to 20 pages; a battlecard should fit on one.</p>
+
+          <p><strong>Can I use this template for non-SaaS businesses?</strong> Yes, with minor adjustments. Replace "deal scenarios" with "sales contexts" for B2C businesses, and adjust the pricing section to reflect your industry's pricing norms (subscription vs. one-time, enterprise vs. transactional).</p>
+        </article>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <a href="/" class="logo" style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: -0.02em;">peer<span style="color: var(--accent);">scope</span></a>
+        <span>Track your competitors. Not your budget.</span>
+        <a href="/?utm_source=blog&utm_medium=organic&utm_campaign=battlecard">peerscope-waitlist.pages.dev</a>
+      </div>
+    </footer>
+  </body>
+</html>
