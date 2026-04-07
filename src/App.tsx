@@ -11,6 +11,7 @@ import { ExitIntentModal } from './components/ExitIntentModal'
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
 const HeroD = lazy(() => import('./components/HeroD').then(m => ({ default: m.HeroD })))
+const HeroE = lazy(() => import('./components/HeroE').then(m => ({ default: m.HeroE })))
 const CompetitorFeedMockup = lazy(() => import('./components/HeroD').then(m => ({ default: m.CompetitorFeedMockup })))
 
 function RevealDiv({
@@ -242,15 +243,15 @@ function SetupFlow() {
 }
 
 // Assign and persist a hero variant for this session.
-// URL param ?variant=a/b/c/d overrides random assignment.
-// Without param: equal 25% chance of each variant, persisted in sessionStorage.
-const HERO_VARIANTS = ['a', 'b', 'c', 'd'] as const
+// URL param ?variant=a/b/c/d/e overrides random assignment.
+// Without param: equal 20% chance of each variant, persisted in sessionStorage.
+const HERO_VARIANTS = ['a', 'b', 'c', 'd', 'e'] as const
 type HeroVariant = typeof HERO_VARIANTS[number]
 
 function useHeroVariant(): HeroVariant {
   const params = new URLSearchParams(window.location.search)
   const urlParam = params.get('variant')?.toLowerCase()
-  if (urlParam === 'a' || urlParam === 'b' || urlParam === 'c' || urlParam === 'd') {
+  if (urlParam === 'a' || urlParam === 'b' || urlParam === 'c' || urlParam === 'd' || urlParam === 'e') {
     return urlParam
   }
   const stored = sessionStorage.getItem('hero_variant') as HeroVariant | null
@@ -265,6 +266,7 @@ function Hero() {
   if (variant === 'a') return <Suspense fallback={null}><HeroA /></Suspense>
   if (variant === 'c') return <Suspense fallback={null}><HeroC /></Suspense>
   if (variant === 'd') return <Suspense fallback={null}><HeroD /></Suspense>
+  if (variant === 'e') return <Suspense fallback={null}><HeroE /></Suspense>
   return <HeroB />
 }
 
