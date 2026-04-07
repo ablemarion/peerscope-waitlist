@@ -243,6 +243,35 @@
   z-index: 0;
 }
 
+/* Radar scan animation on CompetitorFeedMockup */
+@keyframes radar-scan {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.radar-scan-line {
+  animation: radar-scan 1.8s ease-in-out 400ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-scan-line {
+    animation: none;
+    display: none;
+  }
+}
+
 h1, h2, h3 {
   text-wrap: balance;
 }

@@ -24,6 +24,7 @@ interface EmailFormProps {
   buttonText?: string
   size?: 'default' | 'large'
   variant?: 'light' | 'dark'
+  onSuccess?: () => void
 }
 
 export function EmailForm({
@@ -31,6 +32,7 @@ export function EmailForm({
   buttonText = 'Join waitlist',
   size = 'default',
   variant = 'light',
+  onSuccess,
 }: EmailFormProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -57,6 +59,7 @@ export function EmailForm({
       if (res.ok) {
         setStatus('success')
         setEmail('')
+        onSuccess?.()
       } else {
         const data = await res.json().catch(() => ({}))
         setErrorMsg((data as { error?: string }).error || 'Something went wrong. Please try again.')

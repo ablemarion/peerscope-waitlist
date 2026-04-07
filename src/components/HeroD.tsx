@@ -8,7 +8,7 @@
  * Layout: two-column desktop (copy left, feed mockup right), single-column mobile.
  * CTA: "Claim founding price"
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { EmailForm } from './shared'
 
 type ChangeType = 'pricing' | 'feature' | 'jobs' | 'content'
@@ -121,13 +121,21 @@ export function CompetitorFeedMockup() {
   return (
     <div className="w-full select-none" aria-hidden="true">
       <div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-hidden relative"
         style={{
           background: '#06080F',
           border: '1px solid rgba(255,255,255,0.08)',
           boxShadow: '0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03)',
         }}
       >
+        {/* Radar scan overlay — plays once on mount, 400ms delay, 1.8s */}
+        <div
+          className="radar-scan-line absolute inset-x-0 top-0 h-px z-10 pointer-events-none"
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, rgba(52,214,183,0.5) 20%, rgba(52,214,183,0.95) 50%, rgba(52,214,183,0.5) 80%, transparent 100%)',
+            boxShadow: '0 0 10px rgba(52,214,183,0.5), 0 2px 6px rgba(52,214,183,0.2)',
+          }}
+        />
         {/* Window chrome */}
         <div
           className="flex items-center justify-between px-4 py-3 border-b"
@@ -260,6 +268,9 @@ export function CompetitorFeedMockup() {
 
 export function HeroD() {
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
+  const [heroInView, setHeroInView] = useState(true)
+  const [submitted, setSubmitted] = useState(false)
+  const heroRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     fetch('/api/waitlist/count')
@@ -270,8 +281,21 @@ export function HeroD() {
       .catch(() => {/* show nothing on error */})
   }, [])
 
+  useEffect(() => {
+    const hero = heroRef.current
+    if (!hero) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeroInView(entry.isIntersecting),
+      { threshold: 0 },
+    )
+    observer.observe(hero)
+    return () => observer.disconnect()
+  }, [])
+
   return (
+    <>
     <section
+      ref={heroRef}
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12"
       style={{ background: '#0D0F1A' }}
     >
@@ -334,6 +358,7 @@ export function HeroD() {
                 buttonText="Claim founding price"
                 size="large"
                 variant="dark"
+                onSuccess={() => setSubmitted(true)}
               />
               {waitlistCount !== null && waitlistCount > 0 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
@@ -400,5 +425,25 @@ export function HeroD() {
 
       </div>
     </section>
+
+    {/* Mobile sticky email CTA — visible while hero is in view, hidden after submit */}
+    {heroInView && !submitted && (
+      <div
+        className="fixed bottom-0 inset-x-0 z-50 lg:hidden px-4 pb-safe pb-4 pt-3"
+        style={{
+          background: '#0D0F1A',
+          borderTop: '1px solid #B8622A',
+        }}
+      >
+        <EmailForm
+          placeholder="Enter your work email"
+          buttonText="Claim founding price"
+          size="default"
+          variant="dark"
+          onSuccess={() => setSubmitted(true)}
+        />
+      </div>
+    )}
+    </>
   )
 }
