@@ -122,6 +122,16 @@
     .cta-box .cta-btn { display: inline-block; background: var(--accent); color: white; padding: 0.8rem 1.75rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; border: none; }
     .cta-box .cta-btn:hover { background: var(--accent-hover); text-decoration: none; }
     .cta-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.65rem; }
+    /* Inline email form */
+    .email-form { display: flex; gap: 0.5rem; max-width: 420px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .email-form input[type="email"] { flex: 1; min-width: 200px; background: rgba(255,255,255,0.08); border: 1px solid rgba(124,58,237,0.4); border-radius: 8px; padding: 0.7rem 1rem; color: #f8fafc; font-size: 0.92rem; outline: none; }
+    .email-form input[type="email"]::placeholder { color: rgba(255,255,255,0.35); }
+    .email-form input[type="email"]:focus { border-color: var(--accent); }
+    .email-form button { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 0.7rem 1.25rem; font-weight: 700; font-size: 0.9rem; white-space: nowrap; transition: background 0.15s; }
+    .email-form button:hover { background: var(--accent-hover); }
+    .email-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .signup-success { color: var(--green); font-size: 0.9rem; font-weight: 600; margin-top: 0.75rem; }
+    .signup-error { color: var(--red); font-size: 0.85rem; margin-top: 0.5rem; }
 
     /* Progress info */
     .progress-note { font-size: 0.8rem; color: var(--muted); text-align: center; }
@@ -239,10 +249,16 @@
         <div id="output-content">Your analysis will appear here after completing step 3.</div>
       </div>
 
-      <div class="cta-box">
+      <div class="cta-box" id="signup-box">
         <h3>This snapshot gets stale in 2 weeks</h3>
         <p>Competitor pricing changes, features launch, teams get hired. Peerscope monitors it automatically and pings you in Slack when something changes.</p>
-        <a href="https://peerscope-waitlist.pages.dev/?utm_source=tool&utm_medium=cta&utm_campaign=comp-builder" class="cta-btn">Join the Peerscope waitlist — free</a>
+        <div id="signup-form-wrap">
+          <form class="email-form" onsubmit="submitWaitlist(event)">
+            <input type="email" id="tool-email" placeholder="your@email.com" required autocomplete="email" />
+            <button type="submit" id="tool-submit-btn">Get early access — free</button>
+          </form>
+          <div id="signup-msg"></div>
+        </div>
         <p class="cta-sub">AUD$49/mo at launch &bull; No annual contract &bull; Founding rate locked for life</p>
       </div>
 
@@ -499,6 +515,40 @@
     function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
     function esc(str) {
       return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ---- Waitlist signup from tool ----
+    async function submitWaitlist(e) {
+      e.preventDefault();
+      const email = document.getElementById('tool-email').value.trim();
+      const btn = document.getElementById('tool-submit-btn');
+      const msg = document.getElementById('signup-msg');
+      if (!email) return;
+      btn.disabled = true;
+      btn.textContent = 'Joining…';
+      msg.textContent = '';
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source: 'tool-comp-builder', variant: 'tool' }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('signup-form-wrap').innerHTML =
+            '<p class="signup-success">✓ You\'re on the list. We\'ll email you when Peerscope launches.</p>';
+        } else {
+          msg.className = 'signup-error';
+          msg.textContent = data.error || 'Something went wrong — try again.';
+          btn.disabled = false;
+          btn.textContent = 'Get early access — free';
+        }
+      } catch {
+        msg.className = 'signup-error';
+        msg.textContent = 'Network error — please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Get early access — free';
+      }
     }
 
     // ---- Init ----
