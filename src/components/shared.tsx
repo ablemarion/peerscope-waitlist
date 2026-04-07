@@ -59,6 +59,7 @@ export function EmailForm({
       if (res.ok) {
         setStatus('success')
         setEmail('')
+        try { localStorage.setItem('ps_sub', '1') } catch { /* ignore */ }
         onSuccess?.()
       } else {
         const data = await res.json().catch(() => ({}))
@@ -72,13 +73,13 @@ export function EmailForm({
   }
 
   if (status === 'success') {
-    const SHARE_URL = 'https://peerscope-waitlist.pages.dev'
-    const SHARE_TEXT = `I just claimed founding pricing for @Peerscope — competitive intel for SMBs at $49/mo. Closes April 15: ${SHARE_URL}`
+    const SHARE_URL = 'https://peerscope-waitlist.pages.dev?utm_source=share&utm_medium=referral&utm_campaign=founder-share'
+    const SHARE_TEXT = `Crayon costs $20K/year. Klue costs $12K/year. Just found Peerscope — same competitor alerts for $49/mo. Founding price closes April 15: https://peerscope-waitlist.pages.dev`
 
     async function handleShare() {
       if (navigator.share) {
         try {
-          await navigator.share({ title: 'Peerscope', text: SHARE_TEXT, url: SHARE_URL })
+          await navigator.share({ title: 'Peerscope — competitor monitoring for $49/mo', text: SHARE_TEXT, url: SHARE_URL })
           return
         } catch {
           // User cancelled or share failed — fall through to Twitter

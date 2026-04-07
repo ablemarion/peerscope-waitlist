@@ -584,6 +584,44 @@ const annualPrices: Record<string, { monthly: string; annual: string; billed: st
   Team:    { monthly: '$199', annual: '$159', billed: '$1,908' },
 }
 
+// Global mobile sticky CTA — shows after scrolling past hero on variants A/B/C
+// HeroD has its own sticky; this one activates when the page has scrolled > 90vh
+function MobileScrollSticky() {
+  const [show, setShow] = useState(false)
+  const [done, setDone] = useState(() => {
+    try { return localStorage.getItem('ps_sub') === '1' } catch { return false }
+  })
+  const variant = useHeroVariant()
+
+  useEffect(() => {
+    // HeroD manages its own sticky CTA — don't double up
+    if (variant === 'd') return
+    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.9)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [variant])
+
+  if (!show || done || variant === 'd') return null
+
+  return (
+    <div
+      className="fixed bottom-0 inset-x-0 z-50 lg:hidden px-4 pt-3 pb-4"
+      style={{ background: '#0D0F1A', borderTop: '1px solid rgba(184,98,42,0.5)' }}
+    >
+      <p className="text-center text-xs mb-2 font-medium" style={{ color: 'rgba(240,124,53,0.85)' }}>
+        ⚡ Founding price closes April 15 — $49/mo locked for life
+      </p>
+      <EmailForm
+        placeholder="Enter your work email"
+        buttonText="Claim founding price"
+        size="default"
+        variant="dark"
+        onSuccess={() => setDone(true)}
+      />
+    </div>
+  )
+}
+
 export default function App() {
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
@@ -602,6 +640,9 @@ export default function App() {
 
       {/* Urgency banner — deadline + founding spot count, all variants */}
       <FoundingBanner />
+
+      {/* Mobile sticky CTA — scroll-triggered, all variants except HeroD (has its own) */}
+      <MobileScrollSticky />
 
       {/* Nav — dark glass */}
       <nav
