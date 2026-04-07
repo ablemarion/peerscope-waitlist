@@ -109,18 +109,28 @@ export function EmailForm({
         </div>
         <div className="text-center">
           <p className={`font-bold text-lg leading-tight ${textColor}`} style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}>You're in.</p>
-          <p className={`text-sm mt-1 ${mutedColor}`}>We'll alert you the moment Peerscope launches.</p>
+          <p className={`text-sm mt-1 ${mutedColor}`}>Founding price locked. We'll email you when Peerscope launches.</p>
         </div>
-        <button
-          type="button"
-          onClick={handleShare}
-          className={`text-sm transition flex items-center gap-1.5 min-h-[44px] px-2 ${variant === 'dark' ? 'text-white/40 hover:text-white/70' : 'text-gray-400 hover:text-gray-600'}`}
-        >
-          {copied
-            ? <><span className="text-[#34D6B7]">✓</span> Shared!</>
-            : <>Share with a founder friend <span aria-hidden="true">↗</span></>
-          }
-        </button>
+        <div className="w-full flex flex-col items-center gap-2">
+          <p className={`text-xs font-medium ${variant === 'dark' ? 'text-white/45' : 'text-gray-400'}`}>
+            Know a founder who tracks competitors manually?
+          </p>
+          <button
+            type="button"
+            onClick={handleShare}
+            className="w-full rounded-lg font-semibold text-sm transition min-h-[44px] px-4 py-2.5 flex items-center justify-center gap-2"
+            style={{
+              background: variant === 'dark' ? 'rgba(184,98,42,0.15)' : 'rgba(184,98,42,0.08)',
+              border: '1px solid rgba(184,98,42,0.35)',
+              color: copied ? '#34D6B7' : '#F07C35',
+            }}
+          >
+            {copied
+              ? <><span>✓</span> Shared — thanks!</>
+              : <>Tell them about Peerscope <span aria-hidden="true">↗</span></>
+            }
+          </button>
+        </div>
       </div>
     )
   }

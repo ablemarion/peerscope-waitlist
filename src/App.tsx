@@ -545,6 +545,10 @@ const faqs = [
     q: 'Is scraping competitor websites legal?',
     a: 'Yes. Monitoring publicly available web pages is legal fair use. We only track publicly accessible information.',
   },
+  {
+    q: 'Why join the waitlist now instead of waiting for launch?',
+    a: 'The founding price — $49/mo for the Starter plan — is locked for life for anyone who signs up before April 15. After launch, the same plan is $69/mo. That is a permanent $240/year saving. The waitlist also gives you early access before we open to the public.',
+  },
 ]
 
 function FAQ() {
