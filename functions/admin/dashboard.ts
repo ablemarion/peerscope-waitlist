@@ -20,6 +20,21 @@ interface CountRow {
   count: number
 }
 
+interface HourlyRow {
+  hour: string
+  signups: number
+}
+
+interface DailyRow {
+  day: string
+  signups: number
+}
+
+interface SourceRow {
+  source: string
+  count: number
+}
+
 interface DripStats {
   email1: number
   email2: number
@@ -60,9 +75,27 @@ function renderHtml(data: {
   generatedAt: string
   bestVariant: string | null
   dripStats: DripStats
+  hourlySignups: HourlyRow[]
+  dailySignups: DailyRow[]
+  signupsToday: number
+  signupsYesterday: number
+  topSourcesToday: SourceRow[]
 }): string {
-  const { totalSignups, recentSignups, variantStats, pageviewsToday, pageviewsYesterday, generatedAt, bestVariant, dripStats } =
-    data
+  const {
+    totalSignups,
+    recentSignups,
+    variantStats,
+    pageviewsToday,
+    pageviewsYesterday,
+    generatedAt,
+    bestVariant,
+    dripStats,
+    hourlySignups,
+    dailySignups,
+    signupsToday,
+    signupsYesterday,
+    topSourcesToday,
+  } = data
 
   const pvDelta = pageviewsToday - pageviewsYesterday
   const pvDeltaStr = pvDelta >= 0 ? `+${pvDelta}` : `${pvDelta}`
@@ -100,6 +133,61 @@ function renderHtml(data: {
       ? `<p style="margin:12px 0 0;font-size:12px;color:#4ade80;">Recommended default: <strong>${bestVariant}</strong></p>`
       : ''
 
+  // Velocity: today vs yesterday
+  const signupDelta = signupsToday - signupsYesterday
+  const signupDeltaStr = signupDelta >= 0 ? `+${signupDelta}` : `${signupDelta}`
+  const signupDeltaPct =
+    signupsYesterday > 0 ? ` (${signupDelta >= 0 ? '+' : ''}${((signupDelta / signupsYesterday) * 100).toFixed(0)}%)` : ''
+  const signupDeltaColour = signupDelta >= 0 ? '#4ade80' : '#f87171'
+
+  // Hourly bar chart (most recent first from query; reverse for display oldest→newest)
+  const maxHourly = Math.max(...hourlySignups.map((r) => r.signups), 1)
+  const hourlyRows = [...hourlySignups]
+    .reverse()
+    .map((r) => {
+      const barPct = Math.round((r.signups / maxHourly) * 100)
+      const label = r.hour.slice(11, 16) // HH:00
+      return `<tr>
+        <td style="padding:4px 12px 4px 0;font-size:12px;color:#a0a3b1;white-space:nowrap;font-family:monospace;width:42px;">${label}</td>
+        <td style="padding:4px 0;width:100%;">
+          <div style="background:#1a1d33;border-radius:3px;height:18px;position:relative;">
+            ${barPct > 0 ? `<div style="background:#3b82f6;height:18px;width:${barPct}%;border-radius:3px;min-width:2px;"></div>` : ''}
+          </div>
+        </td>
+        <td style="padding:4px 0 4px 10px;font-size:12px;color:#e2e8f0;text-align:right;width:28px;">${r.signups}</td>
+      </tr>`
+    })
+    .join('')
+
+  // Daily bar chart (last 7 days)
+  const maxDaily = Math.max(...dailySignups.map((r) => r.signups), 1)
+  const dailyRows = dailySignups
+    .map((r) => {
+      const barPct = Math.round((r.signups / maxDaily) * 100)
+      const label = r.day.slice(5) // MM-DD
+      return `<tr>
+        <td style="padding:4px 12px 4px 0;font-size:12px;color:#a0a3b1;white-space:nowrap;font-family:monospace;width:42px;">${label}</td>
+        <td style="padding:4px 0;width:100%;">
+          <div style="background:#1a1d33;border-radius:3px;height:18px;position:relative;">
+            ${barPct > 0 ? `<div style="background:#a855f7;height:18px;width:${barPct}%;border-radius:3px;min-width:2px;"></div>` : ''}
+          </div>
+        </td>
+        <td style="padding:4px 0 4px 10px;font-size:12px;color:#e2e8f0;text-align:right;width:28px;">${r.signups}</td>
+      </tr>`
+    })
+    .join('')
+
+  // Top sources today
+  const sourceRows = topSourcesToday
+    .map(
+      (r) =>
+        `<span style="display:inline-block;background:#1a1d33;border-radius:6px;padding:4px 10px;font-size:12px;color:#a0a3b1;margin-right:8px;margin-bottom:8px;">
+          <span style="color:#e2e8f0;font-weight:600;">${r.source}</span>
+          <span style="margin-left:6px;color:#4a4d5e;">${r.count}</span>
+        </span>`,
+    )
+    .join('')
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -125,6 +213,34 @@ function renderHtml(data: {
         <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Pageviews Today</div>
         <div style="font-size:40px;font-weight:700;color:#f5f5f5;letter-spacing:-0.03em;">${pageviewsToday.toLocaleString()}</div>
         <div style="font-size:12px;color:${pvDeltaColour};margin-top:4px;">${pvDeltaStr} vs yesterday (${pageviewsYesterday})</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">Sign-up Velocity</h2>
+
+      <div style="background:#13162A;border-radius:10px;padding:16px 24px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;">
+        <div>
+          <span style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;">Today</span>
+          <span style="font-size:28px;font-weight:700;color:#f5f5f5;margin-left:10px;">${signupsToday}</span>
+        </div>
+        <div>
+          <span style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;">Yesterday</span>
+          <span style="font-size:28px;font-weight:700;color:#f5f5f5;margin-left:10px;">${signupsYesterday}</span>
+        </div>
+        <div style="font-size:14px;color:${signupDeltaColour};font-weight:600;">${signupDeltaStr}${signupDeltaPct}</div>
+        ${topSourcesToday.length > 0 ? `<div style="margin-left:auto;">${sourceRows}</div>` : ''}
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;background:#13162A;border-radius:10px;padding:16px 20px;">
+          <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Last 24 Hours</div>
+          ${hourlyRows ? `<table style="width:100%;border-collapse:collapse;">${hourlyRows}</table>` : '<p style="font-size:13px;color:#4a4d5e;margin:0;">No sign-ups in last 24 hours</p>'}
+        </div>
+        <div style="flex:1;min-width:240px;background:#13162A;border-radius:10px;padding:16px 20px;">
+          <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Last 7 Days</div>
+          ${dailyRows ? `<table style="width:100%;border-collapse:collapse;">${dailyRows}</table>` : '<p style="font-size:13px;color:#4a4d5e;margin:0;">No sign-ups in last 7 days</p>'}
+        </div>
       </div>
     </div>
 
@@ -222,6 +338,11 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     drip4Result,
     dripPending2Result,
     dripPending3Result,
+    hourlyResult,
+    dailyResult,
+    signupsTodayResult,
+    signupsYesterdayResult,
+    topSourcesResult,
   ] = await context.env.DB.batch([
     context.env.DB.prepare(
       `SELECT COUNT(*) as count FROM waitlist
@@ -257,6 +378,42 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     context.env.DB.prepare(
       `SELECT COUNT(*) as count FROM waitlist
        WHERE email_sent_2 IS NOT NULL AND email_sent_3 IS NULL AND signup_ts < datetime('now', '-2 days')`,
+    ),
+    context.env.DB.prepare(
+      `SELECT strftime('%Y-%m-%d %H:00', created_at) as hour, COUNT(*) as signups
+       FROM waitlist
+       WHERE created_at >= datetime('now', '-24 hours')
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       GROUP BY hour
+       ORDER BY hour DESC
+       LIMIT 24`,
+    ),
+    context.env.DB.prepare(
+      `SELECT DATE(created_at) as day, COUNT(*) as signups
+       FROM waitlist
+       WHERE created_at >= datetime('now', '-7 days')
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       GROUP BY day
+       ORDER BY day ASC`,
+    ),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as count FROM waitlist
+       WHERE DATE(created_at) = '${todayUtc}'
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+    ),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as count FROM waitlist
+       WHERE DATE(created_at) = '${yesterdayUtc}'
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+    ),
+    context.env.DB.prepare(
+      `SELECT source, COUNT(*) as count FROM waitlist
+       WHERE DATE(created_at) = '${todayUtc}'
+       AND source IS NOT NULL AND source != 'direct'
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       GROUP BY source
+       ORDER BY count DESC
+       LIMIT 3`,
     ),
   ])
 
@@ -295,6 +452,12 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       ((dripPending3Result.results[0] as CountRow | undefined)?.count ?? 0),
   }
 
+  const hourlySignups = hourlyResult.results as HourlyRow[]
+  const dailySignups = dailyResult.results as DailyRow[]
+  const signupsToday = (signupsTodayResult.results[0] as CountRow | undefined)?.count ?? 0
+  const signupsYesterday = (signupsYesterdayResult.results[0] as CountRow | undefined)?.count ?? 0
+  const topSourcesToday = topSourcesResult.results as SourceRow[]
+
   const html = renderHtml({
     totalSignups,
     recentSignups,
@@ -304,6 +467,11 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     generatedAt: new Date().toISOString(),
     bestVariant,
     dripStats,
+    hourlySignups,
+    dailySignups,
+    signupsToday,
+    signupsYesterday,
+    topSourcesToday,
   })
 
   return new Response(html, {
