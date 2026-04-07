@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Competitive Intelligence Tools | Peerscope</title>
+  <meta name="description" content="Free tools for SaaS founders and PMs: competitive analysis builder, ROI calculator, and more. No signup required." />
+  <meta property="og:title" content="Free Competitive Intelligence Tools | Peerscope" />
+  <meta property="og:description" content="Free tools for SaaS founders: build competitive analyses, calculate the cost of blind spots, and more." />
+  <meta property="og:url" content="https://peerscope-waitlist.pages.dev/tools/" />
+  <meta property="og:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #0B0D18; --surface: #111320; --accent: #F07C35; --accent-teal: #34D6B7; --text: #FAFAF6; --muted: rgba(250,250,246,0.55); --border: rgba(250,250,246,0.1); }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; min-height: 100vh; }
+
+    header { padding: 0 1.5rem; border-bottom: 1px solid var(--border); }
+    nav { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 400; font-size: 1rem; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+    .logo span { font-weight: 700; color: var(--accent); }
+    .nav-cta { background: var(--accent); color: var(--text); font-weight: 700; font-size: 0.8125rem; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; white-space: nowrap; }
+
+    main { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    .page-header { text-align: center; margin-bottom: 3rem; }
+    .page-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 0.75rem; }
+    .page-header p { color: var(--muted); font-size: 1.0625rem; max-width: 520px; margin: 0 auto; }
+
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    @media (max-width: 500px) { .tools-grid { grid-template-columns: 1fr; } }
+
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; text-decoration: none; transition: border-color 0.15s, transform 0.15s; }
+    .tool-card:hover { border-color: rgba(240,124,53,0.5); transform: translateY(-2px); }
+    .tool-card.featured { border-color: rgba(240,124,53,0.35); }
+
+    .tool-badge { display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: rgba(240,124,53,0.15); color: var(--accent); padding: 0.25rem 0.625rem; border-radius: 4px; margin-bottom: 1rem; }
+    .tool-title { font-family: 'Syne', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .tool-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.55; margin-bottom: 1.25rem; }
+    .tool-link { font-size: 0.875rem; font-weight: 600; color: var(--accent); }
+
+    .cta-box { background: linear-gradient(135deg, #0D0F1A 0%, #131525 100%); border: 1px solid rgba(240,124,53,0.35); border-radius: 12px; padding: 2rem; text-align: center; }
+    .cta-deadline { color: var(--accent); font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; }
+    .cta-heading { color: var(--text); font-weight: 700; font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .cta-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .cta-btn { display: inline-block; background: var(--accent); color: var(--text); font-weight: 700; font-size: 1rem; padding: 0.875rem 2rem; border-radius: 8px; text-decoration: none; }
+
+    footer { border-top: 1px solid var(--border); padding: 1.5rem; }
+    .footer-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8125rem; color: var(--muted); }
+    .footer-inner a { color: var(--muted); text-decoration: none; }
+    .footer-inner a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="logo">peer<span>scope</span></a>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <a href="/blog/" style="font-size:0.875rem;font-weight:500;color:rgba(250,250,246,0.5);text-decoration:none;" onmouseover="this.style.color='rgba(250,250,246,0.9)'" onmouseout="this.style.color='rgba(250,250,246,0.5)'">Blog</a>
+        <a href="/pricing/" style="font-size:0.875rem;font-weight:500;color:rgba(250,250,246,0.5);text-decoration:none;" onmouseover="this.style.color='rgba(250,250,246,0.9)'" onmouseout="this.style.color='rgba(250,250,246,0.5)'">Pricing</a>
+        <a href="/?utm_source=tools-index&utm_medium=nav&utm_campaign=tools-nav" class="nav-cta">Join waitlist</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Free Tools</h1>
+      <p>Free competitive intelligence tools for SaaS founders and product managers. No signup required to use the tools.</p>
+    </div>
+
+    <div class="tools-grid">
+      <a href="/tools/competitive-intelligence-roi/?utm_source=tools-index&utm_medium=organic&utm_campaign=tools-grid" class="tool-card featured">
+        <div class="tool-badge">Calculator</div>
+        <div class="tool-title">Competitive Intelligence ROI Calculator</div>
+        <p class="tool-desc">Calculate how much revenue you lose each year from competitor blind spots. Enter your ACV, deal volume, and win rate to see the real cost of missing intelligence.</p>
+        <span class="tool-link">Open calculator &#8594;</span>
+      </a>
+
+      <a href="/tools/competitive-analysis-builder/?utm_source=tools-index&utm_medium=organic&utm_campaign=tools-grid" class="tool-card">
+        <div class="tool-badge">Builder</div>
+        <div class="tool-title">Competitive Analysis Builder</div>
+        <p class="tool-desc">Build a structured competitive analysis for up to 5 competitors. Covers pricing, features, positioning, and strengths/weaknesses. Export as a shareable report.</p>
+        <span class="tool-link">Open builder &#8594;</span>
+      </a>
+    </div>
+
+    <div class="cta-box">
+      <p class="cta-deadline">&#x26A1; Founding price closes April 15</p>
+      <p class="cta-heading">These tools are free. Peerscope automates them.</p>
+      <p class="cta-sub">Stop doing manual competitive research. Peerscope monitors your competitors automatically and sends alerts when something changes &#8212; pricing, features, messaging, hiring. $49/mo, locked for life if you join before April 15.</p>
+      <a href="/?utm_source=tools-index&utm_medium=organic&utm_campaign=tools-cta" class="cta-btn">Claim founding price &#8212; free &#8594;</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="logo" style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--text);">peer<span style="color:var(--accent);">scope</span></a>
+      <p>&copy; 2026 Peerscope. All rights reserved.</p>
+      <div style="display:flex;gap:1.25rem;">
+        <a href="/blog/">Blog</a>
+        <a href="/pricing/">Pricing</a>
+        <a href="mailto:hello@peerscope.io">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
