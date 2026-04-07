@@ -20,13 +20,22 @@ function PricingComparison() {
   return (
     <div className="w-full select-none" aria-hidden="true">
       <div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-hidden relative"
         style={{
           background: '#06080F',
           border: '1px solid rgba(184,98,42,0.2)',
           boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(184,98,42,0.06)',
         }}
       >
+        {/* Radar scan overlay — plays once on mount, 400ms delay, 1.8s */}
+        <div
+          className="radar-scan-line absolute inset-x-0 top-0 h-px z-10 pointer-events-none"
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, rgba(52,214,183,0.5) 20%, rgba(52,214,183,0.95) 50%, rgba(52,214,183,0.5) 80%, transparent 100%)',
+            boxShadow: '0 0 10px rgba(52,214,183,0.5), 0 2px 6px rgba(52,214,183,0.2)',
+          }}
+          aria-hidden="true"
+        />
         {/* Table header */}
         <div
           className="grid grid-cols-3 border-b"
