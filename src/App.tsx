@@ -4,6 +4,7 @@ import { Logo, EmailForm } from './components/shared'
 import { FoundingBanner } from './components/FoundingBanner'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
 import { HeroB } from './components/HeroB'
+import { HowItWorks } from './components/HowItWorks'
 
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
 const HeroC = lazy(() => import('./components/HeroC').then(m => ({ default: m.HeroC })))
@@ -833,7 +834,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* How it works — editorial numbered steps, dark */}
+      {/* How it works — quick 3-step visual overview */}
+      <HowItWorks />
+
+      {/* Setup flow — interactive animated demo, dark */}
       <section
         className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
         style={{ background: '#0D0F1A' }}
@@ -844,7 +848,7 @@ export default function App() {
               className="text-xs font-mono tracking-[0.2em] uppercase mb-4 block"
               style={{ color: '#B8622A' }}
             >
-              How it works
+              See it in action
             </span>
             <h2
               className="text-4xl sm:text-5xl font-bold text-white leading-tight"
