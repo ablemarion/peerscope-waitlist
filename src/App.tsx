@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import './App.css'
 import { Logo, EmailForm } from './components/shared'
 import { FoundingBanner } from './components/FoundingBanner'
+import { SocialProofStrip } from './components/SocialProofStrip'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
 import { HeroB } from './components/HeroB'
 import { HowItWorks } from './components/HowItWorks'
@@ -1270,6 +1271,9 @@ export default function App() {
           <FAQ />
         </div>
       </section>
+
+      {/* Social proof + scarcity strip — conversion nudge above footer */}
+      <SocialProofStrip />
 
       {/* Footer CTA — full-bleed amber inversion */}
       <section
