@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Competitive Intelligence ROI Calculator — How Much Does Poor Competitor Tracking Cost You?</title>
+  <meta name="description" content="Free calculator: find out how much revenue your SaaS team loses each year by missing competitor pricing changes, feature launches, and market moves. Takes 60 seconds." />
+  <meta property="og:title" content="Competitive Intelligence ROI Calculator" />
+  <meta property="og:description" content="Find out how much your SaaS team loses annually by missing competitor moves. Free 60-second calculator." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://peerscope-waitlist.pages.dev/og-image.png" />
+  <meta property="og:url" content="https://peerscope-waitlist.pages.dev/tools/competitive-intelligence-roi/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Competitive Intelligence ROI Calculator" />
+  <meta name="twitter:description" content="Find out how much your SaaS team loses annually by missing competitor moves. Free 60-second calculator." />
+  <link rel="canonical" href="https://peerscope-waitlist.pages.dev/tools/competitive-intelligence-roi/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0D0F1A;
+      --surface: #111320;
+      --border: rgba(255,255,255,0.08);
+      --accent: #F07C35;
+      --accent-dim: rgba(184,98,42,0.18);
+      --teal: #34D6B7;
+      --text: #FAFAF6;
+      --muted: rgba(250,250,246,0.55);
+      --danger: #EF4444;
+      --success: #22C55E;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .nav {
+      background: rgba(13,15,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,98,42,0.12);
+      padding: 0 1.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-brand { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--text); }
+    .nav-brand span { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .nav-cta:hover { background: #d96d26; text-decoration: none; }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 1.5rem 2rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(52,214,183,0.1);
+      color: var(--teal);
+      border: 1px solid rgba(52,214,183,0.25);
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .hero-sub {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 52ch;
+      margin: 0 auto 2rem;
+    }
+
+    .calculator {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    .input-group:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+    .label-hint {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 0.4rem;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .input-prefix {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      min-width: 1.5rem;
+    }
+    input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid rgba(240,124,53,0.4);
+    }
+    .input-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      min-width: 6rem;
+      text-align: right;
+    }
+
+    .results {
+      background: linear-gradient(135deg, rgba(184,98,42,0.12) 0%, rgba(13,15,26,0) 100%);
+      border: 1px solid rgba(184,98,42,0.3);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-headline {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(240,124,53,0.7);
+      margin-bottom: 1rem;
+    }
+
+    .big-number {
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .big-number-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .breakdown {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 0.6rem;
+    }
+    .breakdown-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .breakdown-label { color: var(--muted); }
+    .breakdown-value { font-weight: 700; color: var(--text); }
+
+    .roi-comparison {
+      background: rgba(34,197,94,0.07);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .roi-comparison p {
+      font-size: 0.9rem;
+      color: rgba(250,250,246,0.8);
+      margin-bottom: 0.4rem;
+    }
+    .roi-comparison p:last-child { margin-bottom: 0; }
+    .roi-comparison strong { color: #86efac; }
+
+    .cta-section {
+      background: var(--surface);
+      border: 1px solid rgba(184,98,42,0.3);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .cta-section p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      max-width: 44ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .urgency-line {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .email-form { display: flex; flex-direction: column; gap: 0.75rem; max-width: 400px; margin: 0 auto; }
+    @media (min-width: 480px) { .email-form { flex-direction: row; } }
+    .email-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .email-input:focus { border-color: rgba(240,124,53,0.5); background: rgba(255,255,255,0.09); }
+    .email-input::placeholder { color: rgba(250,250,246,0.35); }
+    .submit-btn {
+      padding: 0.75rem 1.25rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .submit-btn:hover { background: #d96d26; }
+    .submit-btn:disabled { opacity: 0.6; cursor: default; }
+
+    .cta-sub {
+      margin-top: 0.75rem !important;
+      font-size: 0.8rem !important;
+      color: rgba(250,250,246,0.35) !important;
+    }
+
+    .success-msg {
+      color: var(--teal);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem;
+    }
+
+    .share-row {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+    .share-twitter { background: rgba(29,161,242,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .share-copy { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+    .share-copy:hover { color: var(--text); }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .footer a { color: var(--muted); }
+    .footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="https://peerscope-waitlist.pages.dev" class="nav-brand">Peer<span>scope</span></a>
+  <a href="https://peerscope-waitlist.pages.dev/?utm_source=tool-roi&utm_medium=nav&utm_campaign=roi-calc" class="nav-cta">Join waitlist</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Free Calculator</div>
+  <h1>How much does poor competitive intelligence cost your SaaS team?</h1>
+  <p class="hero-sub">Answer 4 questions. See the annual revenue impact of missing competitor pricing changes, feature launches, and market moves.</p>
+</div>
+
+<div class="calculator">
+
+  <!-- Inputs -->
+  <div class="card">
+    <div class="section-label">Your numbers</div>
+
+    <div class="input-group">
+      <label>Average contract value (ACV) <span class="label-hint">per customer per year</span></label>
+      <div class="input-row">
+        <span class="input-prefix">$</span>
+        <input type="range" id="acv" min="1000" max="100000" step="1000" value="12000" oninput="calc()" />
+        <span class="input-value" id="acv-val">$12,000</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>New deals per year</label>
+      <div class="input-row">
+        <span class="input-prefix">#</span>
+        <input type="range" id="deals" min="5" max="500" step="5" value="50" oninput="calc()" />
+        <span class="input-value" id="deals-val">50</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>% of deals where a competitor move surprised you <span class="label-hint">e.g. they cut price, launched a feature, got funded</span></label>
+      <div class="input-row">
+        <span class="input-prefix"></span>
+        <input type="range" id="surprise" min="1" max="50" step="1" value="15" oninput="calc()" />
+        <span class="input-value" id="surprise-val">15%</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>% of those surprised deals you lost <span class="label-hint">or gave a discount to save</span></label>
+      <div class="input-row">
+        <span class="input-prefix"></span>
+        <input type="range" id="lostpct" min="10" max="80" step="5" value="40" oninput="calc()" />
+        <span class="input-value" id="lostpct-val">40%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <div class="results-headline">Annual revenue impact</div>
+    <div class="big-number" id="annual-cost">$0</div>
+    <div class="big-number-label" id="annual-label">lost or discounted per year from competitor surprises</div>
+
+    <div class="breakdown">
+      <div class="breakdown-row">
+        <span class="breakdown-label">Deals surprised by a competitor move</span>
+        <span class="breakdown-value" id="bd-surprised">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Deals lost or heavily discounted</span>
+        <span class="breakdown-value" id="bd-lost">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Revenue at risk per deal</span>
+        <span class="breakdown-value" id="bd-acv">—</span>
+      </div>
+    </div>
+
+    <div class="roi-comparison" id="roi-box">
+      <p id="roi-text-1"></p>
+      <p id="roi-text-2"></p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Monitor competitors for $49/mo — before your next deal is at risk</h2>
+    <p>Peerscope sends instant Slack or email alerts when competitors change pricing, launch features, or post jobs. No manual checking. No surprises.</p>
+    <p class="urgency-line">⚡ Founding price closes April 15 — $49/mo locked for life</p>
+    <div id="signup-wrap">
+      <form class="email-form" onsubmit="joinWaitlist(event)">
+        <input type="email" class="email-input" id="roi-email" placeholder="your@email.com" required autocomplete="email" />
+        <button type="submit" class="submit-btn" id="roi-submit">Claim founding price</button>
+      </form>
+      <p class="cta-sub">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn share-twitter" onclick="shareTwitter()">Share on X</button>
+      <button class="share-btn share-copy" id="copy-btn" onclick="copyLink()">Copy link</button>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p><a href="https://peerscope-waitlist.pages.dev">Peerscope</a> &middot; <a href="https://peerscope-waitlist.pages.dev/blog/">Blog</a> &middot; <a href="https://peerscope-waitlist.pages.dev/tools/competitive-analysis-builder/">Competitive Analysis Builder</a> &middot; <a href="https://peerscope-waitlist.pages.dev/pricing/">Pricing</a></p>
+  <p style="margin-top:0.5rem;font-size:0.8rem;">Track your competitors. Not your budget.</p>
+</footer>
+
+<script>
+  function fmt(n) {
+    if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+    if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+    return '$' + n.toLocaleString();
+  }
+
+  function calc() {
+    const acv = parseInt(document.getElementById('acv').value);
+    const deals = parseInt(document.getElementById('deals').value);
+    const surprise = parseInt(document.getElementById('surprise').value) / 100;
+    const lostpct = parseInt(document.getElementById('lostpct').value) / 100;
+
+    document.getElementById('acv-val').textContent = '$' + acv.toLocaleString();
+    document.getElementById('deals-val').textContent = deals;
+    document.getElementById('surprise-val').textContent = Math.round(surprise * 100) + '%';
+    document.getElementById('lostpct-val').textContent = Math.round(lostpct * 100) + '%';
+
+    const surprised = Math.round(deals * surprise);
+    const lost = Math.round(surprised * lostpct);
+    const annualCost = lost * acv;
+
+    document.getElementById('annual-cost').textContent = fmt(annualCost);
+    document.getElementById('bd-surprised').textContent = surprised + ' deals/year';
+    document.getElementById('bd-lost').textContent = lost + ' deals/year';
+    document.getElementById('bd-acv').textContent = '$' + acv.toLocaleString();
+
+    const peerscope = 49 * 12; // $588/year
+    const multiplier = annualCost > 0 ? Math.round(annualCost / peerscope) : 0;
+
+    const r1 = document.getElementById('roi-text-1');
+    const r2 = document.getElementById('roi-text-2');
+
+    if (annualCost > 0) {
+      r1.innerHTML = `Peerscope costs <strong>$588/year</strong> (Starter plan, founding price).`;
+      if (multiplier >= 2) {
+        r2.innerHTML = `Your intelligence gap costs <strong>${fmt(annualCost)}/year</strong> — <strong>${multiplier}× the cost</strong> of fixing it.`;
+      } else {
+        r2.innerHTML = `Even preventing one competitor surprise per year would cover Peerscope's annual cost.`;
+      }
+    } else {
+      r1.innerHTML = '';
+      r2.innerHTML = '';
+    }
+  }
+
+  async function joinWaitlist(e) {
+    e.preventDefault();
+    const email = document.getElementById('roi-email').value.trim();
+    const btn = document.getElementById('roi-submit');
+    btn.disabled = true;
+    btn.textContent = 'Joining…';
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'tool-roi-calc', variant: 'tool' }),
+      });
+      if (res.ok) {
+        try { localStorage.setItem('ps_sub', '1'); } catch(e) {}
+        document.getElementById('signup-wrap').innerHTML =
+          '<p class="success-msg">✓ You\'re on the list. Founding price locked — we\'ll email you when Peerscope launches.</p>';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Claim founding price';
+        alert('Something went wrong — please try again.');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Claim founding price';
+    }
+  }
+
+  function shareTwitter() {
+    const acv = parseInt(document.getElementById('acv').value);
+    const deals = parseInt(document.getElementById('deals').value);
+    const surprise = parseInt(document.getElementById('surprise').value);
+    const lostpct = parseInt(document.getElementById('lostpct').value);
+    const lost = Math.round(deals * surprise/100 * lostpct/100);
+    const cost = lost * acv;
+
+    const text = cost > 0
+      ? `Just calculated: my team loses ~${fmt(cost)}/year from competitor surprises. There's a free calculator for this: https://peerscope-waitlist.pages.dev/tools/competitive-intelligence-roi/`
+      : `Free calculator: how much does poor competitive intelligence cost your SaaS team? https://peerscope-waitlist.pages.dev/tools/competitive-intelligence-roi/`;
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }
+
+  function copyLink() {
+    const url = 'https://peerscope-waitlist.pages.dev/tools/competitive-intelligence-roi/';
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
+    });
+  }
+
+  // Init
+  calc();
+</script>
+</body>
+</html>
