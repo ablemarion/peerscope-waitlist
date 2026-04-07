@@ -401,6 +401,24 @@
           </a>
 
         </div>
+
+        <div style="margin: 3rem 0; background: linear-gradient(135deg, #0D0F1A 0%, #131525 100%); border: 1px solid rgba(240,124,53,0.35); border-radius: 12px; padding: 2rem; text-align: center;">
+          <p style="color: #F07C35; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; margin-top: 0;">&#x26A1; Founding price closes April 15 &#8212; 8 days left</p>
+          <p style="color: #FAFAF6; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.5rem; margin-top: 0;">Stop finding out about competitor moves from prospects.</p>
+          <p style="color: rgba(250,250,246,0.65); font-size: 0.9rem; margin-bottom: 1.5rem; margin-top: 0;">Automated monitoring for pricing changes, new features, and site updates. $49/mo &#8212; locked for life if you join before April 15.</p>
+          <div id="blog-index-form-wrap">
+            <form id="blog-index-form" style="display:flex;gap:0.625rem;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+              <input type="email" id="blog-index-email" placeholder="Enter your work email" required
+                style="flex:1;min-width:200px;padding:0.75rem 1rem;border-radius:8px;border:1px solid rgba(250,250,246,0.15);background:rgba(250,250,246,0.06);color:#FAFAF6;font-size:0.9375rem;outline:none;" />
+              <button type="submit" id="blog-index-btn"
+                style="background:#F07C35;color:#FAFAF6;font-weight:700;font-size:0.9375rem;padding:0.75rem 1.5rem;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;">
+                Claim founding price
+              </button>
+            </form>
+            <p id="blog-index-msg" style="margin-top:0.75rem;font-size:0.875rem;min-height:1.25rem;color:#34D6B7;"></p>
+          </div>
+        </div>
+
       </div>
     </main>
 
@@ -414,5 +432,42 @@
         </div>
       </div>
     </footer>
+  <script>
+    (function () {
+      var form = document.getElementById('blog-index-form');
+      var input = document.getElementById('blog-index-email');
+      var btn = document.getElementById('blog-index-btn');
+      var msg = document.getElementById('blog-index-msg');
+      var wrap = document.getElementById('blog-index-form-wrap');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = input.value.trim();
+        if (!email) return;
+        btn.disabled = true;
+        btn.textContent = 'Joining\u2026';
+        var params = new URLSearchParams(window.location.search);
+        var source = params.get('utm_source') || 'blog-index';
+        fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, source: source, variant: 'blog-index' })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data.success || data.ok) {
+            try { localStorage.setItem('ps_sub', '1'); } catch (e) { /* ignore */ }
+            wrap.innerHTML = '<p style="color:#34D6B7;font-weight:600;font-size:1rem;margin:0;">&#10003; You\'re on the list &#8212; founding price locked.</p>';
+          } else {
+            msg.textContent = data.error || 'Something went wrong &#8212; try again.';
+            btn.disabled = false;
+            btn.textContent = 'Claim founding price';
+          }
+        }).catch(function () {
+          msg.textContent = 'Network error &#8212; please try again.';
+          btn.disabled = false;
+          btn.textContent = 'Claim founding price';
+        });
+      });
+    })();
+  </script>
   </body>
 </html>

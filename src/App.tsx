@@ -653,7 +653,7 @@ export default function App() {
           <Logo dark />
           <div className="flex items-center gap-4">
             <a href="/blog/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Blog</a>
-            <a href="/tools/competitive-analysis-builder/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Free tools</a>
+            <a href="/tools/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Free tools</a>
             <a href="/pricing/" className="hidden sm:block text-sm font-medium text-white/50 hover:text-white transition py-3 px-1">Pricing</a>
             <a
               href="#waitlist-footer"
@@ -1324,7 +1324,7 @@ export default function App() {
           </p>
           <div className="flex gap-5 text-sm" style={{ color: 'rgba(250,250,246,0.3)' }}>
             <a href="/blog/" className="hover:text-white transition-colors py-3 inline-block">Blog</a>
-            <a href="/tools/competitive-analysis-builder/" className="hover:text-white transition-colors py-3 inline-block">Free tool</a>
+            <a href="/tools/" className="hover:text-white transition-colors py-3 inline-block">Free tools</a>
             <a href="/pricing/" className="hover:text-white transition-colors py-3 inline-block">Pricing</a>
             <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors py-3 inline-block">Contact</a>
           </div>
