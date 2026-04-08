@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F0F0B"/>
+      <stop offset="100%" stop-color="#141410"/>
+    </linearGradient>
+    <!-- Top-right amber orb -->
+    <radialGradient id="orbTR" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F07C35" stop-opacity="0.40"/>
+      <stop offset="50%" stop-color="#0D9488" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0F0F0B" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Bottom-left teal orb -->
+    <radialGradient id="orbBL" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0D9488" stop-opacity="0.25"/>
+      <stop offset="55%" stop-color="#F07C35" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0F0F0B" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend in="SourceGraphic" mode="overlay" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+
+  <!-- Base background -->
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- Grain -->
+  <rect width="1080" height="1080" fill="url(#bg)" filter="url(#grain)" opacity="0.04"/>
+
+  <!-- Orbs -->
+  <ellipse cx="980" cy="-40" rx="420" ry="360" fill="url(#orbTR)"/>
+  <ellipse cx="100" cy="1120" rx="380" ry="340" fill="url(#orbBL)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="72" y1="320" x2="1008" y2="320" stroke="#FAFAF6" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="72" y1="680" x2="1008" y2="680" stroke="#FAFAF6" stroke-opacity="0.04" stroke-width="1"/>
+
+  <!-- Pill label -->
+  <rect x="72" y="120" width="286" height="40" rx="20" fill="#F07C35" fill-opacity="0.15" stroke="#F07C35" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="215" y="146" font-family="'Inter', 'SF Mono', monospace" font-size="13" font-weight="600" fill="#F07C35" text-anchor="middle" letter-spacing="1.5">NOW LIVE - FREE WAITLIST</text>
+
+  <!-- H1 - stacked for square format -->
+  <text x="72" y="270" font-family="'Syne', 'Inter', sans-serif" font-size="96" font-weight="800" fill="#FAFAF6" letter-spacing="-2.5">Competitive</text>
+  <text x="72" y="380" font-family="'Syne', 'Inter', sans-serif" font-size="96" font-weight="800" fill="#FAFAF6" letter-spacing="-2.5">intelligence</text>
+  <text x="72" y="490" font-family="'Syne', 'Inter', sans-serif" font-size="96" font-weight="800" fill="#FAFAF6" letter-spacing="-2.5">for SMBs<tspan fill="#F07C35">.</tspan></text>
+
+  <!-- Subline -->
+  <text x="72" y="566" font-family="'Inter', system-ui, sans-serif" font-size="24" font-weight="400" fill="#FAFAF6" fill-opacity="0.65">Track competitors without</text>
+  <text x="72" y="598" font-family="'Inter', system-ui, sans-serif" font-size="24" font-weight="400" fill="#FAFAF6" fill-opacity="0.65">the enterprise price tag.</text>
+
+  <!-- Divider -->
+  <line x1="72" y1="648" x2="560" y2="648" stroke="#F07C35" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- Large central Peerscope wordmark - prominent for square format -->
+  <!-- P mark -->
+  <rect x="72" y="698" width="6" height="52" rx="3" fill="#F07C35"/>
+  <path d="M78 698 Q110 698 110 722 Q110 748 78 748" stroke="#F07C35" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- PEERSCOPE text -->
+  <text x="126" y="742" font-family="'Syne', 'Inter', sans-serif" font-size="42" font-weight="700" fill="#FAFAF6" letter-spacing="4">PEERSCOPE</text>
+
+  <!-- Tagline -->
+  <text x="72" y="804" font-family="'Inter', system-ui, sans-serif" font-size="18" font-weight="400" fill="#FAFAF6" fill-opacity="0.45">Track your competitors. Not your budget.</text>
+
+  <!-- Domain -->
+  <text x="72" y="960" font-family="'JetBrains Mono', 'SF Mono', 'Courier New', monospace" font-size="20" font-weight="500" fill="#F07C35" letter-spacing="0.5">peerscope.io</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="1074" width="1080" height="6" fill="#F07C35" opacity="0.4"/>
+  <rect x="0" y="1074" width="216" height="6" fill="#F07C35" opacity="0.8"/>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 628" width="1200" height="628">
+  <defs>
+    <!-- Background gradient: near-black with slight warmth -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F0F0B"/>
+      <stop offset="100%" stop-color="#141410"/>
+    </linearGradient>
+    <!-- Amber/teal orb - top right -->
+    <radialGradient id="orbTopRight" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F07C35" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#0D9488" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0F0F0B" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Amber/teal orb - bottom left -->
+    <radialGradient id="orbBottomLeft" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0D9488" stop-opacity="0.20"/>
+      <stop offset="60%" stop-color="#F07C35" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0F0F0B" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Subtle noise/grain via turbulence -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend in="SourceGraphic" mode="overlay" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+    <!-- Subtle glow on headline -->
+    <filter id="glowAmber" x="-10%" y="-30%" width="120%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Base background -->
+  <rect width="1200" height="628" fill="url(#bg)"/>
+
+  <!-- Grain overlay -->
+  <rect width="1200" height="628" fill="url(#bg)" filter="url(#grain)" opacity="0.04"/>
+
+  <!-- Top-right orb -->
+  <ellipse cx="1080" cy="-20" rx="380" ry="320" fill="url(#orbTopRight)"/>
+
+  <!-- Bottom-left orb -->
+  <ellipse cx="120" cy="680" rx="340" ry="280" fill="url(#orbBottomLeft)"/>
+
+  <!-- Subtle horizontal rule lines (grid texture) -->
+  <line x1="80" y1="200" x2="1120" y2="200" stroke="#FAFAF6" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="80" y1="440" x2="1120" y2="440" stroke="#FAFAF6" stroke-opacity="0.04" stroke-width="1"/>
+
+  <!-- Pill label: NOW LIVE - FREE WAITLIST -->
+  <rect x="80" y="76" width="286" height="36" rx="18" fill="#F07C35" fill-opacity="0.15" stroke="#F07C35" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="223" y="100" font-family="'Inter', 'SF Mono', monospace" font-size="13" font-weight="600" fill="#F07C35" text-anchor="middle" letter-spacing="1.5">NOW LIVE - FREE WAITLIST</text>
+
+  <!-- H1: Competitive intelligence -->
+  <text x="80" y="210" font-family="'Syne', 'Inter', sans-serif" font-size="88" font-weight="800" fill="#FAFAF6" letter-spacing="-2">Competitive</text>
+  <!-- H1: for SMBs. (with amber full stop for brand flavour) -->
+  <text x="80" y="308" font-family="'Syne', 'Inter', sans-serif" font-size="88" font-weight="800" fill="#FAFAF6" letter-spacing="-2">intelligence</text>
+  <text x="80" y="406" font-family="'Syne', 'Inter', sans-serif" font-size="88" font-weight="800" fill="#FAFAF6" letter-spacing="-2">for SMBs<tspan fill="#F07C35">.</tspan></text>
+
+  <!-- Subline -->
+  <text x="80" y="460" font-family="'Inter', system-ui, sans-serif" font-size="22" font-weight="400" fill="#FAFAF6" fill-opacity="0.65">Track competitors without the enterprise price tag.</text>
+
+  <!-- Divider line -->
+  <line x1="80" y1="496" x2="480" y2="496" stroke="#F07C35" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- Peerscope wordmark bottom left -->
+  <!-- P mark (abstract) -->
+  <rect x="80" y="516" width="5" height="32" rx="2.5" fill="#F07C35"/>
+  <path d="M85 516 Q106 516 106 530 Q106 544 85 544" stroke="#F07C35" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- PEERSCOPE text -->
+  <text x="118" y="540" font-family="'Syne', 'Inter', sans-serif" font-size="26" font-weight="700" fill="#FAFAF6" letter-spacing="3">PEERSCOPE</text>
+
+  <!-- Domain - monospace bottom right -->
+  <text x="1120" y="556" font-family="'JetBrains Mono', 'SF Mono', 'Courier New', monospace" font-size="16" font-weight="500" fill="#F07C35" text-anchor="end" letter-spacing="0.5">peerscope.io</text>
+
+  <!-- Subtle amber accent bar at very bottom -->
+  <rect x="0" y="622" width="1200" height="6" fill="#F07C35" opacity="0.4"/>
+  <rect x="0" y="622" width="240" height="6" fill="#F07C35" opacity="0.8"/>
+</svg>
