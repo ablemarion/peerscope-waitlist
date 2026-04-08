@@ -70,6 +70,19 @@ export function CommunityHero({ channel }: { channel: string }) {
       .catch(() => {/* show nothing on error */})
   }, [])
 
+  // Auto-set implied source in localStorage so sign-ups from bare /for/* URLs
+  // are attributed to the correct channel even without a ?ref= param.
+  // Explicit ?ref= param written by EmailForm at submission still takes priority.
+  useEffect(() => {
+    if (!config) return
+    try {
+      const existing = JSON.parse(localStorage.getItem('tracking') || '{}') as Record<string, string>
+      if (!existing.source) {
+        localStorage.setItem('tracking', JSON.stringify({ ...existing, source: config.ref }))
+      }
+    } catch { /* ignore – localStorage may be unavailable (private mode) */ }
+  }, [config])
+
   if (!config) return null
 
   return (

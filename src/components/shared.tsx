@@ -49,7 +49,10 @@ export function EmailForm({
     const utmSource = params.get('utm_source') || null
     const utmMedium = params.get('utm_medium') || null
     const utmCampaign = params.get('utm_campaign') || null
-    const source = utmSource || params.get('ref') || 'direct'
+    const storedSource = (() => {
+      try { return (JSON.parse(localStorage.getItem('tracking') || '{}') as Record<string, string>).source || null } catch { return null }
+    })()
+    const source = utmSource || params.get('ref') || storedSource || 'direct'
     const sessionId = sessionStorage.getItem('ps_sid') ?? undefined
     const variant = params.get('variant') ?? 'b'
 
