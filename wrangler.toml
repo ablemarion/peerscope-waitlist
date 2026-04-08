@@ -4,6 +4,7 @@ pages_build_output_dir = "dist"
 
 # Secrets (set via CF Pages dashboard or `wrangler pages secret put`):
 # RESEND_API_KEY — Resend transactional email API key
+# ALERT_EMAIL   — Override alert recipient (default: henrik@soederlund.com.au)
 
 [[d1_databases]]
 binding = "DB"

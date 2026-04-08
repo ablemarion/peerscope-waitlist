@@ -4,6 +4,7 @@ interface Env {
   DB: D1Database
   NOTIFY_WEBHOOK_URL?: string
   RESEND_API_KEY?: string
+  ALERT_EMAIL?: string
 }
 
 const FROM = 'Henrik from Peerscope <hello@peerscope.io>'
@@ -50,6 +51,31 @@ interface WaitlistRequest {
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+const ALERT_EMAIL_DEFAULT = 'henrik@soederlund.com.au'
+
+async function sendAlertEmail(
+  apiKey: string,
+  alertTo: string,
+  email: string,
+  name: string,
+  source: string,
+  variant: string
+): Promise<void> {
+  const resend = new Resend(apiKey)
+  await resend.emails.send({
+    from: 'Peerscope Alerts <alerts@peerscope.io>',
+    to: alertTo,
+    subject: `New waitlist sign-up: ${email} (${source || 'direct'})`,
+    html: `
+      <p><strong>New sign-up:</strong> ${name} &lt;${email}&gt;</p>
+      <p><strong>Source:</strong> ${source || 'direct/organic'}</p>
+      <p><strong>Variant:</strong> ${variant}</p>
+      <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+      <p><a href="https://peerscope.io/admin/dashboard">View dashboard →</a></p>
+    `,
+  })
 }
 
 async function notifyNewSignup(webhookUrl: string, email: string, count: number, source: string): Promise<void> {
@@ -120,6 +146,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           sendWelcomeEmail(context.env.RESEND_API_KEY, email).catch((err: unknown) => {
             console.error('Failed to send welcome email:', err)
           })
+        )
+        const alertTo = context.env.ALERT_EMAIL ?? ALERT_EMAIL_DEFAULT
+        const firstName = extractFirstName(email)
+        context.waitUntil(
+          sendAlertEmail(context.env.RESEND_API_KEY, alertTo, email, firstName, source, variant).catch(
+            (err: unknown) => console.error('Failed to send alert email:', err)
+          )
         )
       }
     }
