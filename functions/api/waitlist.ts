@@ -31,7 +31,7 @@ Peerscope monitors your competitors 24/7 and sends you an instant Slack or email
 I'm building this as a solo founder and I read every reply. Two questions:
 
 1. What's the biggest competitor move that caught you off guard?
-2. Know another founder who'd find this useful? Forward this or share the link: https://peerscope-waitlist.pages.dev
+2. Know another founder who'd find this useful? Forward this or share the link: https://peerscope.io
 
 Henrik
 Peerscope — Track your competitors. Not your budget.`,
