@@ -73,26 +73,41 @@ export function EmailForm({
   }
 
   if (status === 'success') {
-    const SHARE_URL = 'https://peerscope-waitlist.pages.dev?utm_source=share&utm_medium=referral&utm_campaign=founder-share'
-    const SHARE_TEXT = `Crayon costs $20K/year. Klue costs $12K/year. Just found Peerscope — same competitor alerts for $49/mo. Founding price closes April 15: https://peerscope-waitlist.pages.dev`
+    const SHARE_URL = 'https://peerscope-waitlist.pages.dev?ref=referral'
+    const SHARE_TEXT = 'Worth signing up for — tracks competitor pricing and messaging automatically.'
 
     async function handleShare() {
       if (navigator.share) {
         try {
-          await navigator.share({ title: 'Peerscope — competitor monitoring for $49/mo', text: SHARE_TEXT, url: SHARE_URL })
+          await navigator.share({
+            title: 'Peerscope — competitive intelligence for SMBs',
+            text: SHARE_TEXT,
+            url: SHARE_URL,
+          })
           return
         } catch {
-          // User cancelled or share failed — fall through to Twitter
+          // User cancelled or share not supported — fall through to clipboard
         }
       }
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TEXT)}`
-      window.open(twitterUrl, '_blank', 'noopener,noreferrer')
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      try {
+        await navigator.clipboard.writeText(SHARE_URL)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } catch { /* ignore */ }
+    }
+
+    async function handleCopy() {
+      try {
+        await navigator.clipboard.writeText(SHARE_URL)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } catch { /* ignore */ }
     }
 
     const textColor = variant === 'dark' ? 'text-white' : 'text-[#111320]'
     const mutedColor = variant === 'dark' ? 'text-white/60' : 'text-gray-500'
+    const separatorColor = variant === 'dark' ? 'border-white/15' : 'border-gray-200'
+    const subduedColor = variant === 'dark' ? 'text-white/65' : 'text-gray-500/65'
 
     return (
       <div className="flex flex-col items-center gap-4 py-2">
@@ -109,28 +124,44 @@ export function EmailForm({
           </svg>
         </div>
         <div className="text-center">
-          <p className={`font-bold text-lg leading-tight ${textColor}`} style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}>You're in.</p>
-          <p className={`text-sm mt-1 ${mutedColor}`}>Founding price locked. We'll email you when Peerscope launches.</p>
-        </div>
-        <div className="w-full flex flex-col items-center gap-2">
-          <p className={`text-xs font-medium ${variant === 'dark' ? 'text-white/45' : 'text-gray-400'}`}>
-            Know a founder who tracks competitors manually?
+          <p className={`font-bold text-lg leading-tight ${textColor}`} style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}>
+            You're on the list — we'll be in touch.
           </p>
-          <button
-            type="button"
-            onClick={handleShare}
-            className="w-full rounded-lg font-semibold text-sm transition min-h-[44px] px-4 py-2.5 flex items-center justify-center gap-2"
-            style={{
-              background: variant === 'dark' ? 'rgba(184,98,42,0.15)' : 'rgba(184,98,42,0.08)',
-              border: '1px solid rgba(184,98,42,0.35)',
-              color: copied ? '#34D6B7' : '#F07C35',
-            }}
-          >
-            {copied
-              ? <><span>✓</span> Shared — thanks!</>
-              : <>Tell them about Peerscope <span aria-hidden="true">↗</span></>
-            }
-          </button>
+        </div>
+        <div className={`w-full border-t ${separatorColor}`} />
+        <div className="w-full flex flex-col items-center gap-3">
+          <p className={`text-sm font-medium text-center ${subduedColor}`}>
+            Know an SMB owner who's flying blind on competitors?
+          </p>
+          <div className="w-full flex gap-2">
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5"
+              style={{
+                border: '1px solid rgba(184,98,42,0.45)',
+                color: '#F07C35',
+                background: variant === 'dark' ? 'rgba(184,98,42,0.1)' : 'rgba(184,98,42,0.06)',
+              }}
+            >
+              Share with a colleague <span aria-hidden="true">→</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className={`rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5 ${mutedColor}`}
+              style={{
+                border: variant === 'dark' ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(0,0,0,0.12)',
+                background: 'transparent',
+                color: copied ? '#34D6B7' : undefined,
+              }}
+            >
+              {copied ? '✓ Copied' : 'Copy link'}
+            </button>
+          </div>
+          <p className={`text-xs italic text-center ${mutedColor}`}>
+            This takes 20 seconds and helps us build for real people.
+          </p>
         </div>
       </div>
     )
