@@ -46,7 +46,10 @@ export function EmailForm({
     setErrorMsg('')
 
     const params = new URLSearchParams(window.location.search)
-    const source = params.get('utm_source') || params.get('ref') || 'direct'
+    const utmSource = params.get('utm_source') || null
+    const utmMedium = params.get('utm_medium') || null
+    const utmCampaign = params.get('utm_campaign') || null
+    const source = utmSource || params.get('ref') || 'direct'
     const sessionId = sessionStorage.getItem('ps_sid') ?? undefined
     const variant = params.get('variant') ?? 'b'
 
@@ -54,7 +57,7 @@ export function EmailForm({
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source, session_id: sessionId, variant }),
+        body: JSON.stringify({ email, source, session_id: sessionId, variant, utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign }),
       })
       if (res.ok) {
         setStatus('success')
