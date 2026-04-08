@@ -35,6 +35,15 @@ interface SourceRow {
   count: number
 }
 
+interface UtmSourceRow {
+  source: string
+  signups: number
+}
+
+interface LastSignupRow {
+  last_signup: string | null
+}
+
 interface DripStats {
   email1: number
   email2: number
@@ -80,6 +89,9 @@ function renderHtml(data: {
   signupsToday: number
   signupsYesterday: number
   topSourcesToday: SourceRow[]
+  utmSourceBreakdown: UtmSourceRow[]
+  lastSignupAt: string | null
+  signupsLastHour: number
 }): string {
   const {
     totalSignups,
@@ -95,6 +107,9 @@ function renderHtml(data: {
     signupsToday,
     signupsYesterday,
     topSourcesToday,
+    utmSourceBreakdown,
+    lastSignupAt,
+    signupsLastHour,
   } = data
 
   const pvDelta = pageviewsToday - pageviewsYesterday
@@ -177,6 +192,17 @@ function renderHtml(data: {
     })
     .join('')
 
+  // All-time UTM source breakdown table
+  const utmSourceTableRows = utmSourceBreakdown
+    .map(
+      (r) => `
+      <tr>
+        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#e2e8f0;">${r.source}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #1e2133;font-size:13px;color:#a0a3b1;text-align:right;">${r.signups}</td>
+      </tr>`,
+    )
+    .join('')
+
   // Top sources today
   const sourceRows = topSourcesToday
     .map(
@@ -213,6 +239,15 @@ function renderHtml(data: {
         <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Pageviews Today</div>
         <div style="font-size:40px;font-weight:700;color:#f5f5f5;letter-spacing:-0.03em;">${pageviewsToday.toLocaleString()}</div>
         <div style="font-size:12px;color:${pvDeltaColour};margin-top:4px;">${pvDeltaStr} vs yesterday (${pageviewsYesterday})</div>
+      </div>
+      <div style="flex:1;min-width:180px;background:#13162A;border-radius:10px;padding:20px 24px;">
+        <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Last Hour</div>
+        <div style="font-size:40px;font-weight:700;color:${signupsLastHour > 0 ? '#4ade80' : '#f5f5f5'};letter-spacing:-0.03em;">${signupsLastHour}</div>
+        <div style="font-size:12px;color:#4a4d5e;margin-top:4px;">sign-ups</div>
+      </div>
+      <div style="flex:1;min-width:180px;background:#13162A;border-radius:10px;padding:20px 24px;">
+        <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Last Sign-up</div>
+        <div style="font-size:18px;font-weight:700;color:#f5f5f5;letter-spacing:-0.01em;margin-top:8px;">${lastSignupAt ? formatDate(lastSignupAt) : '—'}</div>
       </div>
     </div>
 
@@ -272,6 +307,21 @@ function renderHtml(data: {
           <div style="font-size:28px;font-weight:700;color:${dripStats.pipeline > 0 ? '#facc15' : '#f5f5f5'};">${dripStats.pipeline}</div>
           <div style="font-size:11px;color:#4a4d5e;margin-top:2px;">pending</div>
         </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">Sign-ups by Source</h2>
+      <div style="background:#13162A;border-radius:10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#1a1d33;">
+              <th style="padding:10px 12px;text-align:left;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">Source</th>
+              <th style="padding:10px 12px;text-align:right;font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.06em;">Sign-ups</th>
+            </tr>
+          </thead>
+          <tbody>${utmSourceTableRows || '<tr><td colspan="2" style="padding:16px 12px;text-align:center;color:#4a4d5e;font-size:13px;">No data yet</td></tr>'}</tbody>
+        </table>
       </div>
     </div>
 
@@ -343,6 +393,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     signupsTodayResult,
     signupsYesterdayResult,
     topSourcesResult,
+    utmSourceBreakdownResult,
+    lastSignupResult,
+    signupsLastHourResult,
   ] = await context.env.DB.batch([
     context.env.DB.prepare(
       `SELECT COUNT(*) as count FROM waitlist
@@ -415,6 +468,22 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
        ORDER BY count DESC
        LIMIT 3`,
     ),
+    context.env.DB.prepare(
+      `SELECT COALESCE(source, 'direct/organic') as source, COUNT(*) as signups
+       FROM waitlist
+       WHERE email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       GROUP BY source
+       ORDER BY signups DESC`,
+    ),
+    context.env.DB.prepare(
+      `SELECT MAX(created_at) as last_signup FROM waitlist
+       WHERE email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+    ),
+    context.env.DB.prepare(
+      `SELECT COUNT(*) as count FROM waitlist
+       WHERE created_at > datetime('now', '-1 hour')
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+    ),
   ])
 
   const totalSignups = (signupCountResult.results[0] as CountRow | undefined)?.count ?? 0
@@ -457,6 +526,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const signupsToday = (signupsTodayResult.results[0] as CountRow | undefined)?.count ?? 0
   const signupsYesterday = (signupsYesterdayResult.results[0] as CountRow | undefined)?.count ?? 0
   const topSourcesToday = topSourcesResult.results as SourceRow[]
+  const utmSourceBreakdown = utmSourceBreakdownResult.results as UtmSourceRow[]
+  const lastSignupAt = (lastSignupResult.results[0] as LastSignupRow | undefined)?.last_signup ?? null
+  const signupsLastHour = (signupsLastHourResult.results[0] as CountRow | undefined)?.count ?? 0
 
   const html = renderHtml({
     totalSignups,
@@ -472,6 +544,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     signupsToday,
     signupsYesterday,
     topSourcesToday,
+    utmSourceBreakdown,
+    lastSignupAt,
+    signupsLastHour,
   })
 
   return new Response(html, {
