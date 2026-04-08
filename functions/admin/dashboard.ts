@@ -251,6 +251,38 @@ function renderHtml(data: {
       </div>
     </div>
 
+    ${(() => {
+      const GOAL = 50
+      const DEADLINE = new Date('2026-04-15T00:00:00+08:00')
+      const now = new Date(generatedAt)
+      const msLeft = DEADLINE.getTime() - now.getTime()
+      const daysLeft = Math.max(0, Math.ceil(msLeft / 86400000))
+      const pct = Math.min(100, Math.round((totalSignups / GOAL) * 100))
+      const goalMet = totalSignups >= GOAL
+      const fillColour = goalMet
+        ? 'background:#14b8a6;'
+        : 'background:linear-gradient(90deg,#B8622A,#E07A3A);'
+      const label = goalMet
+        ? '<span style="color:#14b8a6;font-weight:700;letter-spacing:0.06em;">GOAL MET!</span>'
+        : `<span style="color:#E07A3A;font-weight:700;">${totalSignups}</span><span style="color:#4a4d5e;"> / ${GOAL} sign-ups</span>`
+      const deadlineText = goalMet
+        ? ''
+        : daysLeft === 0
+          ? '<span style="color:#f87171;">Deadline: 15 April 2026 — today!</span>'
+          : `Deadline: 15 April 2026 — ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining`
+      return `
+    <div style="margin-bottom:32px;background:#13162A;border-radius:10px;padding:20px 24px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;">
+        <span style="font-size:12px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;">Validation Goal</span>
+        <span style="font-size:14px;">${label}</span>
+      </div>
+      <div style="background:#1A1A14;border-radius:6px;height:12px;width:100%;overflow:hidden;">
+        <div style="${fillColour}height:12px;width:${pct}%;border-radius:6px;min-width:${pct > 0 ? '4px' : '0'};transition:width 0.3s;"></div>
+      </div>
+      ${deadlineText ? `<div style="margin-top:8px;font-size:11px;color:#4a4d5e;">${deadlineText}</div>` : ''}
+    </div>`
+    })()}
+
     <div style="margin-bottom:32px;">
       <h2 style="font-size:14px;font-weight:600;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 12px;">Sign-up Velocity</h2>
 
