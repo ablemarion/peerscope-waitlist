@@ -128,7 +128,7 @@ export function EmailForm({
         </div>
         <div className="text-center">
           <p className={`font-bold text-lg leading-tight ${textColor}`} style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}>
-            You're on the list — we'll be in touch.
+            You're on the list - we'll be in touch.
           </p>
         </div>
         <div className={`w-full border-t ${separatorColor}`} />

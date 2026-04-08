@@ -123,7 +123,7 @@ export function ExitIntentModal() {
           className="text-white font-bold text-xl leading-snug mb-2"
           style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif" }}
         >
-          Wait — you're leaving without your spot
+          Wait - you're leaving without your spot
         </h2>
         <p className="text-white/55 text-sm mb-6 leading-relaxed">
           We're capping the founding price at 50 members. Lock it in before it's gone.
