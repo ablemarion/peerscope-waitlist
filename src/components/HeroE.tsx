@@ -26,24 +26,28 @@ export function HeroE() {
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
       style={{ background: '#0D0F1A', paddingTop: '3rem', paddingBottom: '3rem' }}
     >
-      <div className="w-full max-w-3xl mx-auto">
+      <div className="w-full max-w-4xl mx-auto">
 
-        {/* Eyebrow */}
-        <p
-          className="text-xs font-bold tracking-widest uppercase mb-6"
-          style={{ color: 'rgba(20,184,166,0.8)', letterSpacing: '0.18em' }}
+        {/* FOMO badge */}
+        <div
+          className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-8 border"
+          style={{ background: 'rgba(20,184,166,0.08)', color: '#34D6B7', borderColor: 'rgba(20,184,166,0.2)' }}
         >
-          Competitive intelligence for SMBs
-        </p>
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400" />
+          </span>
+          Now in private waitlist
+        </div>
 
         {/* H1 — two-line problem statement */}
         <h1
           className="font-bold leading-tight mb-6 text-white"
           style={{
             fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
-            fontWeight: 700,
+            fontWeight: 800,
             letterSpacing: '-0.03em',
-            fontSize: 'clamp(2.2rem, 5vw, 3.2rem)',
+            fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
           }}
         >
           Your competitors changed their pricing.
@@ -56,7 +60,7 @@ export function HeroE() {
           className="text-lg mb-10 leading-relaxed"
           style={{ color: 'rgba(255,255,255,0.62)', maxWidth: '52ch' }}
         >
-          Peerscope tracks competitor websites, pricing, and messaging — so you always know first.
+          Peerscope monitors competitor sites, pricing pages, and job boards. You get alerts in minutes. Not from customers. From $49/mo.
         </p>
 
         {/* Email form — wide, prominent */}
