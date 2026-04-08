@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Monitor Competitor Pricing (Without a Dedicated Analyst)</title>
+  <meta name="description" content="A practical guide for SMB founders and small sales teams on how to track competitor pricing automatically - no analyst, no enterprise tool budget required." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://peerscope.io/blog/monitor-competitor-pricing-smb/" />
+  <meta property="og:title" content="How to Monitor Competitor Pricing (Without a Dedicated Analyst)" />
+  <meta property="og:description" content="A practical guide for SMB founders and small sales teams on how to track competitor pricing automatically - no analyst, no enterprise tool budget required." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://peerscope.io/blog/monitor-competitor-pricing-smb/" />
+  <meta property="og:image" content="https://peerscope.io/og/og-blog.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to Monitor Competitor Pricing (Without a Dedicated Analyst)",
+    "description": "A practical guide for SMB founders and small sales teams on how to track competitor pricing automatically - no analyst, no enterprise tool budget required.",
+    "url": "https://peerscope.io/blog/monitor-competitor-pricing-smb/",
+    "datePublished": "2026-04-09",
+    "dateModified": "2026-04-09",
+    "author": {
+      "@type": "Person",
+      "name": "Henrik Soederlund",
+      "url": "https://peerscope.io"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Peerscope",
+      "url": "https://peerscope.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://peerscope.io/blog/monitor-competitor-pricing-smb/"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://peerscope.io"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://peerscope.io/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "How to Monitor Competitor Pricing (Without a Dedicated Analyst)",
+        "item": "https://peerscope.io/blog/monitor-competitor-pricing-smb/"
+      }
+    ]
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0f; color: #e2e8f0; line-height: 1.7; }
+    a { color: #7c3aed; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    nav { background: #0d0d14; border-bottom: 1px solid #1e1e2e; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { font-weight: 700; font-size: 1.1rem; color: #7c3aed; }
+    nav .cta-nav { background: #7c3aed; color: white; padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+    nav .cta-nav:hover { background: #6d28d9; text-decoration: none; }
+    .container { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    .breadcrumb { font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: #64748b; }
+    .tag { display: inline-block; background: #1e1e2e; color: #7c3aed; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; color: #f8fafc; line-height: 1.2; margin-bottom: 1rem; }
+    .meta { font-size: 0.85rem; color: #64748b; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1e1e2e; }
+    h2 { font-size: 1.4rem; font-weight: 700; color: #f8fafc; margin: 2.5rem 0 1rem; }
+    h3 { font-size: 1.1rem; font-weight: 600; color: #cbd5e1; margin: 1.8rem 0 0.75rem; }
+    p { margin-bottom: 1.2rem; color: #94a3b8; }
+    ul, ol { margin: 0.75rem 0 1.2rem 1.5rem; color: #94a3b8; }
+    li { margin-bottom: 0.6rem; }
+    strong { color: #e2e8f0; }
+    code { background: #1e1e2e; color: #a78bfa; padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.88em; font-family: 'Courier New', monospace; }
+    .highlight-box { background: #111827; border: 1px solid #1e1e2e; border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+    .highlight-box p { margin-bottom: 0; }
+    .story-box { background: #0f1923; border: 1px solid #1e3a5f; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; font-style: italic; }
+    .story-box p { color: #94a3b8; }
+    .story-box cite { display: block; margin-top: 0.75rem; font-style: normal; font-size: 0.85rem; color: #475569; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; font-size: 0.9rem; }
+    th { background: #1a1a2e; color: #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid #2d2d44; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e1e2e; color: #94a3b8; vertical-align: top; }
+    tr:hover td { background: #0f0f1a; }
+    td:first-child { color: #e2e8f0; font-weight: 500; }
+    .check { color: #22c55e; }
+    .cross { color: #ef4444; }
+    .neutral { color: #f59e0b; }
+    .cta-section { background: linear-gradient(135deg, #1a0a2e 0%, #0a0a1f 100%); border: 1px solid #2d1b4e; border-radius: 12px; padding: 2.5rem 2rem; margin: 3rem 0 2rem; text-align: center; }
+    .cta-section h2 { margin-top: 0; color: #f8fafc; }
+    .cta-section p { color: #a78bfa; max-width: 480px; margin: 0 auto 1.5rem; }
+    .cta-btn { display: inline-block; background: #7c3aed; color: white; padding: 0.85rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1rem; }
+    .cta-btn:hover { background: #6d28d9; text-decoration: none; }
+    .cta-sub { font-size: 0.8rem; color: #64748b; margin-top: 0.75rem; }
+    .method-card { background: #111827; border: 1px solid #1e1e2e; border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
+    .method-card h4 { color: #e2e8f0; font-weight: 700; margin-bottom: 0.5rem; font-size: 1rem; }
+    .method-card p { margin-bottom: 0.5rem; font-size: 0.92rem; }
+    .method-card .verdict { display: inline-block; font-size: 0.78rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; margin-top: 0.25rem; }
+    .verdict-bad { background: #3f1010; color: #f87171; }
+    .verdict-ok { background: #2d2000; color: #fbbf24; }
+    .verdict-good { background: #0d2d1a; color: #4ade80; }
+    .faq-item { border-bottom: 1px solid #1e1e2e; padding: 1.25rem 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 600; color: #e2e8f0; margin-bottom: 0.5rem; }
+    .faq-a { color: #94a3b8; font-size: 0.95rem; margin: 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="logo">Peerscope</span>
+    <a href="https://peerscope.io/?utm_source=blog&utm_medium=nav&utm_campaign=monitor-pricing-smb" class="cta-nav">Join waitlist</a>
+  </nav>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="https://peerscope.io">Home</a> &rsaquo;
+      <a href="https://peerscope.io/blog/">Blog</a> &rsaquo;
+      How to Monitor Competitor Pricing
+    </div>
+
+    <span class="tag">Guide</span>
+
+    <h1>How to Monitor Competitor Pricing (Without a Dedicated Analyst)</h1>
+    <p class="meta">Published 9 April 2026 &bull; 8 min read &bull; By Peerscope</p>
+
+    <div class="story-box">
+      <p>"I spent an afternoon every month just checking our four main competitors' pricing pages, taking screenshots, and pasting them into a Notion doc. It felt important but completely unsustainable. The moment we hired our first account executive, I stopped doing it - and that's exactly when we went blind."</p>
+      <cite>- Founder, B2B SaaS startup, Series A</cite>
+    </div>
+
+    <p>Most small businesses track competitor pricing the same way: manually, sporadically, and by whoever has time that week. It works until it doesn't. A competitor drops their starter price by 30%, starts a free tier, or quietly adds annual-only billing - and your team finds out three weeks later when a prospect mentions it.</p>
+
+    <p>The good news: you do not need a dedicated competitive analyst to monitor competitor pricing properly. What you need is the right setup - one that runs automatically and flags changes to the right people without anyone having to remember to check.</p>
+
+    <p>This guide is specifically for founders, small sales teams, and product leads at companies between 5 and 50 people who want reliable competitor pricing intelligence without adding headcount.</p>
+
+    <h2>Why SMBs struggle with competitor pricing monitoring</h2>
+
+    <p>Enterprises solve this with dedicated competitive intelligence analysts and tools like Klue or Crayon at $15,000+ per year. Neither option is realistic for most small businesses.</p>
+
+    <p>The result is a predictable cycle: pricing monitoring becomes someone's side responsibility, it gets done inconsistently, and eventually it stops happening at all. The team reverts to ad-hoc awareness - someone mentions a competitor changed something in a sales meeting, someone else checks manually, nothing is captured systematically.</p>
+
+    <p>The three root causes are always the same:</p>
+
+    <ul>
+      <li><strong>No one owns it.</strong> When competitive monitoring is everyone's job, it belongs to no one. It falls off when the named person gets busy.</li>
+      <li><strong>Manual processes don't scale.</strong> Checking 5 competitors' pricing pages weekly takes roughly 90 minutes. That time disappears fast when you're shipping product.</li>
+      <li><strong>There's no alert system.</strong> Without automated notifications, price changes only get noticed if someone happens to check at the right time.</li>
+    </ul>
+
+    <div class="highlight-box">
+      <p><strong>The goal is not more thorough manual checking.</strong> It is removing manual checking entirely and replacing it with an automated system that alerts you when something changes.</p>
+    </div>
+
+    <h2>Manual methods: what most small businesses actually do</h2>
+
+    <p>Before covering the automated approach, it's worth understanding why the common manual methods fall short - because most teams try these first and conclude that competitor pricing monitoring simply "doesn't work at our scale."</p>
+
+    <div class="method-card">
+      <h4>Weekly spreadsheet tracking</h4>
+      <p>Someone visits each competitor's pricing page weekly, notes the current prices in a spreadsheet, and compares to last week. Works for 1-2 competitors when done consistently.</p>
+      <p><strong>Why it fails:</strong> Requires consistent manual effort. The moment the responsible person has a busy week, the process breaks. No alert means no urgency. Changes get missed in the gap between checks.</p>
+      <span class="verdict verdict-bad">Not recommended</span>
+    </div>
+
+    <div class="method-card">
+      <h4>Google Alerts for competitor pricing</h4>
+      <p>Set up alerts like <code>"CompetitorName" pricing</code> to catch any indexed content mentioning their pricing.</p>
+      <p><strong>Why it fails:</strong> Google Alerts only catches indexed content - blog posts, press releases, reviews. It will not detect a direct change to a pricing page. Most pricing page updates are never separately indexed. Useful as a supplement, not a replacement.</p>
+      <span class="verdict verdict-bad">Not recommended as primary method</span>
+    </div>
+
+    <div class="method-card">
+      <h4>Customer and prospect conversations</h4>
+      <p>Sales reps pick up pricing intelligence from prospects ("your competitor just dropped their price"). This is often how most teams learn about changes.</p>
+      <p><strong>Why it fails:</strong> By the time a prospect mentions a competitor's price change, deals have already been lost using the wrong competitive positioning. You're always behind.</p>
+      <span class="verdict verdict-bad">Reactive, not proactive</span>
+    </div>
+
+    <div class="method-card">
+      <h4>G2 and Capterra review monitoring</h4>
+      <p>Customers frequently mention specific prices paid in reviews, even when official pricing is hidden. Checking quarterly gives useful ballpark data.</p>
+      <p><strong>Why it works (partially):</strong> Useful for understanding what real customers are actually paying - often more accurate than the pricing page for customers who negotiated. But not real-time and misses structural pricing changes.</p>
+      <span class="verdict verdict-ok">Useful supplement</span>
+    </div>
+
+    <h2>The automated approach: set it up once, run it forever</h2>
+
+    <p>The shift from manual to automated competitor pricing monitoring takes about 20 minutes to set up and then requires almost no ongoing effort. Here is the approach that works for teams without a dedicated analyst.</p>
+
+    <h3>Step 1: Define your monitoring targets</h3>
+
+    <p>Before choosing a tool, list exactly what you are monitoring. For each competitor, identify:</p>
+
+    <ul>
+      <li>Their primary <code>/pricing</code> URL</li>
+      <li>Any secondary pricing pages (enterprise page, specific product tier pages)</li>
+      <li>Whether they show prices publicly or use "contact us" (both are worth monitoring)</li>
+    </ul>
+
+    <p>Start with your top 3-5 direct competitors. You can expand later. For most SMBs, monitoring 3-5 competitors' pricing pages is sufficient to catch 90% of meaningful changes.</p>
+
+    <h3>Step 2: Choose an automated monitoring tool</h3>
+
+    <p>The right tool for a small team is not the same as what an enterprise would use. You want something that runs on a schedule, shows you exactly what changed (not just "something changed"), and sends alerts to Slack.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tool</th>
+          <th>Price</th>
+          <th>Best for</th>
+          <th>Slack alerts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Visualping (free tier)</td>
+          <td>Free</td>
+          <td>1-3 competitors, pre-revenue stage</td>
+          <td><span class="cross">&#10007;</span> Email only</td>
+        </tr>
+        <tr>
+          <td>Wachete</td>
+          <td>From $14/mo</td>
+          <td>Text-based monitoring, pricing numbers</td>
+          <td><span class="neutral">&#9679;</span> Via Zapier</td>
+        </tr>
+        <tr>
+          <td><a href="https://peerscope.io/?utm_source=blog&utm_medium=inline&utm_campaign=monitor-pricing-smb">Peerscope</a></td>
+          <td>From AUD$49/mo</td>
+          <td>5-50 person SaaS teams, Slack-native</td>
+          <td><span class="check">&#10003;</span> Native</td>
+        </tr>
+        <tr>
+          <td>Crayon / Klue</td>
+          <td>$15,000+/yr</td>
+          <td>Enterprise teams with dedicated CI budget</td>
+          <td><span class="check">&#10003;</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>For most small businesses: start with Visualping's free tier to validate the workflow, then move to a paid tool with Slack integration once you have 3+ competitors to track and a sales team that needs real-time alerts.</p>
+
+    <h3>Step 3: Configure targeted monitoring (not whole-page)</h3>
+
+    <p>This is the step most teams skip and then wonder why they get too many false alerts. Do not monitor the entire pricing page - monitor the pricing content section specifically.</p>
+
+    <p>Pricing pages have headers, footers, navigation, cookie banners, and live chat widgets that change constantly. If you monitor the whole page, you will get alerts every few days for irrelevant changes and eventually start ignoring them - which defeats the purpose.</p>
+
+    <p>Most tools let you define a CSS selector or draw a bounding box around the section you care about. Use it. Target the pricing table specifically, not the entire <code>&lt;body&gt;</code>.</p>
+
+    <h3>Step 4: Set check frequency</h3>
+
+    <p>For pricing pages specifically, daily checks are the minimum. Some competitors run pricing experiments and revert within 24-48 hours - weekly checks will miss these entirely.</p>
+
+    <p>If you are in a fast-moving market or know a competitor is actively repricing (fundraising, rebranding, moving upmarket), set 4-hour checks during that period.</p>
+
+    <h3>Step 5: Route alerts to Slack with a named owner</h3>
+
+    <p>Email alerts get buried. Create a dedicated <code>#competitor-intel</code> Slack channel and route all pricing alerts there. In the channel description, name one person as the responder: "On any alert, @namehere reviews within 4 hours."</p>
+
+    <p>This single step - named ownership with a Slack channel - is the difference between an alert system that gets acted on and one that everyone sees and ignores.</p>
+
+    <h2>What to do when an alert fires</h2>
+
+    <p>An alert is only valuable if it triggers a response. Document a simple protocol before you receive your first alert, not after.</p>
+
+    <p>A minimal response protocol for a 10-person team might look like:</p>
+
+    <ol>
+      <li><strong>Review the diff</strong> within 4 hours. Categorise: price change, model change, tier change, or cosmetic.</li>
+      <li><strong>For price or model changes:</strong> update the relevant section of your competitive battlecard immediately. See our <a href="/blog/competitive-battlecard-template/">competitive battlecard template</a> for a format that works for SMBs.</li>
+      <li><strong>Notify the sales team</strong> with the key fact: what changed, by how much, and what it means for active deals.</li>
+      <li><strong>Evaluate your positioning.</strong> Does the change make you relatively more or less expensive? Does your value narrative need adjusting?</li>
+    </ol>
+
+    <p>Most pricing changes require a battlecard update and a 2-minute Slack message to AEs. That is the whole response. The goal is not to overreact - it is to ensure your sales team is never caught off guard in a prospect conversation.</p>
+
+    <h2>Beyond the pricing page: where else prices hide</h2>
+
+    <p>Automated pricing page monitoring covers the obvious source, but competitor pricing intelligence for SMBs also comes from:</p>
+
+    <ul>
+      <li><strong>G2 and Capterra reviews</strong> - users frequently mention specific prices paid, even when the official page shows "contact us." Check these quarterly for context on what customers actually pay.</li>
+      <li><strong>Their changelog or blog</strong> - pricing changes are sometimes announced publicly before the pricing page is updated. Monitor these too.</li>
+      <li><strong>Job postings</strong> - a competitor hiring a pricing strategist is a signal they are about to reprice. Worth flagging as a leading indicator.</li>
+      <li><strong>AppSumo or lifetime deal sites</strong> - a competitor running a lifetime deal is often a signal of cash flow pressure or a downmarket pivot.</li>
+    </ul>
+
+    <p>For a broader framework on monitoring competitors across all these channels, see our guide on <a href="/blog/competitor-monitoring-tools-small-business/">competitor monitoring tools for small businesses</a>.</p>
+
+    <h2>The minimum viable competitor pricing setup for SMBs</h2>
+
+    <p>If you want to get this running today with the least possible effort, here is the minimum viable setup:</p>
+
+    <ol>
+      <li>List your top 3 competitors and their <code>/pricing</code> URLs.</li>
+      <li>Set up Visualping free (or Peerscope if you have a Slack team already) with daily checks on the pricing section of each page.</li>
+      <li>Create a <code>#competitor-intel</code> Slack channel and name one person as the alert owner.</li>
+      <li>Write a two-sentence response protocol in the channel description.</li>
+    </ol>
+
+    <p>Total setup time: under 30 minutes. Ongoing maintenance: near zero. You will never find out about a competitor pricing change from a prospect again.</p>
+
+    <div class="cta-section">
+      <h2>Automated pricing alerts for SMBs</h2>
+      <p>Peerscope monitors your competitors' pricing pages and sends Slack alerts the same day something changes - no analyst required.</p>
+      <p style="color: #f97316; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0;">&#x26A1; Founding price closes April 15 - $49/mo locked for life</p>
+      <a href="https://peerscope.io/?utm_source=blog&utm_medium=cta&utm_campaign=monitor-pricing-smb" class="cta-btn">Join the Peerscope waitlist</a>
+      <p class="cta-sub">Free during beta &bull; AUD$49/mo at launch &bull; No annual contract</p>
+    </div>
+
+    <h2>FAQ</h2>
+
+    <div class="faq-item">
+      <p class="faq-q">How is this different from hiring someone to do competitive monitoring?</p>
+      <p class="faq-a">Automated pricing page monitoring is a narrow subset of what a competitive analyst does - it handles the detection part only. A human analyst interprets changes, understands strategic implications, builds battlecards, and synthesises signals from multiple sources. For SMBs, the automated layer handles the detection reliably so human time can focus on response and interpretation rather than checking pages.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">What if my competitors hide their pricing behind "contact us"?</p>
+      <p class="faq-a">Still worth monitoring - "contact us" pages change too. They sometimes add pricing ranges, list minimums, or introduce new tier names. Also monitor G2 and Capterra reviews where real customers often mention specific prices paid, and watch for pricing announcements in competitor changelogs or blog posts.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">How many competitors should a small business monitor?</p>
+      <p class="faq-a">Start with 3-5 direct competitors. More than 5 creates noise before you have a process to handle it. Add more once your response workflow is running smoothly. Depth of monitoring on your top 3 is more valuable than shallow coverage of 15.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">How quickly should I respond when a competitor drops their price?</p>
+      <p class="faq-a">The alert should reach your sales team within the same business day. That does not mean you need to change your pricing - it means your AEs should know about it before they have another prospect call. A quick Slack message with the key fact ("Acme dropped their starter plan from $49 to $29 - update your competitive positioning") is usually enough as an immediate response.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Can I do this for free?</p>
+      <p class="faq-a">Yes - Visualping's free tier covers up to 65 checks per month with email alerts. For 3 competitors checked daily, that is 90 checks per month, so you would need their paid tier ($12/mo) or configure checks to every other day on the free tier. For Slack alerts, any paid tier of Visualping or a purpose-built tool like Peerscope is required.</p>
+    </div>
+
+    <p style="margin-top: 2.5rem; font-size: 0.85rem; color: #475569;">
+      See also: <a href="/blog/competitor-pricing-monitoring/">Competitor pricing monitoring: full guide</a> &bull;
+      <a href="/blog/competitor-monitoring-tools-small-business/">Competitor monitoring tools for small business</a> &bull;
+      <a href="/blog/competitive-battlecard-template/">Free competitive battlecard template</a>
+    </p>
+    <div style="margin: 3rem auto; max-width: 640px; background: linear-gradient(135deg, #0D0F1A 0%, #131525 100%); border: 1px solid rgba(240,124,53,0.35); border-radius: 12px; padding: 2rem; text-align: center;">
+      <p style="color: #F07C35; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; margin-top: 0;">&#x26A1; Founding price closes April 15</p>
+      <p style="color: #FAFAF6; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.5rem; margin-top: 0;">Monitor competitor pricing without an analyst. From $49/mo.</p>
+      <p style="color: rgba(250,250,246,0.65); font-size: 0.9rem; margin-bottom: 1.25rem; margin-top: 0;">Automated pricing page alerts and Slack notifications. Founding price locked for life - $49/mo vs $69/mo at launch.</p>
+      <a href="https://peerscope.io/?utm_source=blog&amp;utm_medium=organic&amp;utm_campaign=post-cta" style="display: inline-block; background: #F07C35; color: #FAFAF6; font-weight: 700; font-size: 1rem; padding: 0.875rem 2rem; border-radius: 8px; text-decoration: none;">Claim founding price - free &#8594;</a>
+      <p style="margin-top: 1.25rem; margin-bottom: 0; font-size: 0.8rem; color: rgba(250,250,246,0.4);">&#8592; <a href="https://peerscope.io/blog/" style="color: rgba(250,250,246,0.4);">Back to all articles</a></p>
+    </div>
+  </div>
+</body>
+</html>
