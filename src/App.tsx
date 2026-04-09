@@ -1358,7 +1358,7 @@ export default function App() {
             <a href="/blog/" className="hover:text-white transition-colors py-3 inline-block">Blog</a>
             <a href="/tools/" className="hover:text-white transition-colors py-3 inline-block">Free tools</a>
             <a href="/pricing/" className="hover:text-white transition-colors py-3 inline-block">Pricing</a>
-            <a href="mailto:hello@peerscope.io" className="hover:text-white transition-colors py-3 inline-block">Contact</a>
+            <a href="mailto:onboarding@resend.dev" className="hover:text-white transition-colors py-3 inline-block">Contact</a>
           </div>
         </div>
       </footer>

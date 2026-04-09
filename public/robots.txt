@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://peerscope.io/sitemap.xml
+Sitemap: https://peerscope-waitlist.pages.dev/sitemap.xml

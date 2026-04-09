@@ -14,7 +14,7 @@ interface WaitlistRow {
   email_sent_4: string | null
 }
 
-const FROM = 'Henrik from Peerscope <hello@peerscope.io>'
+const FROM = 'Henrik from Peerscope <onboarding@resend.dev>'
 
 function extractFirstName(email: string): string {
   const local = email.split('@')[0]

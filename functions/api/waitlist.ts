@@ -8,7 +8,7 @@ interface Env {
   DEBOUNCE: KVNamespace
 }
 
-const FROM = 'Henrik from Peerscope <hello@peerscope.io>'
+const FROM = 'Henrik from Peerscope <onboarding@resend.dev>'
 
 function extractFirstName(email: string): string {
   const local = email.split('@')[0]
@@ -33,7 +33,7 @@ Peerscope monitors your competitors 24/7 and sends you an instant Slack or email
 I'm building this as a solo founder and I read every reply. Two questions:
 
 1. What's the biggest competitor move that caught you off guard?
-2. Know another founder who'd find this useful? Forward this or share the link: https://peerscope.io
+2. Know another founder who'd find this useful? Forward this or share the link: https://peerscope-waitlist.pages.dev
 
 Henrik
 Peerscope — Track your competitors. Not your budget.`,
@@ -66,7 +66,7 @@ async function sendAlertEmail(
 ): Promise<void> {
   const resend = new Resend(apiKey)
   await resend.emails.send({
-    from: 'Peerscope Alerts <alerts@peerscope.io>',
+    from: 'Peerscope Alerts <onboarding@resend.dev>',
     to: alertTo,
     subject: `New waitlist sign-up: ${email} (${source || 'direct'})`,
     html: `
@@ -74,7 +74,7 @@ async function sendAlertEmail(
       <p><strong>Source:</strong> ${source || 'direct/organic'}</p>
       <p><strong>Variant:</strong> ${variant}</p>
       <p><strong>Time:</strong> ${new Date().toISOString()}</p>
-      <p><a href="https://peerscope.io/admin/dashboard">View dashboard →</a></p>
+      <p><a href="https://peerscope-waitlist.pages.dev/admin/dashboard">View dashboard →</a></p>
     `,
   })
 }
@@ -89,16 +89,16 @@ async function sendErrorAlertEmail(
   const message = error instanceof Error ? error.message : String(error)
   const stack = error instanceof Error ? (error.stack ?? '') : ''
   await resend.emails.send({
-    from: 'Peerscope Alerts <alerts@peerscope.io>',
+    from: 'Peerscope Alerts <onboarding@resend.dev>',
     to: alertTo,
-    subject: '[PEERSCOPE ALERT] /api/waitlist error on April 10',
+    subject: '[PEERSCOPE ALERT] /api/waitlist error',
     html: `
       <p><strong>⚠️ /api/waitlist threw an error</strong></p>
       <p><strong>Time:</strong> ${new Date().toISOString()}</p>
       ${submittedEmail ? `<p><strong>Submitted email:</strong> ${submittedEmail}</p>` : ''}
       <p><strong>Error:</strong> ${message}</p>
       ${stack ? `<pre style="background:#f4f4f4;padding:12px;font-size:12px">${stack}</pre>` : ''}
-      <p><a href="https://peerscope.io/admin/dashboard">View dashboard →</a></p>
+      <p><a href="https://peerscope-waitlist.pages.dev/admin/dashboard">View dashboard →</a></p>
     `,
   })
 }

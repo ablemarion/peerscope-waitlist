@@ -79,12 +79,28 @@ browser-use get html --selector ".hero"                   # extract HTML
 
 Use for: visual QA, mobile testing, form validation, conversion flow testing, design review screenshots.
 
+## Important: Domain and Email
+
+- **There is NO custom domain.** The only working URL is https://peerscope-waitlist.pages.dev
+- **Do NOT use peerscope.io anywhere** - we do not own that domain
+- **Emails send from** `onboarding@resend.dev` (Resend free tier shared domain)
+- **Do NOT use** `@peerscope.io` email addresses - they will bounce
+
 ## Deployment
 
 - Use `wrangler` CLI for Cloudflare deployments.
-- CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are available as env vars.
+- **IMPORTANT**: Always run `unset CLOUDFLARE_ACCOUNT_ID && unset CLOUDFLARE_API_TOKEN` before wrangler commands to clear stale WSL env vars. The correct credentials are in your Paperclip agent env.
 - Target: <1s LCP on landing page.
-- CI/CD: GitHub Actions deploys on push to main (requires CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID as GitHub Actions secrets).
+- CI/CD: GitHub Actions deploys on push to main.
+
+## Troubleshooting Autonomy
+
+Agents are expected to diagnose and fix problems themselves before escalating to the board:
+- If an API call fails, read the error message and debug it
+- If a URL returns 404, check you are using peerscope-waitlist.pages.dev (not peerscope.io)
+- If credentials seem missing, check the EXACT env var names (e.g. HACKERNEWS_USERNAME not HN_USERNAME)
+- If an email bounces, verify the sender is onboarding@resend.dev
+- Only escalate after trying at least 2 approaches and documenting what you tried
 
 ## Paperclip Task Hygiene
 

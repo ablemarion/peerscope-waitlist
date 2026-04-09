@@ -79,7 +79,7 @@ export function EmailForm({
   }
 
   if (status === 'success') {
-    const SHARE_URL = 'https://peerscope.io?ref=referral'
+    const SHARE_URL = 'https://peerscope-waitlist.pages.dev?ref=referral'
     const SHARE_TEXT = 'Worth signing up for — tracks competitor pricing and messaging automatically.'
 
     async function handleShare() {

@@ -17,7 +17,7 @@ interface ChannelMeta {
   ogImage: string
 }
 
-const BASE_URL = 'https://peerscope.io'
+const BASE_URL = 'https://peerscope-waitlist.pages.dev'
 
 const CHANNEL_META: Record<string, ChannelMeta> = {
   saas: {

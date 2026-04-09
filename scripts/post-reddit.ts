@@ -56,7 +56,7 @@ It's aimed at SMBs tracking 3–10 competitors, not enterprise war rooms. Founde
 
 I'm still in waitlist phase — genuinely want to know: **what competitor move caught you off guard the most?**
 
-Waitlist + more info: https://peerscope.io`,
+Waitlist + more info: https://peerscope-waitlist.pages.dev`,
   },
   {
     subreddit: 'startups',
@@ -72,7 +72,7 @@ What we're seeing in user research: the biggest moments are pricing changes, fea
 
 **Question for the room**: What competitor move caught you off guard in the last 12 months? And how are you currently tracking them?
 
-(We're also collecting early access signups at https://peerscope.io if this resonates)`,
+(We're also collecting early access signups at https://peerscope-waitlist.pages.dev if this resonates)`,
   },
   {
     subreddit: 'Entrepreneur',
@@ -86,7 +86,7 @@ That's what led me to build **Peerscope** — automated competitive monitoring f
 
 You set up your competitors once (takes ~5 minutes), then Peerscope runs 24/7 and pings your Slack or email when it detects a change. No more manual checks.
 
-Founding member pricing is $49/mo locked for life, closing April 15: https://peerscope.io
+Founding member pricing is $49/mo locked for life, closing April 15: https://peerscope-waitlist.pages.dev
 
 Would love to hear — has a competitor move ever blindsided you? How do you currently keep tabs on them?`,
   },

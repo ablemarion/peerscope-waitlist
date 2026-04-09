@@ -40,7 +40,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { subject, text, html, from = 'Henrik from Peerscope <hello@peerscope.io>', to: targetEmails } = body
+  const { subject, text, html, from = 'Henrik from Peerscope <onboarding@resend.dev>', to: targetEmails } = body
 
   if (!subject) {
     return Response.json({ error: 'subject is required' }, { status: 400 })
