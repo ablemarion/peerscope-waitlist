@@ -11,3 +11,7 @@ binding = "DB"
 database_name = "peerscope-waitlist"
 database_id = "d74e1ce9-0a54-4366-8750-7133130781a9"
 migrations_dir = "migrations"
+
+[[kv_namespaces]]
+binding = "DEBOUNCE"
+id = "74584493a8354139b672365bf43b3cb2"

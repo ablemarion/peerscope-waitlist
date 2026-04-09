@@ -5,6 +5,7 @@ interface Env {
   NOTIFY_WEBHOOK_URL?: string
   RESEND_API_KEY?: string
   ALERT_EMAIL?: string
+  DEBOUNCE: KVNamespace
 }
 
 const FROM = 'Henrik from Peerscope <hello@peerscope.io>'
@@ -78,6 +79,30 @@ async function sendAlertEmail(
   })
 }
 
+async function sendErrorAlertEmail(
+  apiKey: string,
+  alertTo: string,
+  error: unknown,
+  submittedEmail?: string
+): Promise<void> {
+  const resend = new Resend(apiKey)
+  const message = error instanceof Error ? error.message : String(error)
+  const stack = error instanceof Error ? (error.stack ?? '') : ''
+  await resend.emails.send({
+    from: 'Peerscope Alerts <alerts@peerscope.io>',
+    to: alertTo,
+    subject: '[PEERSCOPE ALERT] /api/waitlist error on April 10',
+    html: `
+      <p><strong>⚠️ /api/waitlist threw an error</strong></p>
+      <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+      ${submittedEmail ? `<p><strong>Submitted email:</strong> ${submittedEmail}</p>` : ''}
+      <p><strong>Error:</strong> ${message}</p>
+      ${stack ? `<pre style="background:#f4f4f4;padding:12px;font-size:12px">${stack}</pre>` : ''}
+      <p><a href="https://peerscope.io/admin/dashboard">View dashboard →</a></p>
+    `,
+  })
+}
+
 async function notifyNewSignup(webhookUrl: string, email: string, count: number, source: string): Promise<void> {
   const sourceTag = source !== 'direct' ? ` via \`${source}\`` : ''
   await fetch(webhookUrl, {
@@ -96,9 +121,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     'Access-Control-Allow-Headers': 'Content-Type',
   }
 
+  // Captured outside try/catch so the catch block can include it in the error alert
+  let submittedEmail: string | undefined
+
   try {
     const body = await context.request.json<WaitlistRequest>()
     const email = (body.email ?? '').trim().toLowerCase()
+    submittedEmail = email || undefined
     const source = (body.source ?? 'direct').slice(0, 100)
     const sessionId = (body.session_id ?? '').slice(0, 64) || null
     const variant = (body.variant ?? 'b').slice(0, 10)
@@ -163,6 +192,24 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     )
   } catch (err) {
     console.error('Waitlist error:', err)
+
+    // Fire error alert email with KV-based debounce (one alert per error type per 5 min)
+    if (context.env.RESEND_API_KEY) {
+      const errorType = err instanceof Error ? err.constructor.name : 'UnknownError'
+      const debounceKey = `alert-debounce:${errorType}`
+      const alreadyAlerted = await context.env.DEBOUNCE.get(debounceKey)
+      if (!alreadyAlerted) {
+        // Mark as alerted for 5 minutes before firing so concurrent requests don't double-alert
+        await context.env.DEBOUNCE.put(debounceKey, '1', { expirationTtl: 300 })
+        const alertTo = context.env.ALERT_EMAIL ?? ALERT_EMAIL_DEFAULT
+        context.waitUntil(
+          sendErrorAlertEmail(context.env.RESEND_API_KEY, alertTo, err, submittedEmail).catch(
+            (alertErr: unknown) => console.error('Failed to send error alert email:', alertErr)
+          )
+        )
+      }
+    }
+
     return Response.json(
       { error: 'Something went wrong. Please try again.' },
       { status: 500, headers: corsHeaders }
