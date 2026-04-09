@@ -6,9 +6,9 @@
  * Visual: pricing comparison table (Peerscope vs Crayon/Klue).
  * CTA: "Join the waitlist"
  */
-import { useState, useEffect } from 'react'
 import { EmailForm } from './shared'
 import { CountdownTimer } from './CountdownTimer'
+import { LiveSignupCount } from './LiveSignupCount'
 
 function PricingComparison() {
   const rows = [
@@ -109,17 +109,6 @@ function PricingComparison() {
 }
 
 export function HeroB() {
-  const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
-
-  useEffect(() => {
-    fetch('/api/waitlist/count')
-      .then(res => res.ok ? res.json() : null)
-      .then((data: { count: number } | null) => {
-        if (data && data.count > 0) setWaitlistCount(data.count)
-      })
-      .catch(() => {/* show nothing on error */})
-  }, [])
-
   return (
     <section
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
@@ -168,13 +157,7 @@ export function HeroB() {
             {/* CTA */}
             <div className="max-w-lg mb-6">
               <EmailForm placeholder="Enter your work email" buttonText="Claim founding price" size="large" variant="dark" />
-              {waitlistCount !== null && waitlistCount >= 20 && (
-                <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
-                  <span aria-hidden="true">✓ </span>
-                  <span className="hidden sm:inline">Join {waitlistCount.toLocaleString()} founders already tracking their competitors.</span>
-                  <span className="sm:hidden">Join {waitlistCount.toLocaleString()} founders on the waitlist</span>
-                </p>
-              )}
+              <LiveSignupCount />
               <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
