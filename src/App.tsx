@@ -245,9 +245,21 @@ function SetupFlow() {
 
 // Assign and persist a hero variant for this session.
 // URL param ?variant=a/b/c/d/e overrides random assignment.
-// Without param: equal 20% chance of each variant, persisted in sessionStorage.
+// Without param: weighted random — B is winner at 70%, others 7.5% each.
+// Data: B=8 signups (44 views), A/C/D/E=0 signups as of 2026-04-10.
 const HERO_VARIANTS = ['a', 'b', 'c', 'd', 'e'] as const
 type HeroVariant = typeof HERO_VARIANTS[number]
+
+// Cumulative weights: B=70%, A/C/D/E=7.5% each
+const VARIANT_WEIGHTS: Record<HeroVariant, number> = { b: 0.70, a: 0.775, c: 0.85, d: 0.925, e: 1.0 }
+
+function pickWeightedVariant(): HeroVariant {
+  const r = Math.random()
+  for (const [variant, threshold] of Object.entries(VARIANT_WEIGHTS) as [HeroVariant, number][]) {
+    if (r < threshold) return variant
+  }
+  return 'b'
+}
 
 function useHeroVariant(): HeroVariant {
   const params = new URLSearchParams(window.location.search)
@@ -257,7 +269,7 @@ function useHeroVariant(): HeroVariant {
   }
   const stored = sessionStorage.getItem('hero_variant') as HeroVariant | null
   if (stored && HERO_VARIANTS.includes(stored)) return stored
-  const assigned = HERO_VARIANTS[Math.floor(Math.random() * HERO_VARIANTS.length)]
+  const assigned = pickWeightedVariant()
   sessionStorage.setItem('hero_variant', assigned)
   return assigned
 }
