@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Gallery 2 - Dashboard</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  src: url('../public/fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+</style>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1270px;
+    height: 760px;
+    background: #0D0F1A;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    color: #FAFAF6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: rgba(255,255,255,0.85);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .logo span { color: #F07C35; }
+  .topbar-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .tab {
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    border: 1px solid transparent;
+  }
+  .tab.active {
+    background: rgba(240,124,53,0.12);
+    border-color: rgba(240,124,53,0.3);
+    color: #F07C35;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(52,214,183,0.1);
+    border: 1px solid rgba(52,214,183,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #34D6B7;
+  }
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #34D6B7;
+  }
+
+  /* Main layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 268px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    border-right: 1px solid rgba(255,255,255,0.06);
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(255,255,255,0.01);
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 8px;
+    margin-left: 4px;
+  }
+  .comp-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .comp-row.active {
+    background: rgba(240,124,53,0.1);
+    border-color: rgba(240,124,53,0.22);
+  }
+  .comp-row:not(.active):hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .comp-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .comp-info { flex: 1; min-width: 0; }
+  .comp-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .comp-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 1px;
+  }
+  .comp-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .comp-badge.orange { background: rgba(240,124,53,0.15); color: #F07C35; }
+  .comp-badge.teal   { background: rgba(52,214,183,0.12); color: #34D6B7; }
+  .comp-badge.dim    { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.35); }
+
+  /* Feed */
+  .feed {
+    padding: 20px 22px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .feed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .feed-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .feed-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 2px;
+  }
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+  }
+  .filter-pill {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.35);
+  }
+  .filter-pill.active {
+    background: rgba(240,124,53,0.1);
+    border-color: rgba(240,124,53,0.25);
+    color: #F07C35;
+  }
+
+  .feed-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .feed-item {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .feed-item.highlight {
+    background: rgba(240,124,53,0.07);
+    border-color: rgba(240,124,53,0.2);
+  }
+  .feed-item.teal-item {
+    background: rgba(52,214,183,0.05);
+    border-color: rgba(52,214,183,0.16);
+  }
+
+  .item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .item-icon.orange { background: rgba(240,124,53,0.18); }
+  .item-icon.teal   { background: rgba(52,214,183,0.15); }
+  .item-icon.purple { background: rgba(167,139,250,0.15); }
+
+  .item-body { flex: 1; min-width: 0; }
+  .item-type {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 3px;
+  }
+  .item-type.orange { color: rgba(240,124,53,0.7); }
+  .item-type.teal { color: rgba(52,214,183,0.7); }
+
+  .item-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.88);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .item-detail {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.4;
+  }
+  .price-diff {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+  }
+  .price-old {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    text-decoration: line-through;
+  }
+  .price-arrow { color: rgba(255,255,255,0.2); font-size: 13px; }
+  .price-new {
+    font-size: 13px;
+    font-weight: 700;
+    color: #F07C35;
+  }
+  .item-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .item-comp-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .item-comp-name {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+  .item-time {
+    margin-left: auto;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* Right panel */
+  .right-panel {
+    border-left: 1px solid rgba(255,255,255,0.06);
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: rgba(255,255,255,0.01);
+  }
+  .panel-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+  }
+
+  .stat-block {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num.orange { color: #F07C35; }
+  .stat-num.teal { color: #34D6B7; }
+  .stat-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .alert-card {
+    background: rgba(240,124,53,0.08);
+    border: 1px solid rgba(240,124,53,0.22);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .alert-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .alert-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(240,124,53,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .alert-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #F07C35;
+  }
+  .alert-body {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  .alert-body strong {
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+  }
+
+  /* Caption label overlay */
+  .caption-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 220px;
+    right: 268px;
+    padding: 10px 22px;
+    background: linear-gradient(to top, rgba(13,15,26,0.9) 0%, transparent 100%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .caption-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.2px;
+  }
+  .caption-accent { color: #F07C35; }
+
+  .wrapper {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="logo">
+    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="9.5" stroke="#F07C35" stroke-width="1.8"/>
+      <circle cx="11" cy="11" r="5" stroke="#F07C35" stroke-width="1.2" stroke-opacity="0.55"/>
+      <circle cx="11" cy="11" r="2" fill="#F07C35"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+  <div class="topbar-tabs">
+    <div class="tab active">Intelligence Feed</div>
+    <div class="tab">Competitors</div>
+    <div class="tab">Pricing Watch</div>
+    <div class="tab">Alerts</div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      Monitoring live
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-label">Tracking 6</div>
+
+      <div class="comp-row active">
+        <div class="comp-avatar" style="background:#1A2B47;color:#60A5FA;">HS</div>
+        <div class="comp-info">
+          <div class="comp-name">HubSpot</div>
+          <div class="comp-sub">hubspot.com</div>
+        </div>
+        <div class="comp-badge orange">3</div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-avatar" style="background:#12302A;color:#34D6B7;">IC</div>
+        <div class="comp-info">
+          <div class="comp-name">Intercom</div>
+          <div class="comp-sub">intercom.com</div>
+        </div>
+        <div class="comp-badge teal">1</div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-avatar" style="background:#1E1A30;color:#A78BFA;">PP</div>
+        <div class="comp-info">
+          <div class="comp-name">Pipedrive</div>
+          <div class="comp-sub">pipedrive.com</div>
+        </div>
+        <div class="comp-badge dim">—</div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-avatar" style="background:#1E2A1A;color:#86EFAC;">CR</div>
+        <div class="comp-info">
+          <div class="comp-name">Crayon</div>
+          <div class="comp-sub">crayon.co</div>
+        </div>
+        <div class="comp-badge dim">—</div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-avatar" style="background:#2A1A1A;color:#FCA5A5;">CS</div>
+        <div class="comp-info">
+          <div class="comp-name">Clari</div>
+          <div class="comp-sub">clari.com</div>
+        </div>
+        <div class="comp-badge dim">—</div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-avatar" style="background:#1A1E2A;color:#93C5FD;">SM</div>
+        <div class="comp-info">
+          <div class="comp-name">Semrush</div>
+          <div class="comp-sub">semrush.com</div>
+        </div>
+        <div class="comp-badge dim">—</div>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div class="feed">
+      <div class="feed-header">
+        <div>
+          <div class="feed-title">HubSpot — Recent changes</div>
+          <div class="feed-subtitle">3 changes detected in the last 24 hours</div>
+        </div>
+        <div class="filter-pills">
+          <div class="filter-pill active">All</div>
+          <div class="filter-pill">Pricing</div>
+          <div class="filter-pill">Features</div>
+          <div class="filter-pill">Copy</div>
+        </div>
+      </div>
+
+      <div class="feed-items">
+        <div class="feed-item highlight">
+          <div class="item-icon orange">💰</div>
+          <div class="item-body">
+            <div class="item-type orange">Pricing change</div>
+            <div class="item-title">Starter plan price increased — Marketing Hub</div>
+            <div class="price-diff">
+              <span class="price-old">$45/mo</span>
+              <span class="price-arrow">→</span>
+              <span class="price-new">$60/mo</span>
+            </div>
+            <div class="item-detail">Seat-based limit also changed from 2 users to 1 user on base tier.</div>
+            <div class="item-meta">
+              <span class="item-comp-dot" style="background:#60A5FA;"></span>
+              <span class="item-comp-name">HubSpot · Marketing Hub · Pricing page</span>
+              <span class="item-time">14 min ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-item teal-item">
+          <div class="item-icon teal">✦</div>
+          <div class="item-body">
+            <div class="item-type teal">Feature launched</div>
+            <div class="item-title">AI-powered email personalisation added to all plans</div>
+            <div class="item-detail">Previously Enterprise-only feature now available from $0. Changelog updated with live example.</div>
+            <div class="item-meta">
+              <span class="item-comp-dot" style="background:#60A5FA;"></span>
+              <span class="item-comp-name">HubSpot · Product changelog</span>
+              <span class="item-time">2 hrs ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-item">
+          <div class="item-icon purple">📄</div>
+          <div class="item-body">
+            <div class="item-type">Copy change</div>
+            <div class="item-title">Hero headline A/B test detected — CRM homepage</div>
+            <div class="item-detail">"Grow better" replaced with "The #1 AI-powered CRM for growing teams" across 3 page variants.</div>
+            <div class="item-meta">
+              <span class="item-comp-dot" style="background:#60A5FA;"></span>
+              <span class="item-comp-name">HubSpot · crm.hubspot.com</span>
+              <span class="item-time">6 hrs ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="right-panel">
+      <div>
+        <div class="panel-label">This week</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <div class="stat-block" style="flex:1;">
+            <div class="stat-num orange">12</div>
+            <div class="stat-desc">Changes detected</div>
+          </div>
+          <div class="stat-block" style="flex:1;">
+            <div class="stat-num teal">6</div>
+            <div class="stat-desc">Competitors tracked</div>
+          </div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">3</div>
+          <div class="stat-desc">Pricing changes this month</div>
+        </div>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-header">
+          <div class="alert-icon">🔔</div>
+          <div class="alert-label">Smart alert fired</div>
+        </div>
+        <div class="alert-body">
+          <strong>HubSpot raised pricing 33%.</strong> Your Starter plan is now cheaper than their equivalent tier. Consider updating your comparison page.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Caption overlay -->
+  <div class="caption-overlay">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="6" stroke="rgba(240,124,53,0.6)" stroke-width="1.2"/>
+      <circle cx="7" cy="7" r="2" fill="rgba(240,124,53,0.7)"/>
+    </svg>
+    <span class="caption-text">Competitor intelligence feed — <span class="caption-accent">updates automatically</span></span>
+  </div>
+</div>
+
+</body>
+</html>

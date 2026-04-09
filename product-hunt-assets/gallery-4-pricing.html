@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Gallery 4 - Pricing</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  src: url('../public/fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+</style>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1270px;
+    height: 760px;
+    background: #0D0F1A;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    color: #FAFAF6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Background grid */
+  .scan-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,124,53,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,124,53,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .glow-left {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(240,124,53,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  /* Logo */
+  .logo {
+    position: absolute;
+    top: 32px;
+    left: 44px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    color: rgba(255,255,255,0.45);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .logo span { color: rgba(240,124,53,0.7); }
+
+  /* Deadline badge */
+  .deadline-badge {
+    position: absolute;
+    top: 32px;
+    right: 44px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.25);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #F87171;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    max-width: 1100px;
+    width: 100%;
+    padding: 0 60px;
+  }
+
+  /* Left — headline */
+  .left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .founding-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(240,124,53,0.12);
+    border: 1px solid rgba(240,124,53,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #F07C35;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .main-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    line-height: 1.05;
+    letter-spacing: -1.8px;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+  }
+  .main-headline .accent { color: #F07C35; }
+
+  .sub-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    line-height: 1.05;
+    letter-spacing: -1.8px;
+    color: rgba(255,255,255,0.22);
+    margin-bottom: 28px;
+  }
+
+  .desc {
+    font-size: 17px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.65;
+    margin-bottom: 36px;
+    max-width: 420px;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+  }
+  .check-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(52,214,183,0.12);
+    border: 1px solid rgba(52,214,183,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+  }
+
+  /* Right — pricing card */
+  .pricing-card {
+    width: 380px;
+    flex-shrink: 0;
+    background: rgba(240,124,53,0.06);
+    border: 1.5px solid rgba(240,124,53,0.28);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Top glow on card */
+  .pricing-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, #F07C35, transparent);
+  }
+
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(240,124,53,0.18);
+    border: 1px solid rgba(240,124,53,0.35);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #F07C35;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .card-plan-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+  }
+  .card-plan-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 24px;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .price-main {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    letter-spacing: -2px;
+    color: #F07C35;
+    line-height: 1;
+  }
+  .price-period {
+    font-size: 16px;
+    color: rgba(255,255,255,0.4);
+    padding-bottom: 8px;
+  }
+  .price-was {
+    font-size: 14px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .price-was-val {
+    text-decoration: line-through;
+    color: rgba(255,255,255,0.25);
+  }
+  .price-was-badge {
+    background: rgba(52,214,183,0.1);
+    border: 1px solid rgba(52,214,183,0.25);
+    color: #34D6B7;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin-bottom: 20px;
+  }
+
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .feature-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+  .feature-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #F07C35;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .cta-btn {
+    width: 100%;
+    background: #F07C35;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #FFFFFF;
+    margin-bottom: 12px;
+  }
+  .cta-sub {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Brand bar */
+  .brand-bar {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(255,255,255,0.22);
+    white-space: nowrap;
+  }
+  .brand-bar em { color: rgba(240,124,53,0.5); font-style: normal; }
+  .brand-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.12); }
+  .tagline { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.18); }
+</style>
+</head>
+<body>
+  <div class="scan-grid"></div>
+  <div class="glow-left"></div>
+
+  <div class="logo">
+    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="9.5" stroke="rgba(240,124,53,0.65)" stroke-width="1.8"/>
+      <circle cx="11" cy="11" r="5" stroke="rgba(240,124,53,0.4)" stroke-width="1.2"/>
+      <circle cx="11" cy="11" r="2" fill="rgba(240,124,53,0.7)"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+
+  <div class="deadline-badge">
+    ⏰ Founding price closes April 15
+  </div>
+
+  <div class="content">
+    <div class="left">
+      <div class="founding-tag">
+        ✦ Founding Member Offer
+      </div>
+
+      <div class="main-headline">Locked-in pricing,</div>
+      <div class="main-headline"><span class="accent">forever.</span></div>
+      <div class="sub-headline">No price increases. Ever.</div>
+
+      <div class="desc">
+        Sign up before April 15 and your founding price is locked for the lifetime of your account. When we raise prices, you never pay more.
+      </div>
+
+      <div class="checklist">
+        <div class="check-item">
+          <div class="check-icon">✓</div>
+          Price locked for life — even when we raise rates
+        </div>
+        <div class="check-item">
+          <div class="check-icon">✓</div>
+          14-day free trial, no credit card required
+        </div>
+        <div class="check-item">
+          <div class="check-icon">✓</div>
+          Early access before public launch
+        </div>
+        <div class="check-item">
+          <div class="check-icon">✓</div>
+          Cancel anytime — no lock-in contracts
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <div class="card-badge">⭐ Founding Member</div>
+      <div class="card-plan-name">Starter Plan</div>
+      <div class="card-plan-desc">For founders tracking a handful of competitors</div>
+
+      <div class="price-row">
+        <div class="price-main">$49</div>
+        <div class="price-period">/mo</div>
+      </div>
+      <div class="price-was">
+        <span>After April 15:</span>
+        <span class="price-was-val">$69/mo</span>
+        <span class="price-was-badge">Save $240/yr</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="features-list">
+        <div class="feature-row">
+          <div class="feature-dot"></div>
+          Monitor 3 competitors
+        </div>
+        <div class="feature-row">
+          <div class="feature-dot"></div>
+          Daily digest alerts (email + Slack)
+        </div>
+        <div class="feature-row">
+          <div class="feature-dot"></div>
+          30-day change history
+        </div>
+        <div class="feature-row">
+          <div class="feature-dot"></div>
+          Pricing, features, copy tracking
+        </div>
+        <div class="feature-row">
+          <div class="feature-dot"></div>
+          1 team member
+        </div>
+      </div>
+
+      <div class="cta-btn">Claim founding price →</div>
+      <div class="cta-sub">14-day trial · No credit card required</div>
+    </div>
+  </div>
+
+  <div class="brand-bar">
+    <em>Peer</em>scope
+    <div class="brand-dot"></div>
+    <span class="tagline">Track your competitors. Not your budget.</span>
+  </div>
+</body>
+</html>

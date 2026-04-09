@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope Gallery 3 - How It Works</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../public/fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  src: url('../public/fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+</style>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1270px;
+    height: 760px;
+    background: #0D0F1A;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    color: #FAFAF6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Background dots */
+  .bg-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  /* Glow */
+  .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(52,214,183,0.06) 0%, rgba(240,124,53,0.04) 40%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Logo */
+  .logo {
+    position: absolute;
+    top: 32px;
+    left: 44px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    color: rgba(255,255,255,0.45);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .logo span { color: rgba(240,124,53,0.7); }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(52,214,183,0.8);
+    margin-bottom: 16px;
+  }
+
+  .headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 48px;
+    letter-spacing: -1.5px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 56px;
+    line-height: 1.1;
+  }
+  .headline span { color: #F07C35; }
+
+  /* Steps row */
+  .steps {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+  }
+
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 28px;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+  }
+  .step.s1 { border-color: rgba(240,124,53,0.2); background: rgba(240,124,53,0.04); }
+  .step.s2 { border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.04); margin: 0 16px; }
+  .step.s3 { border-color: rgba(52,214,183,0.2); background: rgba(52,214,183,0.04); }
+
+  /* Top accent line */
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .step.s1::before { background: linear-gradient(90deg, #F07C35, rgba(240,124,53,0.3)); }
+  .step.s2::before { background: linear-gradient(90deg, #A78BFA, rgba(167,139,250,0.3)); }
+  .step.s3::before { background: linear-gradient(90deg, #34D6B7, rgba(52,214,183,0.3)); }
+
+  /* Arrow connector */
+  .arrow-connector {
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #0D0F1A;
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .step-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .step.s1 .step-num { color: #F07C35; background: rgba(240,124,53,0.12); }
+  .step.s2 .step-num { color: #A78BFA; background: rgba(167,139,250,0.12); }
+  .step.s3 .step-num { color: #34D6B7; background: rgba(52,214,183,0.12); }
+
+  .step-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .step.s1 .step-icon { background: rgba(240,124,53,0.14); }
+  .step.s2 .step-icon { background: rgba(167,139,250,0.12); }
+  .step.s3 .step-icon { background: rgba(52,214,183,0.1); }
+
+  .step-verb {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .step.s1 .step-verb { color: #F07C35; }
+  .step.s2 .step-verb { color: #A78BFA; }
+  .step.s3 .step-verb { color: #34D6B7; }
+
+  .step-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .step-example {
+    margin-top: auto;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .step.s1 .step-example { background: rgba(240,124,53,0.1); color: rgba(240,124,53,0.75); }
+  .step.s2 .step-example { background: rgba(167,139,250,0.1); color: rgba(167,139,250,0.75); }
+  .step.s3 .step-example { background: rgba(52,214,183,0.08); color: rgba(52,214,183,0.75); }
+
+  /* Brand bar */
+  .brand-bar {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(255,255,255,0.22);
+    white-space: nowrap;
+  }
+  .brand-bar em { color: rgba(240,124,53,0.5); font-style: normal; }
+  .brand-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.12); }
+  .tagline { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.18); }
+</style>
+</head>
+<body>
+  <div class="bg-dots"></div>
+  <div class="glow"></div>
+
+  <div class="logo">
+    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="9.5" stroke="rgba(240,124,53,0.65)" stroke-width="1.8"/>
+      <circle cx="11" cy="11" r="5" stroke="rgba(240,124,53,0.4)" stroke-width="1.2"/>
+      <circle cx="11" cy="11" r="2" fill="rgba(240,124,53,0.7)"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+
+  <div class="content">
+    <div class="eyebrow">How it works</div>
+    <div class="headline">Set it up once. <span>Never miss a move</span> again.</div>
+
+    <div class="steps">
+      <!-- Step 1: Monitor -->
+      <div class="step s1">
+        <div class="arrow-connector">→</div>
+        <div class="step-num">Step 01</div>
+        <div class="step-icon">👁</div>
+        <div class="step-verb">Monitor</div>
+        <div class="step-desc">
+          Add your competitors by URL. Peerscope automatically tracks pricing pages, feature lists, job boards, changelogs, and landing page copy.
+        </div>
+        <div class="step-example">
+          "Tracking HubSpot, Intercom, Pipedrive + 3 more — set up in under 5 minutes"
+        </div>
+      </div>
+
+      <!-- Step 2: Alert -->
+      <div class="step s2">
+        <div class="arrow-connector">→</div>
+        <div class="step-num">Step 02</div>
+        <div class="step-icon">🔔</div>
+        <div class="step-verb">Alert</div>
+        <div class="step-desc">
+          The moment a change is detected, you get a structured alert — what changed, exactly where, and a before/after diff. Slack, email, or in-app.
+        </div>
+        <div class="step-example">
+          "🚨 HubSpot raised Starter pricing 33% — detected 14 min ago"
+        </div>
+      </div>
+
+      <!-- Step 3: Act -->
+      <div class="step s3">
+        <div class="step-num">Step 03</div>
+        <div class="step-icon">⚡</div>
+        <div class="step-verb">Act</div>
+        <div class="step-desc">
+          Use battlecard templates, comparison page suggestions, and alert context to respond before your prospects or customers hear it elsewhere.
+        </div>
+        <div class="step-example">
+          "Your pricing is now 20% cheaper — update your comparison page today"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar">
+    <em>Peer</em>scope
+    <div class="brand-dot"></div>
+    <span class="tagline">Track your competitors. Not your budget.</span>
+  </div>
+</body>
+</html>
