@@ -65,6 +65,18 @@ const CHANNEL_CONFIG: Record<string, ChannelConfig> = {
     badge: 'Built for business consultants',
     ref: 'linkedin-consultants',
   },
+  'ecommerce': {
+    headline: 'Your competitor just dropped their price by 20%. Your customer noticed before you did.',
+    subhead:
+      'Peerscope tracks competitor pricing, promotions, and messaging across your category — automatically. So you always know before your customers do.',
+    painPoints: [
+      'You check competitor sites manually. Once a week, if you remember. That\'s not competitive intelligence — that\'s guesswork.',
+      'A single unmatched price drop can cost you 10-20 orders before you even notice.',
+      'Your competitors run flash sales and seasonal promos. Peerscope catches every change within hours.',
+    ],
+    badge: 'Built for e-commerce stores',
+    ref: 'ecommerce-community',
+  },
 }
 
 export const KNOWN_CHANNELS = Object.keys(CHANNEL_CONFIG)

@@ -44,6 +44,12 @@ const CHANNEL_META: Record<string, ChannelMeta> = {
       'Monitor competitor pricing and positioning for all your clients — automatically.',
     ogImage: `${BASE_URL}/og/og-consultants.svg`,
   },
+  ecommerce: {
+    title: 'Peerscope for E-commerce Stores',
+    description:
+      'Track competitor pricing and promotions automatically. Know before your customers do.',
+    ogImage: `${BASE_URL}/og/og-ecommerce.svg`,
+  },
 }
 
 const KNOWN_CHANNELS = Object.keys(CHANNEL_META)
