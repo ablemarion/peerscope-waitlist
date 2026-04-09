@@ -1,84 +1,83 @@
 import { useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'peerscope_urgency_banner_v1'
-const FOUNDING_CAP = 100
-const DEADLINE_DATE = new Date('2026-04-15T23:59:59+08:00') // AWST
-
-function getDaysLeft(): number {
-  const now = new Date()
-  const diff = DEADLINE_DATE.getTime() - now.getTime()
-  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
-}
+const FOUNDING_CAP = 50
+const DEADLINE = new Date('2026-04-15T23:59:59+08:00') // Perth AWST
 
 export function FoundingBanner() {
   const [dismissed, setDismissed] = useState(() => {
     try {
-      return localStorage.getItem(STORAGE_KEY) === '1'
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (!stored) return false
+      const { dismissed, ts } = JSON.parse(stored)
+      // 24h TTL
+      if (dismissed && Date.now() - ts < 24 * 60 * 60 * 1000) return true
+      localStorage.removeItem(STORAGE_KEY)
+      return false
     } catch {
       return false
     }
   })
   const [spotsLeft, setSpotsLeft] = useState<number | null>(null)
-  const [daysLeft, setDaysLeft] = useState(getDaysLeft)
+  const [past, setPast] = useState(() => Date.now() > DEADLINE.getTime())
 
   useEffect(() => {
-    fetch('/api/waitlist/count')
+    fetch('/api/public/stats')
       .then(res => (res.ok ? res.json() : null))
-      .then((data: { count: number } | null) => {
-        if (data && typeof data.count === 'number') {
-          const remaining = Math.max(0, FOUNDING_CAP - data.count)
-          setSpotsLeft(remaining)
+      .then((data: { count: number; show_count: boolean } | null) => {
+        if (data && data.show_count && typeof data.count === 'number') {
+          setSpotsLeft(Math.max(0, FOUNDING_CAP - data.count))
         }
       })
       .catch(() => {})
   }, [])
 
-  // Recalculate days left once per minute
   useEffect(() => {
-    const timer = setInterval(() => setDaysLeft(getDaysLeft()), 60_000)
-    return () => clearInterval(timer)
-  }, [])
+    if (past) return
+    const ms = DEADLINE.getTime() - Date.now()
+    if (ms <= 0) { setPast(true); return }
+    const t = setTimeout(() => setPast(true), Math.min(ms, 2_147_483_647))
+    return () => clearTimeout(t)
+  }, [past])
 
-  if (dismissed) return null
+  if (dismissed || past) return null
 
   function dismiss() {
     try {
-      localStorage.setItem(STORAGE_KEY, '1')
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ dismissed: true, ts: Date.now() }))
     } catch {
+      // ignore
     }
     setDismissed(true)
   }
 
   const spotsFragment =
     spotsLeft !== null && spotsLeft > 0
-      ? ` · ${spotsLeft} founding spot${spotsLeft === 1 ? '' : 's'} left`
+      ? ` — ${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} remaining`
       : ''
-
-  const urgencyLabel = daysLeft <= 0
-    ? 'Closes today'
-    : daysLeft === 1
-      ? '1 day left'
-      : `${daysLeft} days left`
 
   return (
     <div
       role="banner"
       className="relative flex items-center justify-center px-10 py-2.5"
-      style={{
-        minHeight: '40px',
-        background: 'linear-gradient(90deg, #7C2D0E 0%, #92350F 50%, #7C2D0E 100%)',
-        borderBottom: '1px solid rgba(240,124,53,0.25)',
-      }}
+      style={{ minHeight: '40px', background: '#B8622A' }}
     >
-      <p className="text-center text-xs sm:text-sm leading-snug text-white">
-        <strong className="font-semibold">⚡ {urgencyLabel}</strong>
-        <span className="opacity-90"> — founding rate $49/mo locked for life</span>
-        <span className="opacity-70 hidden sm:inline">{spotsFragment}</span>
+      <p className="text-center leading-snug text-white" style={{ fontSize: '13px' }}>
+        <span>⏰ Founding member pricing closes April 15</span>
+        <span className="hidden sm:inline">{spotsFragment}</span>
+        <span> · </span>
+        <a
+          href="#waitlist"
+          className="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity"
+        >
+          Sign up →
+        </a>
       </p>
       <button
         onClick={dismiss}
-        aria-label="Dismiss waitlist deadline banner"
-        className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded opacity-50 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 focus-visible:ring-offset-[#92350F]"
+        aria-label="Dismiss founding pricing banner"
+        className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded opacity-60 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1"
+        style={{ color: 'white' }}
       >
         <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
