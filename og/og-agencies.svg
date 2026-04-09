@@ -60,7 +60,7 @@
     <rect width="400" height="112" rx="12" fill="#131829" stroke="#272D45" stroke-width="1"/>
     <rect x="0" y="0" width="4" height="112" rx="2" fill="#F07C35"/>
     <rect x="20" y="22" width="36" height="36" rx="8" fill="#B8622A" opacity="0.25"/>
-    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19">📊</text>
+    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19" fill="#F07C35" font-weight="700">$↑</text>
     <text x="68" y="36" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#B8622A" letter-spacing="1">CLIENT: ACME CO · COMPETITOR ALERT</text>
     <text x="68" y="60" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#FAFAF6">Rival relaunched pricing page</text>
     <text x="68" y="83" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">3 plan changes detected · 12 mins ago</text>
@@ -69,10 +69,10 @@
 
   <g transform="translate(762, 244)" filter="url(#shadow)">
     <rect width="368" height="112" rx="12" fill="#131829" stroke="#272D45" stroke-width="1"/>
-    <rect x="0" y="0" width="4" height="112" rx="2" fill="#7C3AED"/>
-    <rect x="20" y="22" width="36" height="36" rx="8" fill="#7C3AED" opacity="0.25"/>
-    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19">🚀</text>
-    <text x="68" y="36" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#A78BFA" letter-spacing="1">CLIENT: ZETA INC · FEATURE LAUNCH</text>
+    <rect x="0" y="0" width="4" height="112" rx="2" fill="#34D6B7"/>
+    <rect x="20" y="22" width="36" height="36" rx="8" fill="#1A7A6E" opacity="0.35"/>
+    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19" fill="#34D6B7" font-weight="700">↑</text>
+    <text x="68" y="36" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#34D6B7" letter-spacing="1">CLIENT: ZETA INC · FEATURE LAUNCH</text>
     <text x="68" y="60" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#FAFAF6">Competitor added AI assistant</text>
     <text x="68" y="83" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">New features page detected · 1h ago</text>
   </g>
@@ -81,7 +81,7 @@
     <rect width="400" height="112" rx="12" fill="#131829" stroke="#272D45" stroke-width="1"/>
     <rect x="0" y="0" width="4" height="112" rx="2" fill="#1A7A6E"/>
     <rect x="20" y="22" width="36" height="36" rx="8" fill="#1A7A6E" opacity="0.25"/>
-    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19">📋</text>
+    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19" fill="#34D6B7" font-weight="700">↻</text>
     <text x="68" y="36" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#34D6B7" letter-spacing="1">CLIENT: NOVA · HIRING SIGNAL</text>
     <text x="68" y="60" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#FAFAF6">Rival hiring 5 sales engineers</text>
     <text x="68" y="83" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">Job board scrape · 2h ago</text>

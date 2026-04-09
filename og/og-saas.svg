@@ -62,7 +62,7 @@
     <rect width="400" height="112" rx="12" fill="#131829" stroke="#272D45" stroke-width="1"/>
     <rect x="0" y="0" width="4" height="112" rx="2" fill="#F07C35"/>
     <rect x="20" y="22" width="36" height="36" rx="8" fill="#B8622A" opacity="0.25"/>
-    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19">💰</text>
+    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19" fill="#F07C35" font-weight="700">$↑</text>
     <text x="68" y="38" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#B8622A" letter-spacing="1">PRICING CHANGE DETECTED</text>
     <text x="68" y="62" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#FAFAF6">Acme raised their Pro plan</text>
     <text x="68" y="85" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">$79 → $99/mo · 3 minutes ago</text>
@@ -71,10 +71,10 @@
 
   <g transform="translate(762, 244)" filter="url(#shadow)">
     <rect width="368" height="112" rx="12" fill="#131829" stroke="#272D45" stroke-width="1"/>
-    <rect x="0" y="0" width="4" height="112" rx="2" fill="#7C3AED"/>
-    <rect x="20" y="22" width="36" height="36" rx="8" fill="#7C3AED" opacity="0.25"/>
-    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19">🚀</text>
-    <text x="68" y="38" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#A78BFA" letter-spacing="1">FEATURE LAUNCH</text>
+    <rect x="0" y="0" width="4" height="112" rx="2" fill="#34D6B7"/>
+    <rect x="20" y="22" width="36" height="36" rx="8" fill="#1A7A6E" opacity="0.35"/>
+    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19" fill="#34D6B7" font-weight="700">↑</text>
+    <text x="68" y="38" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#34D6B7" letter-spacing="1">FEATURE LAUNCH</text>
     <text x="68" y="62" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#FAFAF6">Rival added AI summaries</text>
     <text x="68" y="85" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">New /features page detected · 1h ago</text>
   </g>
@@ -83,7 +83,7 @@
     <rect width="400" height="112" rx="12" fill="#131829" stroke="#272D45" stroke-width="1"/>
     <rect x="0" y="0" width="4" height="112" rx="2" fill="#1A7A6E"/>
     <rect x="20" y="22" width="36" height="36" rx="8" fill="#1A7A6E" opacity="0.25"/>
-    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19">📋</text>
+    <text x="31" y="47" font-family="system-ui, sans-serif" font-size="19" fill="#34D6B7" font-weight="700">↻</text>
     <text x="68" y="38" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#34D6B7" letter-spacing="1">POSITIONING CHANGE</text>
     <text x="68" y="62" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#FAFAF6">Competitor rebranded homepage</text>
     <text x="68" y="85" font-family="system-ui, sans-serif" font-size="13" fill="#64748B">New messaging detected · 2h ago</text>
