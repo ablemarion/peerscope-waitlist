@@ -1,0 +1,148 @@
+<svg width="1200" height="628" viewBox="0 0 1200 628" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Dot grid texture -->
+    <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="16" cy="16" r="1.2" fill="#FAFAF6" fill-opacity="0.055"/>
+    </pattern>
+    <!-- Radial amber glow -->
+    <radialGradient id="center-glow" cx="38%" cy="52%" r="55%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#F07C35" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#F07C35" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Large decorative ring glow -->
+    <radialGradient id="ring-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#34D6B7" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#34D6B7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ── Background ── -->
+  <rect width="1200" height="628" fill="#0F0F0B"/>
+
+  <!-- Dot grid texture -->
+  <rect width="1200" height="628" fill="url(#dots)"/>
+
+  <!-- Radial amber glow (left-center) -->
+  <ellipse cx="460" cy="326" rx="620" ry="380" fill="url(#center-glow)"/>
+
+  <!-- Decorative large scope orbit ring - bottom right quadrant -->
+  <circle cx="1080" cy="500" r="240" stroke="#34D6B7" stroke-width="1" stroke-opacity="0.07" fill="none"/>
+  <circle cx="1080" cy="500" r="170" stroke="#F07C35" stroke-width="1" stroke-opacity="0.05" fill="none"/>
+
+  <!-- Top amber accent bar -->
+  <rect x="0" y="0" width="1200" height="3" fill="#F07C35" fill-opacity="0.55"/>
+
+  <!-- Left amber accent bar -->
+  <rect x="0" y="0" width="3" height="628" fill="#F07C35" fill-opacity="0.18"/>
+
+  <!-- ── FOUNDING MEMBER badge ── -->
+  <rect x="72" y="60" width="272" height="48" rx="24" fill="#F07C35" fill-opacity="0.1" stroke="#F07C35" stroke-width="1.5" stroke-opacity="0.38"/>
+  <text
+    x="208" y="90"
+    text-anchor="middle"
+    font-family="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#F07C35"
+    letter-spacing="3.5"
+  >FOUNDING MEMBER</text>
+
+  <!-- Member number placeholder - top right -->
+  <text
+    x="1128" y="90"
+    text-anchor="end"
+    font-family="'SF Mono', 'Courier New', monospace"
+    font-size="22"
+    font-weight="600"
+    fill="#FAFAF6"
+    fill-opacity="0.18"
+    letter-spacing="1"
+  >#42</text>
+
+  <!-- ── Main headline ── -->
+
+  <!-- "I just joined" -->
+  <text
+    x="72" y="226"
+    font-family="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+    font-size="70"
+    font-weight="700"
+    fill="#FAFAF6"
+    letter-spacing="-2"
+  >I just joined</text>
+
+  <!-- "Peerscope." in amber -->
+  <text
+    x="72" y="316"
+    font-family="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+    font-size="82"
+    font-weight="700"
+    fill="#F07C35"
+    letter-spacing="-2.5"
+  >Peerscope.</text>
+
+  <!-- ── Teal divider ── -->
+  <line x1="72" y1="348" x2="240" y2="348" stroke="#34D6B7" stroke-width="2" stroke-opacity="0.45"/>
+
+  <!-- ── Secondary line ── -->
+  <text
+    x="72" y="393"
+    font-family="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+    font-size="28"
+    font-weight="400"
+    fill="#FAFAF6"
+    fill-opacity="0.72"
+    letter-spacing="-0.5"
+  >Before the waitlist closes.</text>
+
+  <!-- ── Subtext ── -->
+  <text
+    x="72" y="444"
+    font-family="'SF Pro Text', 'Segoe UI', system-ui, sans-serif"
+    font-size="19"
+    font-weight="400"
+    fill="#FAFAF6"
+    fill-opacity="0.4"
+    letter-spacing="0.1"
+  >Competitive intelligence for SMBs · Founding price closes April 15</text>
+
+  <!-- ── URL - bottom left ── -->
+  <text
+    x="72" y="568"
+    font-family="'SF Mono', 'Courier New', monospace"
+    font-size="14"
+    font-weight="400"
+    fill="#FAFAF6"
+    fill-opacity="0.22"
+    letter-spacing="0.4"
+  >peerscope-waitlist.pages.dev</text>
+
+  <!-- ── Peerscope wordmark - bottom right ── -->
+  <!-- Scope icon ring -->
+  <circle cx="946" cy="554" r="24" stroke="#FAFAF6" stroke-width="2.2" fill="none" stroke-opacity="0.85"/>
+  <!-- Teal center dot -->
+  <circle cx="946" cy="554" r="8" fill="#34D6B7"/>
+  <!-- Crosshair lines -->
+  <line x1="946" y1="530" x2="946" y2="542" stroke="#FAFAF6" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.85"/>
+  <line x1="946" y1="566" x2="946" y2="578" stroke="#FAFAF6" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.85"/>
+  <line x1="922" y1="554" x2="934" y2="554" stroke="#FAFAF6" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.85"/>
+  <line x1="958" y1="554" x2="970" y2="554" stroke="#FAFAF6" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.85"/>
+
+  <!-- Wordmark text "peer" (regular) -->
+  <text
+    x="982" y="562"
+    font-family="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+    font-size="26"
+    font-weight="400"
+    fill="#FAFAF6"
+    fill-opacity="0.9"
+  >peer</text>
+  <!-- Wordmark text "scope" (bold, amber) -->
+  <text
+    x="1039" y="562"
+    font-family="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+    font-size="26"
+    font-weight="700"
+    fill="#F07C35"
+  >scope</text>
+</svg>
