@@ -53,6 +53,18 @@ const CHANNEL_CONFIG: Record<string, ChannelConfig> = {
     badge: 'Built for agencies',
     ref: 'reddit-agencies',
   },
+  'consultants': {
+    headline: 'Your clients pay you for strategic insight. Stop guessing what their competitors charge.',
+    subhead:
+      'Peerscope monitors competitor pricing, messaging, and positioning across your client portfolio — automatically. So you walk into every engagement with the intel they need.',
+    painPoints: [
+      'You\'re advising on pricing strategy without knowing what the market actually charges.',
+      'Competitive audits take 2-3 hours per client. That\'s time you\'re not billing.',
+      'Your clients expect strategic recommendations. Peerscope gives you the data to back them.',
+    ],
+    badge: 'Built for business consultants',
+    ref: 'linkedin-consultants',
+  },
 }
 
 export const KNOWN_CHANNELS = Object.keys(CHANNEL_CONFIG)

@@ -38,6 +38,12 @@ const CHANNEL_META: Record<string, ChannelMeta> = {
       "Your client's competitors moved. Do you know about it yet? Peerscope gives agencies competitive intelligence across all clients — without the enterprise price tag.",
     ogImage: `${BASE_URL}/og/og-agencies.svg`,
   },
+  consultants: {
+    title: 'Peerscope for Business Consultants',
+    description:
+      'Monitor competitor pricing and positioning for all your clients — automatically.',
+    ogImage: `${BASE_URL}/og/og-consultants.svg`,
+  },
 }
 
 const KNOWN_CHANNELS = Object.keys(CHANNEL_META)
