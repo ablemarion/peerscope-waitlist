@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>Milestone: 50 Sign-ups — GOAL MET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 628px;
+    overflow: hidden;
+    background: #0F0F0B;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+
+  /* Subtle dot grid */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #2a2a22 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.5;
+  }
+
+  /* Amber glow — celebration */
+  .glow {
+    position: absolute;
+    top: 50%;
+    right: 200px;
+    transform: translateY(-50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(184,98,42,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Top brand bar — thicker for celebration */
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: #B8622A;
+  }
+
+  /* Logo top-left */
+  .logo {
+    position: absolute;
+    top: 40px;
+    left: 64px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: #FAFAF6;
+    text-transform: uppercase;
+  }
+
+  /* Goal met badge — top right */
+  .goal-badge {
+    position: absolute;
+    top: 36px;
+    right: 64px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(184, 98, 42, 0.15);
+    border: 1px solid rgba(184, 98, 42, 0.4);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #B8622A;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .goal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #B8622A;
+  }
+
+  /* Left content */
+  .left {
+    position: absolute;
+    top: 0;
+    left: 64px;
+    width: 560px;
+    height: 628px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 20px;
+  }
+
+  .milestone-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: #B8622A;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .headline {
+    font-family: 'Syne', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    color: #FAFAF6;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .headline em {
+    color: #B8622A;
+    font-style: normal;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: #B8622A;
+    margin: 28px 0;
+  }
+
+  .subtext {
+    font-family: 'Inter', sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    color: #7A7A68;
+    line-height: 1.5;
+  }
+
+  .subtext strong {
+    color: #AAAAAA;
+    font-weight: 600;
+  }
+
+  .closed-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(184, 98, 42, 0.08);
+    border: 1px solid rgba(184, 98, 42, 0.2);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6A6A5A;
+    letter-spacing: 0.05em;
+    margin-top: 28px;
+  }
+
+  .url {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #4A4A3A;
+    letter-spacing: 0.05em;
+    margin-top: 28px;
+  }
+
+  /* Right: big number hero */
+  .right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 540px;
+    height: 628px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* Concentric rings for celebration */
+  .ring-1 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 1px solid #B8622A;
+    opacity: 0.12;
+  }
+
+  .ring-2 {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 1.5px solid #B8622A;
+    opacity: 0.18;
+  }
+
+  .ring-3 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #B8622A;
+    opacity: 0.12;
+  }
+
+  .big-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 230px;
+    font-weight: 800;
+    color: #B8622A;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .number-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #B8622A;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    margin-top: 6px;
+    opacity: 0.7;
+  }
+
+  .founding-members {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #3A3A2A;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="glow"></div>
+  <div class="top-bar"></div>
+
+  <div class="logo">
+    <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="14" cy="14" r="12.5" stroke="#B8622A" stroke-width="2"/>
+      <circle cx="14" cy="14" r="5" fill="#B8622A"/>
+      <line x1="14" y1="2" x2="14" y2="7" stroke="#B8622A" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="14" y1="21" x2="14" y2="26" stroke="#B8622A" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="2" y1="14" x2="7" y2="14" stroke="#B8622A" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="21" y1="14" x2="26" y2="14" stroke="#B8622A" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Peerscope</span>
+  </div>
+
+  <div class="goal-badge"><div class="goal-dot"></div>Goal reached</div>
+
+  <div class="left">
+    <div class="milestone-label">Waitlist closed</div>
+    <div class="headline">We did it.<br><em>50 founding<br>members.</em></div>
+    <div class="divider"></div>
+    <div class="subtext">
+      <strong>Peerscope waitlist is now closed.</strong><br>
+      Building begins.
+    </div>
+    <div class="closed-pill">Waitlist closed · Founding members only</div>
+    <div class="url">peerscope.io</div>
+  </div>
+
+  <div class="right">
+    <div class="ring-1"></div>
+    <div class="ring-2"></div>
+    <div class="ring-3"></div>
+    <div class="big-number">50</div>
+    <div class="number-label">founding members</div>
+  </div>
+
+  <div class="founding-members">Track your competitors. Not your budget.</div>
+</body>
+</html>
