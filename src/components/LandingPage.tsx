@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { Logo, EmailForm } from './shared'
 import { CountdownTimer } from './CountdownTimer'
 import { HeroBFAQStrip } from './HeroBFAQStrip'
+import { LiveSignupCount } from './LiveSignupCount'
 
 function PricingComparison() {
   const rows = [
@@ -186,6 +187,7 @@ export function LandingPage() {
                     defaultSource="linkedin-ads"
                     onSuccess={() => setDone(true)}
                   />
+                  <LiveSignupCount />
                   <CountdownTimer />
                   <p className="mt-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                     14-day free trial &middot; No credit card required &middot; Cancel anytime
