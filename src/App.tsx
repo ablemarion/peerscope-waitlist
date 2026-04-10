@@ -880,6 +880,7 @@ export default function App() {
               style={{
                 background: 'rgba(4, 20, 14, 0.7)',
                 border: '1px solid rgba(200,220,232,0.2)',
+                boxShadow: '0 0 40px rgba(200,220,232,0.06), 0 0 0 1px rgba(200,220,232,0.04)',
               }}
             >
               {/* Panel header */}
