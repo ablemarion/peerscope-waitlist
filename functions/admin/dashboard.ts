@@ -57,6 +57,16 @@ interface PageviewRow {
   pageviews: number
 }
 
+function relativeTime(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime()
+  const diffMin = Math.floor(diffMs / 60000)
+  if (diffMin < 1) return 'just now'
+  if (diffMin < 60) return `${diffMin} min ago`
+  const diffHr = Math.floor(diffMin / 60)
+  if (diffHr < 24) return `${diffHr}h ago`
+  return `${Math.floor(diffHr / 24)}d ago`
+}
+
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@')
   if (!local || !domain) return '***@***'
@@ -162,14 +172,18 @@ function renderHtml(data: {
     .map((r) => {
       const barPct = Math.round((r.signups / maxHourly) * 100)
       const label = r.hour.slice(11, 16) // HH:00
-      return `<tr>
+      const isSpike = r.signups > 2
+      const barColour = isSpike ? '#f59e0b' : '#3b82f6'
+      const countColour = isSpike ? '#f59e0b' : '#e2e8f0'
+      const rowBg = isSpike ? 'background:rgba(245,158,11,0.06);' : ''
+      return `<tr style="${rowBg}">
         <td style="padding:4px 12px 4px 0;font-size:12px;color:#a0a3b1;white-space:nowrap;font-family:monospace;width:42px;">${label}</td>
         <td style="padding:4px 0;width:100%;">
           <div style="background:#1a1d33;border-radius:3px;height:18px;position:relative;">
-            ${barPct > 0 ? `<div style="background:#3b82f6;height:18px;width:${barPct}%;border-radius:3px;min-width:2px;"></div>` : ''}
+            ${barPct > 0 ? `<div style="background:${barColour};height:18px;width:${barPct}%;border-radius:3px;min-width:2px;"></div>` : ''}
           </div>
         </td>
-        <td style="padding:4px 0 4px 10px;font-size:12px;color:#e2e8f0;text-align:right;width:28px;">${r.signups}</td>
+        <td style="padding:4px 0 4px 10px;font-size:12px;color:${countColour};font-weight:${isSpike ? '700' : '400'};text-align:right;width:28px;">${r.signups}</td>
       </tr>`
     })
     .join('')
@@ -247,7 +261,8 @@ function renderHtml(data: {
       </div>
       <div style="flex:1;min-width:180px;background:#13162A;border-radius:10px;padding:20px 24px;">
         <div style="font-size:12px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Last Sign-up</div>
-        <div style="font-size:18px;font-weight:700;color:#f5f5f5;letter-spacing:-0.01em;margin-top:8px;">${lastSignupAt ? formatDate(lastSignupAt) : '—'}</div>
+        <div style="font-size:22px;font-weight:700;color:${lastSignupAt ? '#4ade80' : '#f5f5f5'};letter-spacing:-0.01em;margin-top:4px;">${lastSignupAt ? relativeTime(lastSignupAt) : '—'}</div>
+        <div style="font-size:11px;color:#4a4d5e;margin-top:4px;">${lastSignupAt ? formatDate(lastSignupAt) : ''}</div>
       </div>
     </div>
 
@@ -433,7 +448,8 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       `SELECT COUNT(*) as count FROM waitlist
        WHERE email NOT LIKE '%test%'
        AND email NOT LIKE '%example%'
-       AND email NOT LIKE '%peerscope.app'`,
+       AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'`,
     ),
     context.env.DB.prepare(
       `SELECT email, variant, source, created_at FROM waitlist
@@ -469,6 +485,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
        FROM waitlist
        WHERE created_at >= datetime('now', '-24 hours')
        AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'
        GROUP BY hour
        ORDER BY hour DESC
        LIMIT 24`,
@@ -478,24 +495,28 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
        FROM waitlist
        WHERE created_at >= datetime('now', '-7 days')
        AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'
        GROUP BY day
        ORDER BY day ASC`,
     ),
     context.env.DB.prepare(
       `SELECT COUNT(*) as count FROM waitlist
        WHERE DATE(created_at) = '${todayUtc}'
-       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'`,
     ),
     context.env.DB.prepare(
       `SELECT COUNT(*) as count FROM waitlist
        WHERE DATE(created_at) = '${yesterdayUtc}'
-       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'`,
     ),
     context.env.DB.prepare(
       `SELECT source, COUNT(*) as count FROM waitlist
        WHERE DATE(created_at) = '${todayUtc}'
        AND source IS NOT NULL AND source != 'direct'
        AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'
        GROUP BY source
        ORDER BY count DESC
        LIMIT 3`,
@@ -504,17 +525,20 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       `SELECT COALESCE(source, 'direct/organic') as source, COUNT(*) as signups
        FROM waitlist
        WHERE email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'
        GROUP BY source
        ORDER BY signups DESC`,
     ),
     context.env.DB.prepare(
       `SELECT MAX(created_at) as last_signup FROM waitlist
-       WHERE email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+       WHERE email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'`,
     ),
     context.env.DB.prepare(
       `SELECT COUNT(*) as count FROM waitlist
        WHERE created_at > datetime('now', '-1 hour')
-       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'`,
+       AND email NOT LIKE '%test%' AND email NOT LIKE '%example%' AND email NOT LIKE '%peerscope.app'
+       AND email NOT LIKE '%ablemarion.com'`,
     ),
   ])
 
