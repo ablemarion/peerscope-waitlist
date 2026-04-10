@@ -655,6 +655,44 @@ function getCommunityChannel(): string | 'redirect' | null {
   return KNOWN_CHANNELS.includes(slug) ? slug : 'redirect'
 }
 
+function LiveScanCounter() {
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const [count, setCount] = useState(1247)
+
+  useEffect(() => {
+    if (prefersReducedMotion) return
+    let timeout: ReturnType<typeof setTimeout>
+    const schedule = () => {
+      timeout = setTimeout(() => {
+        setCount(c => c + Math.floor(Math.random() * 3) + 1)
+        schedule()
+      }, 2500 + Math.random() * 1500)
+    }
+    schedule()
+    return () => clearTimeout(timeout)
+  }, [prefersReducedMotion])
+
+  return (
+    <div className="mb-8" aria-live="polite" aria-atomic="true">
+      <span
+        className="font-mono text-5xl font-medium tabular-nums"
+        style={{ color: '#B8622A', letterSpacing: '-0.02em' }}
+      >
+        {count.toLocaleString()}
+      </span>
+      <span
+        className="block text-xs font-mono mt-1 tracking-[0.15em] uppercase"
+        style={{ color: 'rgba(250,250,246,0.3)' }}
+      >
+        competitor pages scanned today
+      </span>
+    </div>
+  )
+}
+
 export default function App() {
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
@@ -966,6 +1004,7 @@ export default function App() {
                 style={{ top: '-8px', left: '-8px' }}
               >02</span>
               <div style={{ position: 'relative', zIndex: 1 }}>
+                <LiveScanCounter />
                 <span
                   className="text-xs font-mono tracking-[0.2em] uppercase mb-6 block"
                   style={{ color: '#B8622A' }}
