@@ -133,13 +133,13 @@ export function HeroB() {
   return (
     <section
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
-      style={{ background: '#0D0F1A', paddingTop: '3rem', paddingBottom: '3rem' }}
+      style={{ background: '#0D0F1A', paddingTop: '3rem', paddingBottom: '3rem', overflowX: 'hidden' }}
     >
       <div className="w-full max-w-7xl mx-auto">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+        <div className="lg:grid lg:gap-12 lg:items-center" style={{ gridTemplateColumns: '55% 45%' }}>
 
           {/* Left — text content, flush-left */}
-          <div className="mb-12 lg:mb-0">
+          <div className="mb-12 lg:mb-0" style={{ position: 'relative', zIndex: 10 }}>
             {/* Badge */}
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-8 border"
@@ -196,8 +196,8 @@ export function HeroB() {
             </div>
           </div>
 
-          {/* Right — pricing comparison visual (desktop only) */}
-          <div className="relative hidden md:block">
+          {/* Right — pricing comparison visual (desktop only, bleeds off right edge) */}
+          <div className="relative hidden md:block" style={{ transform: 'translateX(15%)' }}>
             {/* Decorative glow behind card */}
             <div
               className="absolute inset-0 rounded-3xl pointer-events-none"
