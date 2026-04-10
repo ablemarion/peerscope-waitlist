@@ -22,6 +22,7 @@ export function Logo({ dark = false }: { dark?: boolean }) {
 interface EmailFormProps {
   placeholder?: string
   buttonText?: string
+  buttonVariant?: string
   size?: 'default' | 'large'
   variant?: 'light' | 'dark'
   onSuccess?: () => void
@@ -30,6 +31,7 @@ interface EmailFormProps {
 export function EmailForm({
   placeholder = 'Enter your work email',
   buttonText = 'Join waitlist',
+  buttonVariant,
   size = 'default',
   variant = 'light',
   onSuccess,
@@ -60,7 +62,7 @@ export function EmailForm({
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source, session_id: sessionId, variant, utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign }),
+        body: JSON.stringify({ email, source, session_id: sessionId, variant, button_variant: buttonVariant ?? null, utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign }),
       })
       if (res.ok) {
         setStatus('success')

@@ -6,9 +6,27 @@
  * Visual: pricing comparison table (Peerscope vs Crayon/Klue).
  * CTA: "Join the waitlist"
  */
+import { useState } from 'react'
 import { EmailForm } from './shared'
 import { CountdownTimer } from './CountdownTimer'
 import { LiveSignupCount } from './LiveSignupCount'
+
+const BUTTON_VARIANTS = [
+  { key: 'control', text: 'Join the waitlist \u2192' },
+  { key: 'v1', text: 'Reserve founding price \u2192' },
+  { key: 'v2', text: 'Get early access - closes Apr 15 \u2192' },
+] as const
+
+type ButtonVariantKey = typeof BUTTON_VARIANTS[number]['key']
+
+function pickButtonVariant(): ButtonVariantKey {
+  const stored = sessionStorage.getItem('ps_btn_v') as ButtonVariantKey | null
+  if (stored && BUTTON_VARIANTS.some(v => v.key === stored)) return stored
+  const idx = Math.floor(Math.random() * BUTTON_VARIANTS.length)
+  const key = BUTTON_VARIANTS[idx].key
+  sessionStorage.setItem('ps_btn_v', key)
+  return key
+}
 
 function PricingComparison() {
   const rows = [
@@ -109,6 +127,9 @@ function PricingComparison() {
 }
 
 export function HeroB() {
+  const [buttonVariantKey] = useState<ButtonVariantKey>(() => pickButtonVariant())
+  const buttonVariant = BUTTON_VARIANTS.find(v => v.key === buttonVariantKey)!
+
   return (
     <section
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
@@ -156,7 +177,7 @@ export function HeroB() {
 
             {/* CTA */}
             <div className="max-w-lg mb-6">
-              <EmailForm placeholder="Enter your work email" buttonText="Claim founding price" size="large" variant="dark" />
+              <EmailForm placeholder="Enter your work email" buttonText={buttonVariant.text} buttonVariant={buttonVariantKey} size="large" variant="dark" />
               <LiveSignupCount />
               <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>

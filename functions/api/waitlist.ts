@@ -45,6 +45,7 @@ interface WaitlistRequest {
   source?: string
   session_id?: string
   variant?: string
+  button_variant?: string
   utm_source?: string
   utm_medium?: string
   utm_campaign?: string
@@ -131,6 +132,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const source = (body.source ?? 'direct').slice(0, 100)
     const sessionId = (body.session_id ?? '').slice(0, 64) || null
     const variant = (body.variant ?? 'b').slice(0, 10)
+    const buttonVariant = (body.button_variant ?? '').slice(0, 20) || null
     const utmSource = (body.utm_source ?? '').slice(0, 100) || null
     const utmMedium = (body.utm_medium ?? '').slice(0, 100) || null
     const utmCampaign = (body.utm_campaign ?? '').slice(0, 200) || null
@@ -144,9 +146,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     const now = new Date().toISOString()
     const result = await context.env.DB.prepare(
-      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, utm_source, utm_medium, utm_campaign, created_at, signup_ts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, button_variant, utm_source, utm_medium, utm_campaign, created_at, signup_ts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     )
-      .bind(email, source, sessionId, variant, utmSource, utmMedium, utmCampaign, now, now)
+      .bind(email, source, sessionId, variant, buttonVariant, utmSource, utmMedium, utmCampaign, now, now)
       .run()
 
     // Notify and email on new signups only (not duplicates)
