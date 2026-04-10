@@ -324,7 +324,8 @@ export function HeroD() {
                 fontFamily: "'Syne', system-ui, sans-serif",
                 fontWeight: 800,
                 letterSpacing: '-0.03em',
-                fontSize: 'clamp(2.8rem, 5vw, 4.5rem)',
+                fontSize: 'clamp(2rem, 7vw, 4.5rem)',
+                wordBreak: 'break-word',
               }}
             >
               Track your competitors.{' '}
