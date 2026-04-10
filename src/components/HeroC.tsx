@@ -207,7 +207,7 @@ export function HeroC() {
             <h1
               className="font-bold leading-tight mb-6 text-white"
               style={{
-                fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
+                fontFamily: "'Syne', system-ui, sans-serif",
                 fontWeight: 800,
                 letterSpacing: '-0.03em',
                 fontSize: 'clamp(2.8rem, 5vw, 4.5rem)',

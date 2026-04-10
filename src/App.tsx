@@ -102,7 +102,7 @@ function SetupFlow() {
               <h3
                 className="text-xl font-bold mb-1.5"
                 style={{
-                  fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+                  fontFamily: "'DM Sans', system-ui, sans-serif",
                   color: step === i ? 'white' : 'rgba(250,250,246,0.35)',
                 }}
               >
@@ -714,7 +714,7 @@ export default function App() {
   }, [communityChannel])
 
   return (
-    <div className="min-h-screen font-[Inter,system-ui,sans-serif]" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
+    <div className="min-h-screen" style={{ background: '#0D0F1A', color: '#FAFAF6' }}>
 
       {/* Exit-intent modal — fires once on cursor-to-chrome (desktop) or 60s inactivity (mobile) */}
       <Suspense fallback={null}><ExitIntentModal /></Suspense>
@@ -978,7 +978,7 @@ export default function App() {
             </span>
             <h2
               className="text-4xl sm:text-5xl font-bold text-white leading-tight"
-              style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+              style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800 }}
             >
               Up and running in 2 minutes.
             </h2>
@@ -1013,7 +1013,7 @@ export default function App() {
                 </span>
                 <h2
                   className="text-4xl sm:text-5xl font-bold text-white leading-tight mb-6"
-                  style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+                  style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800 }}
                 >
                   What we track
                 </h2>
@@ -1082,7 +1082,7 @@ export default function App() {
             <h2
               className="text-4xl sm:text-5xl font-bold leading-tight"
               style={{
-                fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
+                fontFamily: "'Syne', system-ui, sans-serif",
                 fontWeight: 800,
                 color: '#111320',
                 letterSpacing: '-0.02em',
@@ -1125,7 +1125,7 @@ export default function App() {
                 <p
                   className="leading-snug mb-4"
                   style={{
-                    fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif",
+                    fontFamily: "'Syne', system-ui, sans-serif",
                     fontSize: '20px',
                     fontWeight: 700,
                     color: '#111320',
@@ -1188,7 +1188,7 @@ export default function App() {
               </span>
               <h2
                 className="text-4xl sm:text-5xl font-bold text-white leading-tight"
-                style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+                style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800 }}
               >
                 Simple, transparent pricing
               </h2>
@@ -1264,7 +1264,7 @@ export default function App() {
                           )}
                           <div
                             className="font-bold text-base text-white"
-                            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                            style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
                           >
                             {plan.name}
                           </div>
@@ -1358,7 +1358,7 @@ export default function App() {
           <div className="text-center mb-12">
             <h2
               className="text-3xl sm:text-4xl font-bold text-white mb-4"
-              style={{ fontFamily: "'Plus Jakarta Sans', Inter, system-ui, sans-serif" }}
+              style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
             >
               Before you decide.
             </h2>

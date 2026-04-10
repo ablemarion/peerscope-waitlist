@@ -121,7 +121,7 @@ export function ExitIntentModal() {
         <h2
           id="exit-modal-heading"
           className="text-white font-bold text-xl leading-snug mb-2"
-          style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif" }}
+          style={{ fontFamily: "'Syne', system-ui, sans-serif" }}
         >
           Wait - you're leaving without your spot
         </h2>

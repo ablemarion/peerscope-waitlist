@@ -86,7 +86,7 @@ function StepCard({ step, index, visible }: { step: typeof STEPS[0]; index: numb
         <div>
           <h3
             className="text-base font-bold text-white mb-1.5 leading-snug"
-            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+            style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
           >
             {step.title}
           </h3>
@@ -156,7 +156,7 @@ export function HowItWorks() {
           </span>
           <h2
             className="text-2xl sm:text-3xl font-bold text-white"
-            style={{ fontFamily: "'Syne', 'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800 }}
+            style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800 }}
           >
             Three steps to competitor clarity.
           </h2>
