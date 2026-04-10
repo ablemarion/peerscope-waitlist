@@ -22,7 +22,7 @@ export function LiveSignupCount() {
         if (!res.ok) throw new Error('non-ok')
         const data: StatsResponse = await res.json()
         if (cancelled) return
-        if (data.count > 0) {
+        if (data.show_count && data.count > 0) {
           setState({ status: 'visible', count: data.count })
         } else {
           setState({ status: 'hidden' })

@@ -29,7 +29,7 @@ export function CountdownTimer() {
     return (
       <p
         className="mt-3 text-sm text-center"
-        style={{ fontFamily: 'Syne, sans-serif', fontSize: 14, opacity: 0.65 }}
+        style={{ fontSize: 14, color: 'rgba(250,250,246,0.65)' }}
       >
         Waitlist closed
       </p>
@@ -39,12 +39,12 @@ export function CountdownTimer() {
   return (
     <p
       className="mt-3 text-sm text-center"
-      style={{ fontFamily: 'Syne, sans-serif', fontSize: 14, opacity: 0.65 }}
+      style={{ fontSize: 14 }}
     >
       <span style={{ color: '#B8622A', fontWeight: 600 }}>
         {timeLeft.days}d {timeLeft.hours}h
       </span>
-      {' '}left at founding price
+      <span style={{ color: 'rgba(250,250,246,0.65)' }}>{' '}left at founding price</span>
     </p>
   )
 }
