@@ -133,8 +133,8 @@ export function CompetitorFeedMockup() {
         <div
           className="radar-scan-line absolute inset-x-0 top-0 h-px z-10 pointer-events-none"
           style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(52,214,183,0.5) 20%, rgba(52,214,183,0.95) 50%, rgba(52,214,183,0.5) 80%, transparent 100%)',
-            boxShadow: '0 0 10px rgba(52,214,183,0.5), 0 2px 6px rgba(52,214,183,0.2)',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(200,220,232,0.4) 20%, rgba(200,220,232,0.85) 50%, rgba(200,220,232,0.4) 80%, transparent 100%)',
+            boxShadow: '0 0 10px rgba(200,220,232,0.4), 0 2px 6px rgba(200,220,232,0.15)',
           }}
         />
         {/* Window chrome */}
@@ -155,11 +155,11 @@ export function CompetitorFeedMockup() {
           {/* Live badge */}
           <div
             className="flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold"
-            style={{ background: 'rgba(52,214,183,0.08)', color: '#34D6B7', border: '1px solid rgba(52,214,183,0.2)' }}
+            style={{ background: 'rgba(200,220,232,0.08)', color: '#C8DCE8', border: '1px solid rgba(200,220,232,0.2)' }}
           >
             <span
               className="inline-block w-1.5 h-1.5 rounded-full transition-opacity duration-700"
-              style={{ background: '#34D6B7', opacity: pulseNew ? 1 : 0.3 }}
+              style={{ background: '#C8DCE8', opacity: pulseNew ? 1 : 0.3 }}
             />
             Live
           </div>
@@ -197,7 +197,7 @@ export function CompetitorFeedMockup() {
                 key={row.company + row.summary}
                 className="flex items-start gap-3 px-4 py-3 transition-all duration-300"
                 style={{
-                  background: row.isNew ? 'rgba(52,214,183,0.03)' : 'transparent',
+                  background: row.isNew ? 'rgba(200,220,232,0.03)' : 'transparent',
                   opacity: isVisible ? 1 : 0,
                   transform: isVisible ? 'translateY(0)' : 'translateY(6px)',
                   borderBottom: '1px solid rgba(255,255,255,0.04)',
@@ -230,7 +230,7 @@ export function CompetitorFeedMockup() {
                     {row.isNew && (
                       <span
                         className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
-                        style={{ background: 'rgba(52,214,183,0.1)', color: '#34D6B7', border: '1px solid rgba(52,214,183,0.2)' }}
+                        style={{ background: 'rgba(200,220,232,0.1)', color: '#C8DCE8', border: '1px solid rgba(200,220,232,0.2)' }}
                       >
                         new
                       </span>
@@ -308,11 +308,11 @@ export function HeroD() {
             {/* Badge */}
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-4 sm:mb-6 lg:mb-8 border"
-              style={{ background: 'rgba(20,184,166,0.08)', color: '#34D6B7', borderColor: 'rgba(20,184,166,0.2)' }}
+              style={{ background: 'rgba(200,220,232,0.08)', color: '#C8DCE8', borderColor: 'rgba(200,220,232,0.2)' }}
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
               </span>
               Real-time competitor intelligence
             </div>
@@ -342,12 +342,12 @@ export function HeroD() {
 
             {/* Social proof */}
             {waitlistCount !== null && waitlistCount >= 20 && (
-              <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: '#34D6B7' }}>
+              <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: '#C8DCE8' }}>
                 Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
               </p>
             )}
             {(waitlistCount === null || waitlistCount === 0) && (
-              <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: 'rgba(52,214,183,0.7)' }}>
+              <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: 'rgba(200,220,232,0.7)' }}>
                 No more flying blind. Know what your competitors are doing, before your customers do.
               </p>
             )}
@@ -382,7 +382,7 @@ export function HeroD() {
             <div
               className="absolute inset-0 rounded-3xl pointer-events-none"
               style={{
-                background: 'radial-gradient(ellipse at 60% 40%, rgba(52,214,183,0.07) 0%, rgba(184,98,42,0.05) 50%, transparent 75%)',
+                background: 'radial-gradient(ellipse at 60% 40%, rgba(200,220,232,0.07) 0%, rgba(184,98,42,0.05) 50%, transparent 75%)',
                 transform: 'scale(1.15)',
               }}
               aria-hidden="true"

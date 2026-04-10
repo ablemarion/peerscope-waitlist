@@ -176,7 +176,7 @@ function SetupFlow() {
                   <div
                     key={i}
                     className="text-xs font-mono py-1.5 px-3 rounded"
-                    style={{ color: 'rgba(52,214,183,0.8)', background: 'rgba(20,184,166,0.05)' }}
+                    style={{ color: 'rgba(200,220,232,0.8)', background: 'rgba(160,196,216,0.05)' }}
                   >
                     {line}
                   </div>
@@ -205,7 +205,7 @@ function SetupFlow() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-sm font-semibold text-white">Peerscope</span>
-                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(52,214,183,0.1)', color: '#34D6B7' }}>App</span>
+                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(200,220,232,0.1)', color: '#C8DCE8' }}>App</span>
                     </div>
                     <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
                       🔔 <strong>Bluestone Plumbing Co.</strong> changed their pricing
@@ -405,7 +405,7 @@ function ProductFeed() {
             <div className="flex items-center gap-2">
               <span
                 className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
-                style={{ color: '#34D6B7', background: 'rgba(26,122,110,0.14)', border: '1px solid rgba(26,122,110,0.28)' }}
+                style={{ color: '#C8DCE8', background: 'rgba(200,220,232,0.1)', border: '1px solid rgba(200,220,232,0.25)' }}
               >
                 LAUNCH
               </span>
@@ -532,8 +532,8 @@ function Check({ active = true }: { active?: boolean }) {
   }
   return (
     <svg className="w-5 h-5 mx-auto" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="9" fill="rgba(20,184,166,0.12)" stroke="rgba(52,214,183,0.35)" strokeWidth="1" />
-      <path d="M6.5 10l2.5 2.5 4.5-5" stroke="#34D6B7" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="10" cy="10" r="9" fill="rgba(200,220,232,0.12)" stroke="rgba(200,220,232,0.35)" strokeWidth="1" />
+      <path d="M6.5 10l2.5 2.5 4.5-5" stroke="rgba(200,220,232,0.8)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -744,7 +744,7 @@ export default function App() {
 
             {/* BEFORE panel */}
             <RevealDiv
-              className="rounded-2xl overflow-hidden flex flex-col"
+              className="rounded-2xl overflow-hidden flex flex-col before-panel-pulse"
               style={{
                 background: 'rgba(30, 8, 8, 0.7)',
                 border: '1px solid rgba(239,68,68,0.25)',
@@ -837,6 +837,16 @@ export default function App() {
 
             {/* VS divider */}
             <div className="flex lg:flex-col items-center justify-center py-4 lg:py-0 px-0 lg:px-0 relative z-10">
+              {/* Scan bar — clipped to column bounds, desktop only */}
+              <div className="hidden lg:block absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                <div
+                  className="absolute inset-x-0 h-16 vs-scan-bar"
+                  style={{
+                    background: 'linear-gradient(to bottom, transparent, rgba(184,98,42,0.6) 40%, rgba(184,98,42,0.9) 50%, rgba(184,98,42,0.6) 60%, transparent)',
+                    boxShadow: '0 0 12px rgba(184,98,42,0.4)',
+                  }}
+                />
+              </div>
               <div
                 className="hidden lg:block w-px flex-1"
                 style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent)' }}
@@ -847,7 +857,7 @@ export default function App() {
                   background: '#111320',
                   border: '1px solid rgba(255,255,255,0.1)',
                   color: 'rgba(255,255,255,0.3)',
-                  boxShadow: '0 0 0 6px #111320',
+                  boxShadow: '0 0 0 6px #111320, 0 0 0 7px rgba(184,98,42,0.15)',
                 }}
               >
                 vs
@@ -869,19 +879,19 @@ export default function App() {
               className="rounded-2xl overflow-hidden flex flex-col"
               style={{
                 background: 'rgba(4, 20, 14, 0.7)',
-                border: '1px solid rgba(52,214,183,0.25)',
+                border: '1px solid rgba(200,220,232,0.2)',
               }}
             >
               {/* Panel header */}
               <div
                 className="flex items-center gap-2.5 px-5 py-3.5 border-b"
-                style={{ background: 'rgba(52,214,183,0.05)', borderColor: 'rgba(52,214,183,0.15)' }}
+                style={{ background: 'rgba(200,220,232,0.05)', borderColor: 'rgba(200,220,232,0.15)' }}
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                  <circle cx="7" cy="7" r="6.5" stroke="rgba(52,214,183,0.6)" />
-                  <path d="M4.5 7l2 2 3.5-4" stroke="#34D6B7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="7" cy="7" r="6.5" stroke="rgba(200,220,232,0.6)" />
+                  <path d="M4.5 7l2 2 3.5-4" stroke="#C8DCE8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(52,214,183,0.8)' }}>
+                <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(200,220,232,0.8)' }}>
                   With Peerscope
                 </span>
               </div>
@@ -976,9 +986,9 @@ export default function App() {
                 <div className="flex flex-wrap gap-2">
                   {[
                     { label: 'Pricing pages', color: '#B8622A' },
-                    { label: 'Feature launches', color: '#1A7A6E' },
+                    { label: 'Feature launches', color: '#C8DCE8' },
                     { label: 'Job postings', color: '#D4A843' },
-                    { label: 'G2/Capterra reviews', color: '#1A7A6E' },
+                    { label: 'G2/Capterra reviews', color: '#C8DCE8' },
                   ].map(tag => (
                     <span
                       key={tag.label}
@@ -1023,7 +1033,7 @@ export default function App() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
-            backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(184,98,42,0.06) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(26,122,110,0.05) 0%, transparent 50%)',
+            backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(184,98,42,0.06) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(200,220,232,0.04) 0%, transparent 50%)',
           }}
         />
         <div className="max-w-6xl mx-auto relative">

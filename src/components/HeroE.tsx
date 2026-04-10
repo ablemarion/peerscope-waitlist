@@ -31,11 +31,11 @@ export function HeroE() {
         {/* FOMO badge */}
         <div
           className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-8 border"
-          style={{ background: 'rgba(20,184,166,0.08)', color: '#34D6B7', borderColor: 'rgba(20,184,166,0.2)' }}
+          style={{ background: 'rgba(200,220,232,0.08)', color: '#C8DCE8', borderColor: 'rgba(200,220,232,0.2)' }}
         >
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
           </span>
           Now in private waitlist
         </div>

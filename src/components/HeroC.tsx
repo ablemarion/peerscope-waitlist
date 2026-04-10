@@ -132,7 +132,7 @@ function FoundingSeatsCard({ takenCount }: { takenCount: number }) {
                 </div>
                 <div
                   className="ml-auto flex-shrink-0 text-xs px-1.5 py-0.5 rounded"
-                  style={{ background: 'rgba(20,184,166,0.1)', color: '#34D6B7', border: '1px solid rgba(20,184,166,0.15)' }}
+                  style={{ background: 'rgba(200,220,232,0.1)', color: '#C8DCE8', border: '1px solid rgba(200,220,232,0.15)' }}
                 >
                   ✓
                 </div>
@@ -231,13 +231,13 @@ export function HeroC() {
             {waitlistCount !== null && waitlistCount >= 20 && (
               <p
                 className="text-sm font-medium mb-8"
-                style={{ color: '#34D6B7' }}
+                style={{ color: '#C8DCE8' }}
               >
                 Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
               </p>
             )}
             {(waitlistCount === null || waitlistCount === 0) && (
-              <p className="text-sm font-medium mb-8" style={{ color: '#34D6B7' }}>
+              <p className="text-sm font-medium mb-8" style={{ color: '#C8DCE8' }}>
                 Competitive intelligence built for SaaS teams, not enterprise budgets.
               </p>
             )}

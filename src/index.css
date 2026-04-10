@@ -122,8 +122,8 @@
   --color-navy: #111320;
   --color-brand: #B8622A;
   --color-brand-light: #F07C35;
-  --color-teal: #1A7A6E;
-  --color-teal-light: #34D6B7;
+  --color-teal: #C8DCE8;
+  --color-teal-light: #C8DCE8;
   --color-bg: #FAFAF6;
   --color-surface: #FFFFFF;
   --color-dark-bg: #0D0F1A;
@@ -269,6 +269,39 @@
   .radar-scan-line {
     animation: none;
     display: none;
+  }
+}
+
+/* VS divider scan bar — sweeps top-to-bottom on a 3s loop */
+@keyframes scanSweep {
+  0% { top: -4rem; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: calc(100% + 1px); opacity: 0; }
+}
+
+@keyframes beforePanelPulse {
+  0%, 100% { border-color: rgba(239,68,68,0.25); }
+  50% { border-color: rgba(239,68,68,0.15); }
+}
+
+.vs-scan-bar {
+  top: -4rem;
+  animation: scanSweep 3s ease-in-out infinite;
+}
+
+.before-panel-pulse {
+  animation: beforePanelPulse 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-scan-bar {
+    animation: none;
+    display: none;
+  }
+
+  .before-panel-pulse {
+    animation: none;
   }
 }
 

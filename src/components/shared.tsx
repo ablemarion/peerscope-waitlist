@@ -4,7 +4,7 @@ import type { FormEvent } from 'react'
 export function Logo({ dark = false }: { dark?: boolean }) {
   const navy = dark ? '#FAFAF6' : '#111320'
   const blue = dark ? '#F07C35' : '#B8622A'
-  const teal = dark ? '#34D6B7' : '#1A7A6E'
+  const teal = '#C8DCE8'
   return (
     <svg width="140" height="28" viewBox="0 0 140 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="peerscope">
       <circle cx="14" cy="14" r="12" stroke={navy} strokeWidth="2" fill="none" />
@@ -126,7 +126,7 @@ export function EmailForm({
           <span className="scope-ping scope-ping-delay absolute inset-0 rounded-full border-2 border-[#B8622A]/30" />
           <svg width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="14" cy="14" r="12" stroke="#B8622A" strokeWidth="2" fill="none" />
-            <circle cx="14" cy="14" r="4" fill="#1A7A6E" />
+            <circle cx="14" cy="14" r="4" fill="rgba(200,220,232,0.5)" />
             <line x1="14" y1="2" x2="14" y2="8" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
             <line x1="14" y1="20" x2="14" y2="26" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
             <line x1="2" y1="14" x2="8" y2="14" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
@@ -163,7 +163,7 @@ export function EmailForm({
               style={{
                 border: variant === 'dark' ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(0,0,0,0.12)',
                 background: 'transparent',
-                color: copied ? '#34D6B7' : undefined,
+                color: copied ? '#C8DCE8' : undefined,
               }}
             >
               {copied ? '✓ Copied' : 'Copy link'}

@@ -49,8 +49,8 @@ function PricingComparison() {
         <div
           className="radar-scan-line absolute inset-x-0 top-0 h-px z-10 pointer-events-none"
           style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(52,214,183,0.5) 20%, rgba(52,214,183,0.95) 50%, rgba(52,214,183,0.5) 80%, transparent 100%)',
-            boxShadow: '0 0 10px rgba(52,214,183,0.5), 0 2px 6px rgba(52,214,183,0.2)',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(200,220,232,0.4) 20%, rgba(200,220,232,0.85) 50%, rgba(200,220,232,0.4) 80%, transparent 100%)',
+            boxShadow: '0 0 10px rgba(200,220,232,0.4), 0 2px 6px rgba(200,220,232,0.15)',
           }}
           aria-hidden="true"
         />
@@ -99,8 +99,8 @@ function PricingComparison() {
             <div className="px-4 sm:px-5 py-3.5 flex items-center justify-center">
               {row.smb ? (
                 <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="9" fill="rgba(20,184,166,0.15)" stroke="rgba(52,214,183,0.4)" strokeWidth="1.5" />
-                  <path d="M6.5 10l2.5 2.5 4.5-5" stroke="#2DD4BF" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="10" cy="10" r="9" fill="rgba(200,220,232,0.15)" stroke="rgba(200,220,232,0.4)" strokeWidth="1.5" />
+                  <path d="M6.5 10l2.5 2.5 4.5-5" stroke="rgba(200,220,232,0.8)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               ) : (
                 <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" style={{ opacity: 0.45 }}>
@@ -143,11 +143,11 @@ export function HeroB() {
             {/* Badge */}
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium mb-8 border"
-              style={{ background: 'rgba(20,184,166,0.08)', color: '#34D6B7', borderColor: 'rgba(20,184,166,0.2)' }}
+              style={{ background: 'rgba(200,220,232,0.08)', color: '#C8DCE8', borderColor: 'rgba(200,220,232,0.2)' }}
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
               </span>
               Now in private waitlist
             </div>
@@ -163,7 +163,7 @@ export function HeroB() {
               }}
             >
               Track your competitors.{' '}
-              <span style={{ color: '#34D6B7' }}>Not your budget.</span>
+              <span style={{ color: '#C8DCE8' }}>Not your budget.</span>
             </h1>
 
             {/* Sub-headline */}
@@ -189,7 +189,7 @@ export function HeroB() {
               {/* Mobile trust line — replaces hidden pricing table */}
               <p
                 className="mt-3 text-sm font-medium md:hidden"
-                style={{ color: 'rgba(52,214,183,0.85)' }}
+                style={{ color: 'rgba(200,220,232,0.85)' }}
               >
                 Founding price $49/mo &middot; Save ~$19,400/yr vs Crayon
               </p>
