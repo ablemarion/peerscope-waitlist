@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { LandingPage } from './components/LandingPage'
 
 // Cloudflare Web Analytics — only injected when token is configured
 const analyticsToken = import.meta.env.VITE_CF_ANALYTICS_TOKEN
@@ -35,8 +36,10 @@ if (analyticsToken) {
   navigator.sendBeacon('/api/analytics/pageview', JSON.stringify(payload))
 })()
 
+const isLandingPage = window.location.pathname === '/lp'
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    {isLandingPage ? <LandingPage /> : <App />}
   </StrictMode>,
 )

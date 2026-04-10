@@ -26,6 +26,7 @@ interface EmailFormProps {
   size?: 'default' | 'large'
   variant?: 'light' | 'dark'
   onSuccess?: () => void
+  defaultSource?: string
 }
 
 export function EmailForm({
@@ -35,6 +36,7 @@ export function EmailForm({
   size = 'default',
   variant = 'light',
   onSuccess,
+  defaultSource,
 }: EmailFormProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -54,7 +56,7 @@ export function EmailForm({
     const storedSource = (() => {
       try { return (JSON.parse(localStorage.getItem('tracking') || '{}') as Record<string, string>).source || null } catch { return null }
     })()
-    const source = utmSource || params.get('ref') || storedSource || 'direct'
+    const source = utmSource || params.get('ref') || storedSource || defaultSource || 'direct'
     const sessionId = sessionStorage.getItem('ps_sid') ?? undefined
     const variant = params.get('variant') ?? 'b'
 

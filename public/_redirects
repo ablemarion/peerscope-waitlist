@@ -1,2 +1,3 @@
-# SPA fallback — serve index.html for /for/* community landing pages
+# SPA fallback — serve index.html for /for/* community landing pages and /lp paid traffic page
 /for/*  /index.html  200
+/lp  /index.html  200
