@@ -17,7 +17,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     const count = result?.count ?? 0
 
     return Response.json(
-      { count, show_count: count >= 20 },
+      { count, show_count: count >= 1 },
       {
         status: 200,
         headers: {
