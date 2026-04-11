@@ -93,6 +93,19 @@ Use for: visual QA, mobile testing, form validation, conversion flow testing, de
 - Target: <1s LCP on landing page.
 - CI/CD: GitHub Actions deploys on push to main.
 
+## FORBIDDEN: Personal Accounts and Credentials
+
+**NEVER use Henrik's personal accounts, credentials, or email addresses for ANY purpose.** This is a hard rule with no exceptions.
+
+- **NEVER** use `gws` CLI, Gmail API, or any Google Workspace tools
+- **NEVER** send emails from `admin@henriksoderlund.com`, `henrik@soederlund.com.au`, or any personal address
+- **NEVER** access `~/.config/gws/`, `client_secret.json`, `token_cache.json`, or any personal credential files
+- **NEVER** use MCP Gmail/Google tools to send on behalf of Henrik
+- **ALL outreach emails** must be sent via Resend API from `onboarding@resend.dev`
+- If Resend cannot send (test mode, domain verification needed), **escalate to the board** - do NOT find alternative sending methods using personal accounts
+
+Violation of this rule is a termination-level offence. A system hook enforces this and will block attempts.
+
 ## Troubleshooting Autonomy
 
 Agents are expected to diagnose and fix problems themselves before escalating to the board:

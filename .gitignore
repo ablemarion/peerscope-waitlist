@@ -27,3 +27,6 @@ dist-ssr
 # Design review artifacts and screenshots (local only)
 design-review/
 email-templates/*.png
+
+# Ad creatives (local working files)
+ads/
