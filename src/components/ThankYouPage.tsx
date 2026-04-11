@@ -17,9 +17,13 @@ export default function ThankYouPage() {
   const email = decodeURIComponent(params.get('email') ?? '')
   const refCode = email ? emailToRefCode(email) : 'share'
   const shareUrl = `${BASE_URL}?ref=${refCode}`
-  const tweetText = `Stop tracking competitors in spreadsheets. @PeerscopeHQ monitors pricing, features, and jobs 24/7 — on the waitlist for founding price: ${shareUrl}`
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    `Stop tracking competitors in spreadsheets. @PeerscopeHQ monitors pricing, features, and jobs 24/7 — on the waitlist for founding price: ${shareUrl}`
+  )}`
 
   const [position, setPosition] = useState<number | null>(null)
+  const [displayedPosition, setDisplayedPosition] = useState<number | null>(null)
+  const [glowing, setGlowing] = useState(false)
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
@@ -31,6 +35,26 @@ export default function ThankYouPage() {
       })
       .catch(() => {/* silent */})
   }, [email])
+
+  // Count-up animation: fires when position arrives from API
+  useEffect(() => {
+    if (position === null) return
+
+    const steps = Math.min(position, 20)
+    const start = position - steps
+    let current = start
+
+    const interval = setInterval(() => {
+      current++
+      setDisplayedPosition(current)
+      // Amber text-shadow pulse: instant on, 60ms fade off (managed via glowing state)
+      setGlowing(true)
+      setTimeout(() => setGlowing(false), 60)
+      if (current >= position) clearInterval(interval)
+    }, 80)
+
+    return () => clearInterval(interval)
+  }, [position])
 
   async function handleShare() {
     if (navigator.share) {
@@ -71,120 +95,81 @@ export default function ThankYouPage() {
       </nav>
 
       {/* Main */}
-      <main className="flex-1 flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
-          {/* Scope icon with ping */}
-          <div className="flex justify-center mb-8">
-            <div className="relative flex items-center justify-center w-20 h-20">
-              <span className="scope-ping absolute inset-0 rounded-full border-2 border-[#B8622A]/50" />
-              <span className="scope-ping scope-ping-delay absolute inset-0 rounded-full border-2 border-[#B8622A]/30" />
-              <svg width="44" height="44" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="14" cy="14" r="12" stroke="#B8622A" strokeWidth="2" fill="none" />
-                <circle cx="14" cy="14" r="4" fill="rgba(200,220,232,0.5)" />
-                <line x1="14" y1="2" x2="14" y2="8" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
-                <line x1="14" y1="20" x2="14" y2="26" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
-                <line x1="2" y1="14" x2="8" y2="14" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
-                <line x1="20" y1="14" x2="26" y2="14" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </div>
-          </div>
+      <main className="flex-1">
+        {/* Visually hidden h1 for accessibility — number is the visual headline */}
+        <h1 className="sr-only">Waitlist confirmed</h1>
 
-          {/* Confirmation */}
-          <div className="text-center mb-8">
-            <h1
-              className="text-3xl font-bold mb-3"
-              style={{ fontFamily: "'DM Sans', system-ui, sans-serif", letterSpacing: '-0.02em' }}
-            >
-              You're on the waitlist.
-            </h1>
-            {position !== null && (
-              <p className="text-white/60 text-sm">
-                You're{' '}
-                <span className="text-[#B8622A] font-semibold">#{position}</span>
-                {' '}in line — founding price locked at $49/mo for life.
-              </p>
-            )}
-            {position === null && (
-              <p className="text-white/60 text-sm">
-                Founding price locked at $49/mo for life.
-              </p>
-            )}
-          </div>
+        {/* Hero: position number — full width, no max-w constraint */}
+        <div className="relative w-full text-center pt-24 pb-12 overflow-hidden">
+          {/* Radial glow centred behind the number */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(circle 600px at 50% 50%, rgba(184,98,42,0.05) 0%, transparent 70%)' }}
+            aria-hidden="true"
+          />
 
-          {/* Divider */}
-          <div className="border-t mb-8" style={{ borderColor: 'rgba(184,98,42,0.15)' }} />
-
-          {/* Share section */}
-          <div className="text-center mb-6">
-            <p
-              className="text-sm font-medium text-white/70 mb-5"
-              style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
-            >
-              Know a founder who tracks competitors in spreadsheets? Send them this:
+          <div className="relative z-10">
+            <p className="text-sm text-white/40 tracking-widest uppercase mb-4">
+              You're number
             </p>
 
-            {/* Referral link display */}
-            <div
-              className="flex items-center gap-2 rounded-lg px-3 py-2 mb-4 text-left"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+            <p
+              aria-live="polite"
+              className="font-bold text-[#B8622A] leading-none tracking-tight text-[96px] sm:text-[120px]"
+              style={{
+                fontFamily: "'DM Sans', system-ui, sans-serif",
+                textShadow: glowing ? '0 0 20px rgba(184,98,42,0.6)' : '0 0 0px rgba(184,98,42,0)',
+                transition: glowing ? 'none' : 'text-shadow 60ms ease-out',
+              }}
             >
-              <span className="flex-1 text-xs text-white/50 truncate font-mono">{shareUrl}</span>
-              <button
-                type="button"
-                onClick={copyToClipboard}
-                className="shrink-0 text-xs font-semibold rounded-md px-3 py-1.5 transition-colors"
-                style={{
-                  background: copied ? 'rgba(184,98,42,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: copied ? '#B8622A' : 'rgba(250,250,246,0.7)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }}
-                aria-label="Copy referral link"
-              >
-                {copied ? 'Copied!' : 'Copy link'}
-              </button>
-            </div>
+              {displayedPosition !== null ? displayedPosition : '—'}
+            </p>
 
-            {/* Share buttons */}
-            <div className="flex gap-3">
-              {/* Tweet button */}
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold transition-opacity hover:opacity-80"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#FAFAF6' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.738-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                Post on X
-              </a>
-
-              {/* Native share / copy fallback */}
-              <button
-                type="button"
-                onClick={handleShare}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold transition-opacity hover:opacity-80"
-                style={{ background: 'rgba(184,98,42,0.15)', border: '1px solid rgba(184,98,42,0.3)', color: '#F07C35' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                  <polyline points="16 6 12 2 8 6" />
-                  <line x1="12" y1="2" x2="12" y2="15" />
-                </svg>
-                Share
-              </button>
-            </div>
+            <p className="text-lg text-white/50 mt-2">
+              in line — founding price locked
+            </p>
           </div>
+        </div>
 
-          {/* Back to home */}
-          <div className="text-center mt-8">
+        {/* Divider: full-width amber rule */}
+        <div className="w-full h-px" style={{ background: 'rgba(184,98,42,0.15)' }} />
+
+        {/* Share section: constrained width */}
+        <div className="max-w-sm mx-auto px-4 pt-10 pb-16 text-center">
+          <p
+            className="text-[18px] font-semibold text-white/80 mb-6 leading-snug"
+            style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
+          >
+            Know a founder who tracks competitors<br />in spreadsheets?
+          </p>
+
+          {/* Primary CTA — amber filled, full width, native share */}
+          <button
+            type="button"
+            onClick={handleShare}
+            className="w-full rounded-lg py-4 text-base font-bold text-white bg-[#B8622A] hover:bg-[#F07C35] transition-colors"
+          >
+            Share with a founder →
+          </button>
+
+          {/* Secondary links */}
+          <div className="flex items-center justify-center gap-4 mt-4">
             <a
-              href="/"
-              className="text-sm text-white/35 hover:text-white/60 transition-colors"
+              href={tweetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-white/40 hover:text-white/70 transition-colors"
             >
-              Back to Peerscope
+              Post on X
             </a>
+            <span className="text-white/20" aria-hidden="true">·</span>
+            <button
+              type="button"
+              onClick={copyToClipboard}
+              className="text-sm text-white/40 hover:text-white/70 transition-colors"
+            >
+              {copied ? '✓ Copied' : 'Copy link'}
+            </button>
           </div>
         </div>
       </main>
