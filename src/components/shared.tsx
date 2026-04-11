@@ -50,10 +50,17 @@ export function EmailForm({
     setErrorMsg('')
 
     const params = new URLSearchParams(window.location.search)
-    const utmSource = params.get('utm_source') || null
-    const utmMedium = params.get('utm_medium') || null
-    const utmCampaign = params.get('utm_campaign') || null
-    const refCode = params.get('ref') || null
+
+    // First-touch UTM fallback: if no UTMs in current URL, check localStorage
+    // (set on landing via main.tsx for multi-page attribution)
+    const storedUtm = (() => {
+      try { return JSON.parse(localStorage.getItem('ps_utm') || 'null') as { utm_source?: string; utm_medium?: string; utm_campaign?: string; ref?: string } | null } catch { return null }
+    })()
+
+    const utmSource = params.get('utm_source') || storedUtm?.utm_source || null
+    const utmMedium = params.get('utm_medium') || storedUtm?.utm_medium || null
+    const utmCampaign = params.get('utm_campaign') || storedUtm?.utm_campaign || null
+    const refCode = params.get('ref') || storedUtm?.ref || null
     const storedSource = (() => {
       try { return (JSON.parse(localStorage.getItem('tracking') || '{}') as Record<string, string>).source || null } catch { return null }
     })()

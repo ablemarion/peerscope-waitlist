@@ -34,6 +34,20 @@ if (analyticsToken) {
   }
 
   navigator.sendBeacon('/api/analytics/pageview', JSON.stringify(payload))
+
+  // First-touch UTM attribution — persist to localStorage on first visit with UTM params.
+  // Ensures form submissions on later pages/sessions still attribute to the original ad.
+  if (params.get('utm_source') && !localStorage.getItem('ps_utm')) {
+    try {
+      localStorage.setItem('ps_utm', JSON.stringify({
+        utm_source: params.get('utm_source'),
+        utm_medium: params.get('utm_medium'),
+        utm_campaign: params.get('utm_campaign'),
+        ref: params.get('ref'),
+        landed_at: new Date().toISOString(),
+      }))
+    } catch { /* localStorage unavailable — ignore */ }
+  }
 })()
 
 const path = window.location.pathname
