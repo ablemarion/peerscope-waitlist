@@ -36,7 +36,9 @@ I'm building this as a solo founder and I read every reply. Two questions:
 2. Know another founder who'd find this useful? Forward this or share the link: https://peerscope-waitlist.pages.dev
 
 Henrik
-Peerscope — Track your competitors. Not your budget.`,
+Peerscope — Track your competitors. Not your budget.
+
+P.S. Know a founder tracking competitor pricing in a spreadsheet? Forward them this: https://peerscope-waitlist.pages.dev`,
   })
 }
 
