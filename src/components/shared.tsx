@@ -53,10 +53,11 @@ export function EmailForm({
     const utmSource = params.get('utm_source') || null
     const utmMedium = params.get('utm_medium') || null
     const utmCampaign = params.get('utm_campaign') || null
+    const refCode = params.get('ref') || null
     const storedSource = (() => {
       try { return (JSON.parse(localStorage.getItem('tracking') || '{}') as Record<string, string>).source || null } catch { return null }
     })()
-    const source = utmSource || params.get('ref') || storedSource || defaultSource || 'direct'
+    const source = utmSource || refCode || storedSource || defaultSource || 'direct'
     const sessionId = sessionStorage.getItem('ps_sid') ?? undefined
     const variant = params.get('variant') ?? 'b'
 
@@ -64,13 +65,13 @@ export function EmailForm({
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source, session_id: sessionId, variant, button_variant: buttonVariant ?? null, utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign }),
+        body: JSON.stringify({ email, source, session_id: sessionId, variant, button_variant: buttonVariant ?? null, utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign, ref_code: refCode }),
       })
       if (res.ok) {
-        setStatus('success')
-        setEmail('')
         try { localStorage.setItem('ps_sub', '1') } catch { /* ignore */ }
         onSuccess?.()
+        window.location.href = `/thank-you?email=${encodeURIComponent(email)}`
+        return
       } else {
         const data = await res.json().catch(() => ({}))
         setErrorMsg((data as { error?: string }).error || 'Something went wrong. Please try again.')

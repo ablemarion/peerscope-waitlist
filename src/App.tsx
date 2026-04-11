@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import './App.css'
 import { Logo, EmailForm } from './components/shared'
+import ThankYouPage from './components/ThankYouPage'
 import { FoundingBanner } from './components/FoundingBanner'
 import { SocialProofStrip } from './components/SocialProofStrip'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
@@ -694,6 +695,11 @@ function LiveScanCounter() {
 }
 
 export default function App() {
+  // /thank-you is a standalone page — render it directly without the main layout
+  if (window.location.pathname === '/thank-you') {
+    return <ThankYouPage />
+  }
+
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
   const communityChannel = getCommunityChannel()

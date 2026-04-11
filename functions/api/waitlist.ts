@@ -51,6 +51,7 @@ interface WaitlistRequest {
   utm_source?: string
   utm_medium?: string
   utm_campaign?: string
+  ref_code?: string
 }
 
 function isValidEmail(email: string): boolean {
@@ -138,6 +139,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const utmSource = (body.utm_source ?? '').slice(0, 100) || null
     const utmMedium = (body.utm_medium ?? '').slice(0, 100) || null
     const utmCampaign = (body.utm_campaign ?? '').slice(0, 200) || null
+    const refCode = (body.ref_code ?? '').slice(0, 64) || null
 
     if (!email || !isValidEmail(email)) {
       return Response.json(
@@ -148,9 +150,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     const now = new Date().toISOString()
     const result = await context.env.DB.prepare(
-      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, button_variant, utm_source, utm_medium, utm_campaign, created_at, signup_ts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT OR IGNORE INTO waitlist (email, source, session_id, variant, button_variant, utm_source, utm_medium, utm_campaign, ref_code, created_at, signup_ts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     )
-      .bind(email, source, sessionId, variant, buttonVariant, utmSource, utmMedium, utmCampaign, now, now)
+      .bind(email, source, sessionId, variant, buttonVariant, utmSource, utmMedium, utmCampaign, refCode, now, now)
       .run()
 
     // Notify and email on new signups only (not duplicates)
@@ -165,13 +167,16 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           .catch((err: unknown) => console.error('Conversion mark failed:', err))
       )
     }
+    let signupCount: number | null = null
     if (isNew) {
+      const countResult = await context.env.DB.prepare(
+        'SELECT COUNT(*) as count FROM waitlist'
+      ).first<{ count: number }>()
+      signupCount = countResult?.count ?? null
+
       if (context.env.NOTIFY_WEBHOOK_URL) {
-        const countResult = await context.env.DB.prepare(
-          'SELECT COUNT(*) as count FROM waitlist'
-        ).first<{ count: number }>()
         context.waitUntil(
-          notifyNewSignup(context.env.NOTIFY_WEBHOOK_URL, email, countResult?.count ?? 0, source)
+          notifyNewSignup(context.env.NOTIFY_WEBHOOK_URL, email, signupCount ?? 0, source)
         )
       }
       if (context.env.RESEND_API_KEY) {
@@ -191,7 +196,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     return Response.json(
-      { success: true },
+      { success: true, position: signupCount, isNew },
       { status: 200, headers: corsHeaders }
     )
   } catch (err) {
