@@ -1,4 +1,9 @@
-# SPA fallback — serve index.html for /for/* community landing pages and /lp paid traffic page
-/for/*  /index.html  200
-/lp  /index.html  200
+# SPA fallback — serve index.html for all client-side routes
+# CF Pages serves static files before evaluating these rules, so assets are unaffected.
+# Exact-match rules without trailing slash are unreliable on CF Pages; /* catches all SPA paths.
+/for/*      /index.html  200
+/lp         /index.html  200
+/lp/        /index.html  200
 /thank-you  /index.html  200
+/thank-you/ /index.html  200
+/*          /index.html  200
