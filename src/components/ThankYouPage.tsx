@@ -126,7 +126,7 @@ export default function ThankYouPage() {
             </p>
 
             <p className="text-lg text-white/50 mt-2">
-              in line — founding price locked
+              in line - founding price locked
             </p>
           </div>
         </div>
