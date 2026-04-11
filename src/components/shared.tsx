@@ -70,7 +70,7 @@ export function EmailForm({
       if (res.ok) {
         try { localStorage.setItem('ps_sub', '1') } catch { /* ignore */ }
         onSuccess?.()
-        window.location.href = `/thank-you?email=${encodeURIComponent(email)}`
+        window.location.href = `/thank-you/?email=${encodeURIComponent(email)}`
         return
       } else {
         const data = await res.json().catch(() => ({}))

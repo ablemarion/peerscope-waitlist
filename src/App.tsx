@@ -696,7 +696,8 @@ function LiveScanCounter() {
 
 export default function App() {
   // /thank-you is a standalone page — render it directly without the main layout
-  if (window.location.pathname === '/thank-you') {
+  const _path = window.location.pathname
+  if (_path === '/thank-you' || _path === '/thank-you/') {
     return <ThankYouPage />
   }
 

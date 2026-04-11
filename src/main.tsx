@@ -36,7 +36,8 @@ if (analyticsToken) {
   navigator.sendBeacon('/api/analytics/pageview', JSON.stringify(payload))
 })()
 
-const isLandingPage = window.location.pathname === '/lp'
+const path = window.location.pathname
+const isLandingPage = path === '/lp' || path === '/lp/'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
