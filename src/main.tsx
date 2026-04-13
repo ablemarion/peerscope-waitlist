@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { LandingPage } from './components/LandingPage'
+import { Portal } from './components/portal/index.tsx'
 
 // Cloudflare Web Analytics — only injected when token is configured
 const analyticsToken = import.meta.env.VITE_CF_ANALYTICS_TOKEN
@@ -52,9 +53,10 @@ if (analyticsToken) {
 
 const path = window.location.pathname
 const isLandingPage = path === '/lp' || path === '/lp/'
+const isPortal = path.startsWith('/portal')
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {isLandingPage ? <LandingPage /> : <App />}
+    {isPortal ? <Portal /> : isLandingPage ? <LandingPage /> : <App />}
   </StrictMode>,
 )

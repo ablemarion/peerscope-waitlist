@@ -1,0 +1,151 @@
+interface StatCardProps {
+  label: string
+  value: string | number
+  trend?: string
+  trendUp?: boolean
+}
+
+function StatCard({ label, value, trend, trendUp }: StatCardProps) {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{label}</p>
+      <p className="mt-1.5 text-2xl font-semibold text-gray-900">{value}</p>
+      {trend && (
+        <p className={`mt-1 text-xs ${trendUp ? 'text-emerald-600' : 'text-gray-400'}`}>
+          {trend}
+        </p>
+      )}
+    </div>
+  )
+}
+
+export function PortalDashboard() {
+  return (
+    <div className="max-w-5xl space-y-6">
+      {/* Page header */}
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900">Overview</h2>
+        <p className="text-sm text-gray-500 mt-0.5">Welcome back. Here's what's happening across your clients.</p>
+      </div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Total Clients" value="0" trend="No clients yet" />
+        <StatCard label="Active Projects" value="0" trend="No projects yet" />
+        <StatCard label="Reports Generated" value="0" trend="Get started below" />
+        <StatCard label="Pending Invites" value="0" />
+      </div>
+
+      {/* Quick actions */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <QuickAction
+            icon={
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="7" r="3.5" stroke="#6366f1" strokeWidth="1.5" fill="none" />
+                <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                <path d="M14 4v6M11 7h6" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            }
+            label="Invite a Client"
+            description="Add a new client to your portal"
+            onClick={() => {
+              window.history.pushState({}, '', '/portal/clients')
+              window.dispatchEvent(new PopStateEvent('popstate'))
+            }}
+          />
+          <QuickAction
+            icon={
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="3" y="2" width="14" height="16" rx="2" stroke="#6366f1" strokeWidth="1.5" fill="none" />
+                <path d="M7 7h6M7 10h6M7 13h4" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            }
+            label="New Project"
+            description="Set up competitor tracking for a client"
+            onClick={() => {
+              window.history.pushState({}, '', '/portal/projects')
+              window.dispatchEvent(new PopStateEvent('popstate'))
+            }}
+          />
+          <QuickAction
+            icon={
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 2v10M7 9l3 3 3-3" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4 14v2a2 2 0 002 2h8a2 2 0 002-2v-2" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            }
+            label="Generate Report"
+            description="Export competitive intelligence for a client"
+            onClick={() => {
+              window.history.pushState({}, '', '/portal/projects')
+              window.dispatchEvent(new PopStateEvent('popstate'))
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Recent activity — empty state */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Recent Activity</h3>
+        <EmptyState
+          icon={
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-300">
+              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <path d="M10 16h12M16 10v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          }
+          title="No activity yet"
+          description="Activity will appear here once you add clients and start generating reports."
+        />
+      </div>
+    </div>
+  )
+}
+
+function QuickAction({
+  icon,
+  label,
+  description,
+  onClick,
+}: {
+  icon: React.ReactNode
+  label: string
+  description: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all duration-150 text-left group"
+    >
+      <span className="mt-0.5 flex-shrink-0">{icon}</span>
+      <div>
+        <p className="text-sm font-medium text-gray-900 group-hover:text-indigo-700">{label}</p>
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      </div>
+    </button>
+  )
+}
+
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+}: {
+  icon: React.ReactNode
+  title: string
+  description: string
+  action?: React.ReactNode
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center py-10 text-center">
+      <div className="mb-3">{icon}</div>
+      <p className="text-sm font-medium text-gray-700">{title}</p>
+      <p className="text-xs text-gray-400 mt-1 max-w-xs">{description}</p>
+      {action && <div className="mt-4">{action}</div>}
+    </div>
+  )
+}
