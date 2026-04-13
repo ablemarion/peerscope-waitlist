@@ -1,10 +1,10 @@
 /**
  * Hero Variant B — Value-led (current direction)
  *
- * Angle: affordability. "Enterprise CI intelligence at SMB price."
- * Headline is the brand tagline.
- * Visual: pricing comparison table (Peerscope vs Crayon/Klue).
- * CTA: "Join the waitlist"
+ * Angle: affordability + white-label. "Enterprise CI for agencies, not enterprise budgets."
+ * Headline speaks to agencies delivering competitive intelligence to clients.
+ * Visual: pricing comparison table (Peerscope vs Crayon/Klue) — agency column.
+ * CTA: "Join agency beta"
  */
 import { useState } from 'react'
 import { EmailForm } from './shared'
@@ -12,8 +12,8 @@ import { CountdownTimer } from './CountdownTimer'
 import { LiveSignupCount } from './LiveSignupCount'
 
 const BUTTON_VARIANTS = [
-  { key: 'control', text: 'Join the waitlist \u2192' },
-  { key: 'v1', text: 'Reserve founding price \u2192' },
+  { key: 'control', text: 'Join agency beta \u2192' },
+  { key: 'v1', text: 'Reserve agency founding price \u2192' },
   { key: 'v2', text: 'Get early access - closes Apr 15 \u2192' },
 ] as const
 
@@ -61,7 +61,7 @@ function PricingComparison() {
         >
           <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider" style={{ color: 'rgba(255,255,255,0.28)' }}>Tool</div>
           <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>Price</div>
-          <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>SMB</div>
+          <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>Agency</div>
         </div>
 
         {/* Table rows */}
@@ -118,7 +118,7 @@ function PricingComparison() {
           style={{ background: 'rgba(184,98,42,0.06)', borderColor: 'rgba(184,98,42,0.2)' }}
         >
           <p className="text-xs text-center font-medium" style={{ color: '#B8622A' }}>
-            Save ~$19,400/year vs enterprise tools
+            Save ~$19,400/year vs enterprise tools &mdash; white-label included
           </p>
         </div>
       </div>
@@ -149,7 +149,7 @@ export function HeroB() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
               </span>
-              Now in private waitlist
+              Now in agency beta
             </div>
 
             {/* Headline — flush-left, Syne */}
@@ -163,8 +163,8 @@ export function HeroB() {
                 wordBreak: 'break-word',
               }}
             >
-              Track your competitors.{' '}
-              <span style={{ color: '#C8DCE8' }}>Not your budget.</span>
+              Competitive intelligence,{' '}
+              <span style={{ color: '#C8DCE8' }}>under your brand.</span>
             </h1>
 
             {/* Sub-headline */}
@@ -172,8 +172,7 @@ export function HeroB() {
               className="text-lg sm:text-xl mb-10 leading-relaxed"
               style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '44ch' }}
             >
-              Get alerts when competitors change their pricing, launch features, or post jobs.
-              Built for SaaS teams. From $49/mo.
+              A white-label portal your clients log into — your branding, your reports, Peerscope doing the monitoring. Manage 3–10 clients from one dashboard. From $49/mo.
             </p>
 
             {/* CTA */}
@@ -185,14 +184,14 @@ export function HeroB() {
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
               </p>
               <p className="mt-3 text-xs font-semibold" style={{ color: 'rgba(240,124,53,0.8)' }}>
-                &#9889; Founding price closes April 15 &mdash; locked for life after signup
+                &#9889; Agency founding price closes April 15 &mdash; locked for life after signup
               </p>
               {/* Mobile trust line — replaces hidden pricing table */}
               <p
                 className="mt-3 text-sm font-medium md:hidden"
                 style={{ color: 'rgba(200,220,232,0.85)' }}
               >
-                Founding price $49/mo &middot; Save ~$19,400/yr vs Crayon
+                $49/mo &middot; White-label portal included &middot; Save ~$19,400/yr vs Crayon
               </p>
             </div>
           </div>

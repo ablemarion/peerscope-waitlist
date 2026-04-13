@@ -40,7 +40,7 @@ function PricingComparison() {
         >
           <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider" style={{ color: 'rgba(255,255,255,0.28)' }}>Tool</div>
           <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>Price</div>
-          <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>SMB</div>
+          <div className="px-4 sm:px-5 py-3 text-xs font-mono tracking-wider text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>Agency</div>
         </div>
 
         {/* Table rows */}
@@ -137,7 +137,7 @@ export function LandingPage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
                 </span>
-                Now in private waitlist
+                Now in agency beta
               </div>
 
               {/* Headline */}
@@ -151,8 +151,8 @@ export function LandingPage() {
                   wordBreak: 'break-word',
                 }}
               >
-                Track your competitors.{' '}
-                <span style={{ color: '#C8DCE8' }}>Not your budget.</span>
+                Competitive intelligence,{' '}
+                <span style={{ color: '#C8DCE8' }}>under your brand.</span>
               </h1>
 
               {/* Subheadline */}
@@ -160,8 +160,7 @@ export function LandingPage() {
                 className="text-lg sm:text-xl mb-10 leading-relaxed"
                 style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '44ch' }}
               >
-                Get alerts when competitors change their pricing, launch features, or post jobs.
-                Built for SaaS teams. From $49/mo.
+                A white-label portal your clients log into — your branding, your reports, Peerscope doing the monitoring. Manage 3–10 clients from one dashboard. From $49/mo.
               </p>
 
               {/* Email form — front and centre */}
@@ -181,7 +180,7 @@ export function LandingPage() {
                 <div className="max-w-lg">
                   <EmailForm
                     placeholder="Enter your work email"
-                    buttonText="Reserve founding price →"
+                    buttonText="Join agency beta →"
                     buttonVariant="v1"
                     size="large"
                     variant="dark"
@@ -194,13 +193,13 @@ export function LandingPage() {
                     14-day free trial &middot; No credit card required &middot; Cancel anytime
                   </p>
                   <p className="mt-3 text-xs font-semibold" style={{ color: 'rgba(240,124,53,0.85)' }}>
-                    &#9889; Founding price closes April 15 &mdash; locked for life after signup
+                    &#9889; Agency founding price closes April 15 &mdash; locked for life after signup
                   </p>
                   <p
                     className="mt-3 text-sm font-medium md:hidden"
                     style={{ color: 'rgba(200,220,232,0.85)' }}
                   >
-                    Founding price $49/mo &middot; Save ~$19,400/yr vs Crayon
+                    $49/mo &middot; White-label portal included &middot; Save ~$19,400/yr vs Crayon
                   </p>
                 </div>
               )}
@@ -228,15 +227,15 @@ export function LandingPage() {
             className="text-2xl font-bold mb-2 text-white"
             style={{ fontFamily: "'Syne', sans-serif", letterSpacing: '-0.02em' }}
           >
-            Ready to stop guessing what your competitors are doing?
+            Ready to deliver competitive intelligence to every client?
           </p>
           <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Join the waitlist. Founding price closes April 15.
+            Join the agency beta. Founding price closes April 15.
           </p>
           <div className="max-w-md mx-auto">
             <EmailForm
               placeholder="Enter your work email"
-              buttonText="Reserve founding price →"
+              buttonText="Join agency beta →"
               buttonVariant="v1"
               size="large"
               variant="dark"

@@ -45,9 +45,9 @@ function SetupFlow() {
   const [scanLines, setScanLines] = useState<string[]>([])
 
   const STEPS = [
-    { label: 'Paste a URL', desc: 'Add any competitor URL — pricing page, homepage, job board. No engineering required.' },
-    { label: 'We scan 24/7', desc: 'Peerscope continuously monitors for changes around the clock. Zero effort from you.' },
-    { label: 'You get alerted', desc: 'Instant Slack or email the moment something changes. Not a weekly digest.' },
+    { label: 'Add your clients', desc: 'Create a workspace per client and point Peerscope at their competitors. White-label branding applied automatically.' },
+    { label: 'We scan 24/7', desc: 'Peerscope monitors every client\'s competitive landscape around the clock. Zero effort from your team.' },
+    { label: 'Deliver reports', desc: 'Clients log into your branded portal and see polished, up-to-date competitor reports — under your agency name.' },
   ]
 
   const URL_TARGET = 'bluestoneplumbing.com/pricing'
@@ -477,7 +477,7 @@ const pricingPlans: PricingPlan[] = [
     name: 'Starter',
     price: '$49',
     period: '/mo',
-    description: 'For founders tracking a handful of competitors.',
+    description: 'For agencies managing up to 3 client accounts.',
     competitors: '3',
     alerts: 'Daily digest',
     history: '30 days',
@@ -491,7 +491,7 @@ const pricingPlans: PricingPlan[] = [
     name: 'Pro',
     price: '$99',
     period: '/mo',
-    description: 'For teams that need real-time intelligence.',
+    description: 'For agencies delivering real-time intelligence to multiple clients.',
     competitors: '10',
     alerts: 'Real-time',
     history: '12 months',
@@ -505,7 +505,7 @@ const pricingPlans: PricingPlan[] = [
     name: 'Team',
     price: '$199',
     period: '/mo',
-    description: 'For GTM teams that need the full picture.',
+    description: 'For agencies managing competitive intelligence at scale.',
     competitors: 'Unlimited',
     alerts: 'Real-time',
     history: 'Unlimited',
@@ -565,8 +565,8 @@ const faqs = [
     a: 'Yes. Monitoring publicly available web pages is legal fair use. We only track publicly accessible information.',
   },
   {
-    q: 'Why join the waitlist now instead of waiting for launch?',
-    a: 'The founding price — $49/mo for the Starter plan — is locked for life for anyone who signs up before April 15. After launch, the same plan is $69/mo. That is a permanent $240/year saving. The waitlist also gives you early access before we open to the public.',
+    q: 'Why join the agency beta now instead of waiting for launch?',
+    a: 'The agency founding price — $49/mo for the Starter plan — is locked for life for anyone who signs up before April 15. After launch, the same plan is $69/mo. That is a permanent $240/year saving per client account. Beta members also get early access and input on the white-label portal roadmap.',
   },
 ]
 
@@ -633,12 +633,12 @@ function MobileScrollSticky() {
           <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B8622A]" />
         </span>
         <p className="text-xs font-medium" style={{ color: 'rgba(240,124,53,0.85)' }}>
-          Founding price closes April 15 - $49/mo locked for life
+          Agency founding price closes April 15 - $49/mo locked for life
         </p>
       </div>
       <EmailForm
         placeholder="Enter your work email"
-        buttonText="Claim founding price"
+        buttonText="Join agency beta"
         size="large"
         variant="dark"
         onSuccess={() => setDone(true)}

@@ -2,16 +2,16 @@ import { useState } from 'react'
 
 const faqs = [
   {
-    q: 'What exactly does Peerscope monitor?',
-    a: 'Pricing pages, feature lists, positioning copy, and messaging changes across your competitors\' websites — updated automatically, no manual checking.',
+    q: 'How does the white-label portal work?',
+    a: 'Your agency gets a branded portal — your logo, your colours, your domain. Each client logs in and sees their own competitor dashboard. You control what they see; Peerscope does all the monitoring.',
   },
   {
-    q: 'Do I need to do anything once I sign up?',
-    a: 'No. Point Peerscope at your competitors and it monitors them 24/7. You get alerts when something changes.',
+    q: 'How many clients can I manage?',
+    a: 'The $49/mo founding plan covers 3–10 client workspaces. Peerscope monitors each client\'s competitors separately and surfaces changes in a single agency dashboard. No manual tracking, no spreadsheets.',
   },
   {
-    q: 'Why $49/mo? Isn\'t competitive intel expensive?',
-    a: 'Enterprise tools like Crayon cost $1,500/mo and are built for teams of analysts. Peerscope is built for a single SMB owner. Same intelligence, fraction of the price. The $49/mo founding price is locked in for life.',
+    q: 'Why $49/mo for a whole agency?',
+    a: 'Enterprise tools like Crayon charge $1,500/mo per seat — built for in-house analyst teams. Peerscope is built for agencies that need to deliver competitive intelligence across multiple clients without enterprise budgets. The $49/mo founding price is locked in for life.',
   },
 ]
 
