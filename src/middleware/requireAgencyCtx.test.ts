@@ -9,7 +9,7 @@
  * - AgencyRepo: cross-tenant query returns 0 rows (the core isolation guarantee)
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { Hono } from 'hono'
 import { AgencyRepo } from '../db/repo'
 import type { D1Database, D1PreparedStatement } from '@cloudflare/workers-types'

@@ -6,7 +6,7 @@
  * enforces it universally, preventing cross-tenant data leaks.
  */
 
-import type { D1Database } from '@cloudflare/workers-types'
+import type { D1Database, D1Result } from '@cloudflare/workers-types'
 
 // ─── Row types ────────────────────────────────────────────────────────────────
 
@@ -82,10 +82,13 @@ function rows<T>(result: D1Result<T>): T[] {
 // ─── Repo ─────────────────────────────────────────────────────────────────────
 
 export class AgencyRepo {
-  constructor(
-    private readonly db: D1Database,
-    private readonly agencyId: string
-  ) {}
+  private readonly db: D1Database
+  private readonly agencyId: string
+
+  constructor(db: D1Database, agencyId: string) {
+    this.db = db
+    this.agencyId = agencyId
+  }
 
   // ── Agencies ────────────────────────────────────────────────────────────────
 
@@ -98,10 +101,11 @@ export class AgencyRepo {
 
   // ── Clients ─────────────────────────────────────────────────────────────────
 
-  async listClients(): Promise<ClientRow[]> {
+  async listClients(opts: { limit?: number; offset?: number } = {}): Promise<ClientRow[]> {
+    const { limit = 50, offset = 0 } = opts
     const result = await this.db
-      .prepare('SELECT * FROM clients WHERE agency_id = ? ORDER BY name ASC')
-      .bind(this.agencyId)
+      .prepare('SELECT * FROM clients WHERE agency_id = ? ORDER BY name ASC LIMIT ? OFFSET ?')
+      .bind(this.agencyId, limit, offset)
       .all<ClientRow>()
     return rows(result)
   }
@@ -196,6 +200,50 @@ export class AgencyRepo {
       .bind(projectId, this.agencyId)
       .run()
     return (result.meta?.changes ?? 0) > 0
+  }
+
+  // ── Competitor targets ────────────────────────────────────────────────────────
+
+  async listCompetitorTargets(projectId: string): Promise<CompetitorTargetRow[]> {
+    // Validate the project belongs to this agency before returning targets.
+    const project = await this.getProject(projectId)
+    if (!project) return []
+    const result = await this.db
+      .prepare('SELECT * FROM competitor_targets WHERE project_id = ?')
+      .bind(projectId)
+      .all<CompetitorTargetRow>()
+    return rows(result)
+  }
+
+  async createCompetitorTarget(data: {
+    projectId: string
+    domain: string
+    name: string
+    trackPricing?: boolean
+    trackJobs?: boolean
+    trackReviews?: boolean
+    trackFeatures?: boolean
+  }): Promise<CompetitorTargetRow | null> {
+    // Validate the project belongs to this agency.
+    const project = await this.getProject(data.projectId)
+    if (!project) return null
+    const result = await this.db
+      .prepare(
+        `INSERT INTO competitor_targets
+           (project_id, domain, name, track_pricing, track_jobs, track_reviews, track_features)
+         VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
+      )
+      .bind(
+        data.projectId,
+        data.domain,
+        data.name,
+        data.trackPricing !== false ? 1 : 0,
+        data.trackJobs !== false ? 1 : 0,
+        data.trackReviews !== false ? 1 : 0,
+        data.trackFeatures !== false ? 1 : 0
+      )
+      .first<CompetitorTargetRow>()
+    return result ?? null
   }
 
   // ── Reports ──────────────────────────────────────────────────────────────────
