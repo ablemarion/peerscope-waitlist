@@ -324,6 +324,25 @@ export class AgencyRepo {
       .first<ReportRow>()
   }
 
+  async publishReport(reportId: string): Promise<ReportRow | null> {
+    return this.db
+      .prepare(
+        `UPDATE reports SET status = 'published', published_at = datetime('now')
+         WHERE id = ? AND agency_id = ? AND status = 'draft' RETURNING *`
+      )
+      .bind(reportId, this.agencyId)
+      .first<ReportRow>()
+  }
+
+  async updateAgencyStripe(stripeCustomerId: string, plan: string): Promise<void> {
+    await this.db
+      .prepare(
+        'UPDATE agencies SET stripe_customer_id = ?, plan = ? WHERE id = ?'
+      )
+      .bind(stripeCustomerId, plan, this.agencyId)
+      .run()
+  }
+
   // ── Client invitations ────────────────────────────────────────────────────────
 
   async getInvitationByTokenHash(tokenHash: string): Promise<ClientInvitationRow | null> {

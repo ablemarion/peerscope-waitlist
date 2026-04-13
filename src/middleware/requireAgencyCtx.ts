@@ -1,16 +1,16 @@
 /**
  * requireAgencyCtx — Hono middleware for Client Portal multi-tenancy.
  *
- * Extracts `agency_id` and `role` from the Better Auth JWT bearer token,
- * then verifies the authenticated user is an actual member of that agency
- * in the `agency_users` table. If either check fails the request is
- * rejected — routes NEVER trust a user-supplied agency_id.
+ * Verifies a HS256 JWT signed with BETTER_AUTH_SECRET (issued by
+ * POST /api/portal/auth/token after invite acceptance). Extracts
+ * `agency_id` and `role` from the payload, then confirms the user is
+ * an active member of that agency in the `agency_users` table.
  *
  * Populates `c.var.agencyCtx` for downstream route handlers.
  */
 
 import type { Context, MiddlewareHandler } from 'hono'
-import { createRemoteJWKSet, jwtVerify } from 'jose'
+import { jwtVerify, SignJWT } from 'jose'
 import type { D1Database } from '@cloudflare/workers-types'
 import type { AgencyRole } from '../lib/auth'
 
@@ -49,23 +49,57 @@ function isPortalJwtPayload(p: unknown): p is PortalJwtPayload {
   )
 }
 
+// ─── Role normalisation ───────────────────────────────────────────────────────
+
+// Normalises legacy 'admin'/'member' values from migration 0009.
+function normaliseRole(dbRole: string): AgencyRole {
+  if (dbRole === 'agency_admin' || dbRole === 'client_viewer') return dbRole as AgencyRole
+  if (dbRole === 'admin' || dbRole === 'member') return 'agency_admin'
+  return 'agency_admin'
+}
+
+// ─── JWT helpers ──────────────────────────────────────────────────────────────
+
+/** Derive a 32-byte HMAC key from BETTER_AUTH_SECRET. */
+function secretKey(secret: string): Uint8Array {
+  return new TextEncoder().encode(secret)
+}
+
+/**
+ * Issue a signed portal JWT.
+ * Called from POST /api/portal/auth/token after session validation.
+ */
+export async function issuePortalJwt(opts: {
+  userId: string
+  agencyId: string
+  role: AgencyRole
+  secret: string
+  expiresInHours?: number
+}): Promise<string> {
+  const key = secretKey(opts.secret)
+  return new SignJWT({
+    agency_id: opts.agencyId,
+    role: opts.role,
+  })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setSubject(opts.userId)
+    .setIssuedAt()
+    .setExpirationTime(`${opts.expiresInHours ?? 1}h`)
+    .sign(key)
+}
+
 // ─── Middleware factory ───────────────────────────────────────────────────────
 
 export interface RequireAgencyCtxOptions {
   /**
-   * The URL of the Better Auth JWKS endpoint used to verify JWT signatures.
-   * e.g. "https://your-worker.pages.dev/api/portal/auth/jwks"
+   * BETTER_AUTH_SECRET used to verify HS256 JWT signatures.
+   * Passed from the Cloudflare Pages env binding.
    */
-  jwksUrl: string
-  /**
-   * Expected JWT audience claim. Must match the `aud` set in betterAuth jwt config.
-   * @default undefined (audience check skipped)
-   */
-  audience?: string
+  secret: string
 }
 
 export function requireAgencyCtx(opts: RequireAgencyCtxOptions): MiddlewareHandler {
-  const JWKS = createRemoteJWKSet(new URL(opts.jwksUrl))
+  const key = secretKey(opts.secret)
 
   return async (c: Context, next) => {
     // 1. Extract bearer token
@@ -78,9 +112,7 @@ export function requireAgencyCtx(opts: RequireAgencyCtxOptions): MiddlewareHandl
     // 2. Verify JWT signature + expiry
     let payload: PortalJwtPayload
     try {
-      const { payload: rawPayload } = await jwtVerify(token, JWKS, {
-        audience: opts.audience,
-      })
+      const { payload: rawPayload } = await jwtVerify(token, key)
       if (!isPortalJwtPayload(rawPayload)) {
         return c.json({ error: 'Invalid token claims' }, 401)
       }
@@ -105,7 +137,7 @@ export function requireAgencyCtx(opts: RequireAgencyCtxOptions): MiddlewareHandl
     }
 
     // 4. Validate the DB role matches the JWT role (defense-in-depth).
-    const dbRole = membership.role as AgencyRole
+    const dbRole = normaliseRole(membership.role)
     if (dbRole !== payload.role) {
       return c.json({ error: 'Forbidden' }, 403)
     }

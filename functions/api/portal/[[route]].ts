@@ -15,10 +15,11 @@
 import { Hono } from 'hono'
 import { handle } from 'hono/cloudflare-pages'
 import { z } from 'zod'
+import Stripe from 'stripe'
 import type { D1Database, R2Bucket } from '@cloudflare/workers-types'
 import type { MiddlewareHandler } from 'hono'
 import { Resend } from 'resend'
-import { requireAgencyCtx } from '../../../src/middleware/requireAgencyCtx'
+import { requireAgencyCtx, issuePortalJwt } from '../../../src/middleware/requireAgencyCtx'
 import { createRepo } from '../../../src/db/repo'
 import type { ClientInvitationRow, ReportRow } from '../../../src/db/repo'
 import {
@@ -37,14 +38,20 @@ import type { AgencyResponse } from '../../../src/types/portal'
 interface Env {
   DB: D1Database
   PORTAL_STORAGE: R2Bucket
-  /** Better Auth base URL — used to derive the JWKS endpoint. */
+  /** HS256 JWT signing secret (required). */
+  BETTER_AUTH_SECRET: string
+  /** Public base URL for magic links and Stripe redirects. */
   BETTER_AUTH_URL: string
-  /** Override JWKS URL if Better Auth is on a different origin. */
-  PORTAL_JWKS_URL?: string
   /** Admin key for bootstrapping new agencies. */
   ADMIN_KEY?: string
   /** Resend API key for transactional email. */
   RESEND_API_KEY?: string
+  /** Stripe secret key (sk_live_... or sk_test_...). */
+  STRIPE_SECRET_KEY?: string
+  /** Stripe webhook signing secret (whsec_...). */
+  STRIPE_WEBHOOK_SECRET?: string
+  /** Stripe price ID for the AUD$249/mo plan. */
+  STRIPE_PRICE_ID?: string
 }
 
 // ─── Response helpers ─────────────────────────────────────────────────────────
@@ -79,13 +86,8 @@ let _agencyAuth: ReturnType<typeof requireAgencyCtx> | null = null
 
 const agencyAuth: MiddlewareHandler<{ Bindings: Env }> = async (c, next) => {
   if (!_agencyAuth) {
-    const jwksUrl =
-      c.env.PORTAL_JWKS_URL ??
-      `${c.env.BETTER_AUTH_URL}/api/auth/well-known/jwks.json`
-    _agencyAuth = requireAgencyCtx({ jwksUrl })
+    _agencyAuth = requireAgencyCtx({ secret: c.env.BETTER_AUTH_SECRET })
   }
-  // Cast required: the cached middleware was created without Bindings generic,
-  // but the runtime behaviour is identical.
   return (_agencyAuth as MiddlewareHandler)(c, next)
 }
 
@@ -136,10 +138,10 @@ app.post('/agencies', async (c) => {
     return c.json(err('Failed to create agency'), 500)
   }
 
-  // Link creator as agency_admin.
+  // Link creator as agency_admin (migration 0010 uses agency_admin).
   await db
     .prepare(
-      "INSERT OR IGNORE INTO agency_users (agency_id, user_id, role) VALUES (?, ?, 'admin')"
+      "INSERT OR IGNORE INTO agency_users (agency_id, user_id, role) VALUES (?, ?, 'agency_admin')"
     )
     .bind(agency.id, userId)
     .run()
@@ -217,7 +219,16 @@ app.post('/auth/accept-invite', async (c) => {
       .run()
   }
 
-  // Create a session the client can exchange for a JWT at /api/portal/auth/token.
+  // Ensure user appears in agency_users for middleware membership check.
+  // INSERT OR IGNORE so re-inviting an existing client is idempotent.
+  await c.env.DB
+    .prepare(
+      "INSERT OR IGNORE INTO agency_users (agency_id, user_id, role) VALUES (?, ?, 'client_viewer')"
+    )
+    .bind(invitation.agency_id, userId)
+    .run()
+
+  // Create a session the client exchanges for a JWT at POST /auth/token.
   const sessionId = crypto.randomUUID()
   const sessionToken = randomHex(32)
   const sessionExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
@@ -231,6 +242,45 @@ app.post('/auth/accept-invite', async (c) => {
     .run()
 
   return c.json(ok({ sessionToken, userId, agencyId: invitation.agency_id }))
+})
+
+// ── POST /auth/token — exchange session token for a signed HS256 JWT ─────────
+// PUBLIC: called by frontend after accept-invite to get Bearer token.
+app.post('/auth/token', async (c) => {
+  const body = await c.req.json().catch(() => null)
+  const schema = z.object({ sessionToken: z.string().min(1) })
+  const parsed = schema.safeParse(body)
+  if (!parsed.success) {
+    return c.json(err('sessionToken is required'), 400)
+  }
+
+  const { sessionToken } = parsed.data
+
+  const row = await c.env.DB
+    .prepare(
+      `SELECT s.user_id, s.expires_at, u.agency_id, u.agency_role
+       FROM session s
+       JOIN user u ON u.id = s.user_id
+       WHERE s.token = ? LIMIT 1`
+    )
+    .bind(sessionToken)
+    .first<{ user_id: string; expires_at: string; agency_id: string | null; agency_role: string | null }>()
+
+  if (!row) return c.json(err('Invalid session token'), 401)
+  if (new Date(row.expires_at) < new Date()) return c.json(err('Session has expired'), 401)
+  if (!row.agency_id || !row.agency_role) return c.json(err('User has no agency association'), 403)
+
+  const role = row.agency_role === 'client_viewer' ? 'client_viewer' as const : 'agency_admin' as const
+
+  const jwt = await issuePortalJwt({
+    userId: row.user_id,
+    agencyId: row.agency_id,
+    role,
+    secret: c.env.BETTER_AUTH_SECRET,
+    expiresInHours: 8,
+  })
+
+  return c.json(ok({ token: jwt }))
 })
 
 // ── All routes below require a valid agency JWT ───────────────────────────────
@@ -559,6 +609,124 @@ app.patch('/reports/:id/publish', async (c) => {
 
   if (!updated) return c.json(err('Failed to publish report'), 500)
   return c.json(ok(updated))
+})
+
+// ── POST /billing/checkout — create Stripe checkout session (AUD$249/mo) ─────
+app.post('/billing/checkout', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  if (!c.env.STRIPE_SECRET_KEY || !c.env.STRIPE_PRICE_ID) {
+    return c.json(err('Billing not configured'), 503)
+  }
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const agency = await repo.getAgency()
+  if (!agency) return c.json(err('Agency not found'), 404)
+
+  const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
+    // @ts-expect-error — CF Workers use fetch-based HTTP
+    httpClient: Stripe.createFetchHttpClient(),
+    apiVersion: '2024-12-18.acacia',
+  })
+
+  const baseUrl = c.env.BETTER_AUTH_URL ?? 'https://peerscope-waitlist.pages.dev'
+
+  // Create or reuse the Stripe customer for this agency.
+  let customerId = agency.stripe_customer_id ?? undefined
+  if (!customerId) {
+    const customer = await stripe.customers.create({
+      name: agency.name,
+      metadata: { agency_id: agencyId },
+    })
+    customerId = customer.id
+    await repo.updateAgencyStripe(customerId, agency.plan)
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    customer: customerId,
+    mode: 'subscription',
+    line_items: [{ price: c.env.STRIPE_PRICE_ID, quantity: 1 }],
+    currency: 'aud',
+    success_url: `${baseUrl}/portal/dashboard?billing=success`,
+    cancel_url: `${baseUrl}/portal/dashboard?billing=cancelled`,
+    metadata: { agency_id: agencyId },
+    subscription_data: { metadata: { agency_id: agencyId } },
+  })
+
+  return c.json(ok({ url: session.url }))
+})
+
+// ── POST /billing/webhook — handle Stripe subscription lifecycle events ───────
+// PUBLIC: verified by Stripe signature header, NOT by agency JWT.
+app.post('/billing/webhook', async (c) => {
+  if (!c.env.STRIPE_SECRET_KEY || !c.env.STRIPE_WEBHOOK_SECRET) {
+    return c.json(err('Billing not configured'), 503)
+  }
+
+  const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
+    // @ts-expect-error — CF Workers use fetch-based HTTP
+    httpClient: Stripe.createFetchHttpClient(),
+    apiVersion: '2024-12-18.acacia',
+  })
+
+  const sig = c.req.header('stripe-signature')
+  if (!sig) return c.json(err('Missing Stripe signature'), 400)
+
+  const rawBody = await c.req.text()
+  let event: Stripe.Event
+  try {
+    event = await stripe.webhooks.constructEventAsync(
+      rawBody,
+      sig,
+      c.env.STRIPE_WEBHOOK_SECRET
+    )
+  } catch (e) {
+    console.error('Stripe webhook signature verification failed:', e)
+    return c.json(err('Invalid signature'), 400)
+  }
+
+  switch (event.type) {
+    case 'customer.subscription.created':
+    case 'customer.subscription.updated': {
+      const subscription = event.data.object as Stripe.Subscription
+      const agencyId = subscription.metadata?.agency_id
+      if (agencyId) {
+        const plan = subscription.status === 'active' ? 'pro' : 'free'
+        const customerId = typeof subscription.customer === 'string'
+          ? subscription.customer
+          : subscription.customer.id
+        const repo = createRepo(c.env.DB, agencyId)
+        await repo.updateAgencyStripe(customerId, plan)
+      }
+      break
+    }
+
+    case 'customer.subscription.deleted': {
+      const subscription = event.data.object as Stripe.Subscription
+      const agencyId = subscription.metadata?.agency_id
+      if (agencyId) {
+        const customerId = typeof subscription.customer === 'string'
+          ? subscription.customer
+          : subscription.customer.id
+        const repo = createRepo(c.env.DB, agencyId)
+        await repo.updateAgencyStripe(customerId, 'free')
+      }
+      break
+    }
+
+    case 'invoice.payment_failed': {
+      // Log for now; future: send dunning email via Resend.
+      const invoice = event.data.object as Stripe.Invoice
+      console.warn('Invoice payment failed:', invoice.id, invoice.customer)
+      break
+    }
+
+    default:
+      break
+  }
+
+  return c.json({ received: true })
 })
 
 // ─── Export ───────────────────────────────────────────────────────────────────
