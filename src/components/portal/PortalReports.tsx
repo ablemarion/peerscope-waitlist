@@ -256,21 +256,46 @@ function FeaturesCell({ field }: { field: TrackingField<FeaturesData> | null }) 
 
 function CompetitorCard({ competitor }: { competitor: CompetitorInSnapshot }) {
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
           <p className="text-sm font-semibold text-gray-900">{competitor.name}</p>
           <p className="text-xs text-gray-400 mt-0.5">{competitor.domain}</p>
         </div>
-        <div className="flex-shrink-0 w-8 h-8 rounded bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold">
-          {competitor.name.charAt(0).toUpperCase()}
-        </div>
+        {(() => {
+          const colours = [
+            'bg-indigo-100 text-indigo-700',
+            'bg-violet-100 text-violet-700',
+            'bg-sky-100 text-sky-700',
+            'bg-teal-100 text-teal-700',
+            'bg-rose-100 text-rose-700',
+          ]
+          const colour = colours[competitor.name.charCodeAt(0) % 5]
+          return (
+            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${colour}`}>
+              {competitor.name.charAt(0).toUpperCase()}
+            </div>
+          )
+        })()}
       </div>
-      <div className="grid grid-cols-4 gap-2">
-        <PricingCell field={competitor.pricing} />
-        <JobsCell field={competitor.jobs} />
-        <ReviewsCell field={competitor.reviews} />
-        <FeaturesCell field={competitor.features} />
+      <div className="flex flex-wrap gap-1.5 mt-3">
+        {(['pricing', 'jobs', 'reviews', 'features'] as const).map((key) => {
+          const field = competitor[key]
+          if (!field) return null
+          const label = key.charAt(0).toUpperCase() + key.slice(1)
+          if (field.status === 'populated') {
+            return (
+              <span key={key} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                {label} ✓
+              </span>
+            )
+          }
+          return (
+            <span key={key} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+              {label} …
+            </span>
+          )
+        })}
       </div>
     </div>
   )
@@ -509,10 +534,10 @@ export function PortalReports() {
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Table header */}
         <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
-          <div className="grid grid-cols-[1fr_130px_130px_90px] gap-4 text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <div className="grid grid-cols-[1fr_90px] sm:grid-cols-[1fr_130px_130px_90px] gap-4 text-xs font-medium text-gray-500 uppercase tracking-wide">
             <span>Report</span>
-            <span>Generated</span>
-            <span>Published</span>
+            <span className="hidden sm:block">Generated</span>
+            <span className="hidden sm:block">Published</span>
             <span>Status</span>
           </div>
         </div>
@@ -558,11 +583,11 @@ export function PortalReports() {
               <button
                 key={report.id}
                 onClick={() => setSelectedReport(report)}
-                className="w-full grid grid-cols-[1fr_130px_130px_90px] gap-4 items-center px-5 py-4 hover:bg-gray-50 transition-colors duration-100 text-left"
+                className="w-full grid grid-cols-[1fr_90px] sm:grid-cols-[1fr_130px_130px_90px] gap-4 items-center px-5 py-4 hover:bg-gray-50 transition-colors duration-100 text-left"
               >
                 <span className="text-sm font-medium text-gray-900 truncate">{report.title}</span>
-                <span className="text-xs text-gray-500">{formatDate(report.generated_at)}</span>
-                <span className="text-xs text-gray-500">{formatDate(report.published_at)}</span>
+                <span className="hidden sm:block text-xs text-gray-500">{formatDate(report.generated_at)}</span>
+                <span className="hidden sm:block text-xs text-gray-500">{formatDate(report.published_at)}</span>
                 <StatusBadge status={report.status} />
               </button>
             ))}

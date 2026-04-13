@@ -79,6 +79,10 @@ export function PortalJoin() {
           <Logo dark />
         </div>
 
+        <p className="text-center text-[11px] text-white/30 mb-6">
+          Competitor pricing · Job openings · Feature releases
+        </p>
+
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
           {/* Loading */}
           {(state.phase === 'loading' || state.phase === 'accepting') && (
@@ -87,7 +91,7 @@ export function PortalJoin() {
               <h1 className="text-base font-semibold text-white">
                 {state.phase === 'loading' ? 'Checking your invite…' : 'Accepting your invite…'}
               </h1>
-              <p className="text-sm text-white/40 mt-2">Just a moment, please hold on.</p>
+              <p className="text-sm text-white/40 mt-2">Unlocking your intelligence hub…</p>
             </>
           )}
 
@@ -132,8 +136,8 @@ export function PortalJoin() {
                   <path d="M8 12l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
-              <h1 className="text-base font-semibold text-white">You're in!</h1>
-              <p className="text-sm text-white/40 mt-2">Redirecting to your portal…</p>
+              <h1 className="text-base font-semibold text-white">Welcome to Peerscope</h1>
+              <p className="text-sm text-white/40 mt-2">Your competitive intelligence portal is ready.</p>
             </>
           )}
         </div>

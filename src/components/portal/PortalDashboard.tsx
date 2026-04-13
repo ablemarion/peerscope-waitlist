@@ -16,7 +16,9 @@ function StatCard({ label, value, trend, trendUp, loading }: StatCardProps) {
       {loading ? (
         <div className="mt-1.5 h-8 bg-gray-200 rounded w-12 animate-pulse" />
       ) : (
-        <p className="mt-1.5 text-2xl font-semibold text-gray-900">{value}</p>
+        <p className="mt-1.5 text-2xl font-semibold text-gray-900">
+          {typeof value === 'number' && value === 0 ? '—' : value}
+        </p>
       )}
       {trend && !loading && (
         <p className={`mt-1 text-xs ${trendUp ? 'text-emerald-600' : 'text-gray-400'}`}>
@@ -95,69 +97,111 @@ export function PortalDashboard() {
         <StatCard label="Pending Invites" value="—" trend="Coming soon" />
       </div>
 
-      {/* Quick actions */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <QuickAction
-            icon={
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="7" r="3.5" stroke="#6366f1" strokeWidth="1.5" fill="none" />
-                <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                <path d="M14 4v6M11 7h6" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            }
-            label="Invite a Client"
-            description="Add a new client to your portal"
-            onClick={() => {
-              window.history.pushState({}, '', '/portal/clients')
-              window.dispatchEvent(new PopStateEvent('popstate'))
-            }}
-          />
-          <QuickAction
-            icon={
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <rect x="3" y="2" width="14" height="16" rx="2" stroke="#6366f1" strokeWidth="1.5" fill="none" />
-                <path d="M7 7h6M7 10h6M7 13h4" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            }
-            label="New Project"
-            description="Set up competitor tracking for a client"
-            onClick={() => {
-              window.history.pushState({}, '', '/portal/projects')
-              window.dispatchEvent(new PopStateEvent('popstate'))
-            }}
-          />
-          <QuickAction
-            icon={
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M10 2v10M7 9l3 3 3-3" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M4 14v2a2 2 0 002 2h8a2 2 0 002-2v-2" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            }
-            label="Generate Report"
-            description="Export competitive intelligence for a client"
-            onClick={() => {
-              window.history.pushState({}, '', '/portal/projects')
-              window.dispatchEvent(new PopStateEvent('popstate'))
-            }}
-          />
-        </div>
-      </div>
+      {stats.clientCount === 0 && stats.projectCount === 0 && stats.reportCount === 0 && !loading ? (
+        <GettingStarted onAddClient={() => { window.history.pushState({}, '', '/portal/clients'); window.dispatchEvent(new PopStateEvent('popstate')) }} />
+      ) : (
+        <>
+          {/* Quick actions */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <QuickAction
+                icon={
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="7" r="3.5" stroke="#6366f1" strokeWidth="1.5" fill="none" />
+                    <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                    <path d="M14 4v6M11 7h6" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                }
+                label="Invite a Client"
+                description="Add a new client to your portal"
+                onClick={() => {
+                  window.history.pushState({}, '', '/portal/clients')
+                  window.dispatchEvent(new PopStateEvent('popstate'))
+                }}
+              />
+              <QuickAction
+                icon={
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="3" y="2" width="14" height="16" rx="2" stroke="#6366f1" strokeWidth="1.5" fill="none" />
+                    <path d="M7 7h6M7 10h6M7 13h4" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                }
+                label="New Project"
+                description="Set up competitor tracking for a client"
+                onClick={() => {
+                  window.history.pushState({}, '', '/portal/projects')
+                  window.dispatchEvent(new PopStateEvent('popstate'))
+                }}
+              />
+              <QuickAction
+                icon={
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 2v10M7 9l3 3 3-3" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 14v2a2 2 0 002 2h8a2 2 0 002-2v-2" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                }
+                label="Generate Report"
+                description="Export competitive intelligence for a client"
+                onClick={() => {
+                  window.history.pushState({}, '', '/portal/projects')
+                  window.dispatchEvent(new PopStateEvent('popstate'))
+                }}
+              />
+            </div>
+          </div>
 
-      {/* Recent activity — empty state */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">Recent Activity</h3>
-        <EmptyState
-          icon={
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-300">
-              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.5" fill="none" />
-              <path d="M10 16h12M16 10v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          }
-          title="No activity yet"
-          description="Activity will appear here once you add clients and start generating reports."
-        />
+          {/* Recent activity — empty state */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            <EmptyState
+              icon={
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-300">
+                  <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                  <path d="M16 9v7l4 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              }
+              title="No activity yet"
+              description="Reports generated, clients added, and projects created will appear here."
+            />
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function GettingStarted({ onAddClient }: { onAddClient: () => void }) {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 className="text-sm font-semibold text-gray-900 mb-1">Let's set up your first client</h3>
+      <p className="text-xs text-gray-500 mb-6">Follow these steps to start generating intelligence reports.</p>
+      <div className="space-y-5">
+        {/* Step 1 - active */}
+        <div className="flex items-start gap-4">
+          <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 mt-0.5">1</div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-900">Add a client</p>
+            <p className="text-xs text-gray-500 mt-0.5">Add your client and invite them to their own view.</p>
+            <button onClick={onAddClient} className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 transition-colors">Add your first client →</button>
+          </div>
+        </div>
+        {/* Step 2 - pending */}
+        <div className="flex items-start gap-4">
+          <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-semibold flex-shrink-0 mt-0.5">2</div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-400">Create a project</p>
+            <p className="text-xs text-gray-400 mt-0.5">Define which competitors to track for this client.</p>
+          </div>
+        </div>
+        {/* Step 3 - pending */}
+        <div className="flex items-start gap-4">
+          <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-semibold flex-shrink-0 mt-0.5">3</div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-400">Generate a report</p>
+            <p className="text-xs text-gray-400 mt-0.5">Run competitive analysis and share it directly.</p>
+          </div>
+        </div>
       </div>
     </div>
   )
