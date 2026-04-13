@@ -16,9 +16,50 @@ interface ReportRow {
   created_at: string
 }
 
-interface TrackingField {
+interface PricingPlan {
+  name: string
+  price: number | null
+  currency: string
+  period: string
+  highlight: string
+}
+
+interface PricingData {
+  summary: string
+  plans: PricingPlan[]
+  hasFreeTrialOrTier: boolean
+  lastChecked: string
+}
+
+interface JobsData {
+  openRoles: number
+  byDepartment: Record<string, number>
+  hiringSignal: 'low' | 'medium' | 'high'
+  lastChecked: string
+}
+
+interface ReviewsData {
+  g2Rating: number
+  g2Count: number
+  capterra: number
+  summary: string
+  lastChecked: string
+}
+
+interface FeatureChange {
+  date: string
+  type: string
+  description: string
+}
+
+interface FeaturesData {
+  recentChanges: FeatureChange[]
+  lastChecked: string
+}
+
+interface TrackingField<T> {
   status: 'pending_crawl' | 'populated'
-  data: unknown | null
+  data: T | null
 }
 
 interface CompetitorInSnapshot {
@@ -30,10 +71,10 @@ interface CompetitorInSnapshot {
     reviews: boolean
     features: boolean
   }
-  pricing: TrackingField | null
-  jobs: TrackingField | null
-  reviews: TrackingField | null
-  features: TrackingField | null
+  pricing: TrackingField<PricingData> | null
+  jobs: TrackingField<JobsData> | null
+  reviews: TrackingField<ReviewsData> | null
+  features: TrackingField<FeaturesData> | null
 }
 
 interface ReportSnapshot {
@@ -99,36 +140,117 @@ function StatusBadge({ status }: { status: 'draft' | 'published' }) {
 
 // ─── Competitor card ──────────────────────────────────────────────────────────
 
-function TrackingCell({ field, label }: { field: TrackingField | null; label: string }) {
-  if (!field) {
-    return (
-      <div className="text-center">
-        <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">{label}</p>
-        <span className="text-xs text-gray-300">—</span>
-      </div>
-    )
-  }
+function CellWrapper({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="text-center min-w-0">
+      <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">{label}</p>
+      {children}
+    </div>
+  )
+}
 
-  if (field.status === 'pending_crawl') {
-    return (
-      <div className="text-center">
-        <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">{label}</p>
-        <div className="mx-auto h-3 bg-gray-200 rounded animate-pulse w-12" />
-        <p className="text-[10px] text-gray-400 mt-0.5">Crawling…</p>
-      </div>
-    )
-  }
+function PendingCell({ label }: { label: string }) {
+  return (
+    <CellWrapper label={label}>
+      <div className="mx-auto h-3 bg-gray-200 rounded animate-pulse w-10" />
+      <p className="text-[10px] text-gray-400 mt-0.5">Crawling…</p>
+    </CellWrapper>
+  )
+}
+
+function EmptyCell({ label }: { label: string }) {
+  return (
+    <CellWrapper label={label}>
+      <span className="text-xs text-gray-300">—</span>
+    </CellWrapper>
+  )
+}
+
+function PricingCell({ field }: { field: TrackingField<PricingData> | null }) {
+  if (!field) return <EmptyCell label="Pricing" />
+  if (field.status === 'pending_crawl') return <PendingCell label="Pricing" />
+  const data = field.data
+  if (!data) return <EmptyCell label="Pricing" />
+
+  const lowestPrice = data.plans.reduce<number | null>((min, p) => {
+    if (p.price === null) return min
+    return min === null ? p.price : Math.min(min, p.price)
+  }, null)
 
   return (
-    <div className="text-center">
-      <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">{label}</p>
-      <span className="inline-flex items-center gap-1 text-xs text-emerald-600">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        Ready
+    <CellWrapper label="Pricing">
+      <p className="text-[10px] font-medium text-gray-800 leading-snug">
+        {data.plans.length} plan{data.plans.length !== 1 ? 's' : ''}
+      </p>
+      {lowestPrice !== null && (
+        <p className="text-[10px] text-gray-500">from ${lowestPrice}/mo</p>
+      )}
+      {data.hasFreeTrialOrTier && (
+        <span className="inline-block text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 rounded px-1 mt-0.5 leading-4">
+          Free tier
+        </span>
+      )}
+    </CellWrapper>
+  )
+}
+
+const hiringSignalStyles: Record<JobsData['hiringSignal'], string> = {
+  low: 'bg-gray-100 text-gray-500 border-gray-200',
+  medium: 'bg-amber-50 text-amber-600 border-amber-200',
+  high: 'bg-emerald-50 text-emerald-600 border-emerald-200',
+}
+
+function JobsCell({ field }: { field: TrackingField<JobsData> | null }) {
+  if (!field) return <EmptyCell label="Jobs" />
+  if (field.status === 'pending_crawl') return <PendingCell label="Jobs" />
+  const data = field.data
+  if (!data) return <EmptyCell label="Jobs" />
+
+  return (
+    <CellWrapper label="Jobs">
+      <p className="text-[10px] font-medium text-gray-800">{data.openRoles} roles</p>
+      <span className={`inline-block text-[9px] border rounded px-1 mt-0.5 leading-4 capitalize ${hiringSignalStyles[data.hiringSignal]}`}>
+        {data.hiringSignal}
       </span>
-    </div>
+    </CellWrapper>
+  )
+}
+
+function ReviewsCell({ field }: { field: TrackingField<ReviewsData> | null }) {
+  if (!field) return <EmptyCell label="Reviews" />
+  if (field.status === 'pending_crawl') return <PendingCell label="Reviews" />
+  const data = field.data
+  if (!data) return <EmptyCell label="Reviews" />
+
+  return (
+    <CellWrapper label="Reviews">
+      <p className="text-[10px] font-medium text-gray-800">{data.g2Rating} ★</p>
+      <p className="text-[10px] text-gray-500">{data.g2Count.toLocaleString('en-AU')} reviews</p>
+    </CellWrapper>
+  )
+}
+
+function FeaturesCell({ field }: { field: TrackingField<FeaturesData> | null }) {
+  if (!field) return <EmptyCell label="Features" />
+  if (field.status === 'pending_crawl') return <PendingCell label="Features" />
+  const data = field.data
+  if (!data) return <EmptyCell label="Features" />
+
+  const count = data.recentChanges.length
+  const latestDate = data.recentChanges[0]?.date ?? null
+  const formattedDate = latestDate
+    ? new Date(latestDate).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' })
+    : null
+
+  return (
+    <CellWrapper label="Features">
+      <p className="text-[10px] font-medium text-gray-800">
+        {count} change{count !== 1 ? 's' : ''}
+      </p>
+      {formattedDate && (
+        <p className="text-[10px] text-gray-500">{formattedDate}</p>
+      )}
+    </CellWrapper>
   )
 }
 
@@ -145,10 +267,10 @@ function CompetitorCard({ competitor }: { competitor: CompetitorInSnapshot }) {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-2">
-        <TrackingCell field={competitor.pricing} label="Pricing" />
-        <TrackingCell field={competitor.jobs} label="Jobs" />
-        <TrackingCell field={competitor.reviews} label="Reviews" />
-        <TrackingCell field={competitor.features} label="Features" />
+        <PricingCell field={competitor.pricing} />
+        <JobsCell field={competitor.jobs} />
+        <ReviewsCell field={competitor.reviews} />
+        <FeaturesCell field={competitor.features} />
       </div>
     </div>
   )
