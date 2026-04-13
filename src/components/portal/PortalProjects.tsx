@@ -110,6 +110,11 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, clientName, lastReportAt }: ProjectCardProps) {
+  function navigate(path: string) {
+    window.history.pushState({}, '', path)
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-indigo-200 hover:shadow-sm transition-all duration-150 flex flex-col gap-4">
       {/* Header */}
@@ -120,6 +125,18 @@ function ProjectCard({ project, clientName, lastReportAt }: ProjectCardProps) {
             <span className="text-gray-400">Client:</span> {clientName}
           </p>
         </div>
+        <button
+          onClick={() => navigate(`/portal/projects/${project.id}`)}
+          className="flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors"
+          aria-label={`Manage competitors for ${project.name}`}
+        >
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+            <circle cx="5.5" cy="5.5" r="1" fill="currentColor" />
+            <circle cx="1.5" cy="5.5" r="1" fill="currentColor" />
+            <circle cx="9.5" cy="5.5" r="1" fill="currentColor" />
+          </svg>
+          Manage
+        </button>
       </div>
 
       {/* Last report */}

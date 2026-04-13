@@ -3,14 +3,30 @@ import { PortalLayout } from './PortalLayout'
 import { PortalDashboard } from './PortalDashboard'
 import { PortalClients } from './PortalClients'
 import { PortalProjects } from './PortalProjects'
+import { PortalProjectDetail } from './PortalProjectDetail'
 import { PortalReports } from './PortalReports'
 import { ClientPortal } from './ClientPortal'
 
-function getPage(path: string) {
+type Page =
+  | 'dashboard'
+  | 'clients'
+  | 'projects'
+  | 'project-detail'
+  | 'reports'
+
+function getPage(path: string): Page {
   if (path.startsWith('/portal/clients')) return 'clients'
-  if (path.startsWith('/portal/projects')) return 'projects'
   if (path.startsWith('/portal/reports')) return 'reports'
+  // /portal/projects/:id — detail view
+  const projectDetail = path.match(/^\/portal\/projects\/([^/]+)$/)
+  if (projectDetail) return 'project-detail'
+  if (path.startsWith('/portal/projects')) return 'projects'
   return 'dashboard'
+}
+
+function getProjectId(path: string): string | null {
+  const m = path.match(/^\/portal\/projects\/([^/]+)$/)
+  return m ? m[1] : null
 }
 
 function normalisePath(path: string) {
@@ -50,12 +66,14 @@ export function Portal() {
   }
 
   const page = getPage(currentPath)
+  const projectId = getProjectId(currentPath)
 
   return (
     <PortalLayout currentPath={currentPath} role={role}>
       {page === 'dashboard' && <PortalDashboard />}
       {page === 'clients' && <PortalClients />}
       {page === 'projects' && <PortalProjects />}
+      {page === 'project-detail' && projectId && <PortalProjectDetail projectId={projectId} />}
       {page === 'reports' && <PortalReports />}
     </PortalLayout>
   )

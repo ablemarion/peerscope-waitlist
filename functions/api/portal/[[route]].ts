@@ -442,6 +442,17 @@ app.get('/competitor-targets', async (c) => {
   return c.json(ok(targets))
 })
 
+// ── DELETE /competitor-targets/:id ───────────────────────────────────────────
+app.delete('/competitor-targets/:id', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const deleted = await repo.deleteCompetitorTarget(c.req.param('id'))
+  if (!deleted) return c.json(err('Target not found'), 404)
+  return c.json(ok(null))
+})
+
 // ── POST /clients/:id/invite — generate magic-link and send via Resend ───────
 app.post('/clients/:id/invite', async (c) => {
   const { agencyId, role } = c.var.agencyCtx

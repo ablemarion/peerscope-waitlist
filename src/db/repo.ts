@@ -216,6 +216,18 @@ export class AgencyRepo {
     return rows(result)
   }
 
+  async deleteCompetitorTarget(targetId: string): Promise<boolean> {
+    // Ensure the target belongs to a project owned by this agency.
+    const result = await this.db
+      .prepare(
+        `DELETE FROM competitor_targets WHERE id = ? AND project_id IN
+         (SELECT id FROM projects WHERE agency_id = ?)`
+      )
+      .bind(targetId, this.agencyId)
+      .run()
+    return (result.meta?.changes ?? 0) > 0
+  }
+
   // ── Client invitations (create) ──────────────────────────────────────────────
 
   async createInvitation(data: {
