@@ -57,6 +57,7 @@ export interface ReportRow {
   title: string
   status: 'draft' | 'published'
   r2_key: string | null
+  snapshot_json: string | null
   generated_at: string | null
   published_at: string | null
   created_at: string
@@ -239,15 +240,15 @@ export class AgencyRepo {
     id: string
     projectId: string
     title: string
-    r2Key: string
+    snapshotJson: string
     generatedAt: string
   }): Promise<ReportRow> {
     const result = await this.db
       .prepare(
-        `INSERT INTO reports (id, project_id, agency_id, title, status, r2_key, generated_at)
+        `INSERT INTO reports (id, project_id, agency_id, title, status, snapshot_json, generated_at)
          VALUES (?, ?, ?, ?, 'draft', ?, ?) RETURNING *`
       )
-      .bind(data.id, data.projectId, this.agencyId, data.title, data.r2Key, data.generatedAt)
+      .bind(data.id, data.projectId, this.agencyId, data.title, data.snapshotJson, data.generatedAt)
       .first<ReportRow>()
     if (!result) throw new Error('Failed to create report')
     return result

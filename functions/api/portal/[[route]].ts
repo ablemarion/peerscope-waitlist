@@ -16,7 +16,7 @@ import { Hono } from 'hono'
 import { handle } from 'hono/cloudflare-pages'
 import { z } from 'zod'
 import Stripe from 'stripe'
-import type { D1Database, R2Bucket } from '@cloudflare/workers-types'
+import type { D1Database } from '@cloudflare/workers-types'
 import type { MiddlewareHandler } from 'hono'
 import { Resend } from 'resend'
 import { requireAgencyCtx, issuePortalJwt } from '../../../src/middleware/requireAgencyCtx'
@@ -37,7 +37,6 @@ import type { AgencyResponse } from '../../../src/types/portal'
 
 interface Env {
   DB: D1Database
-  PORTAL_STORAGE: R2Bucket
   /** HS256 JWT signing secret (required). */
   BETTER_AUTH_SECRET: string
   /** Public base URL for magic links and Stripe redirects. */
@@ -539,16 +538,11 @@ app.post('/reports/generate', async (c) => {
     status: 'draft',
   }
 
-  const r2Key = `reports/${agencyId}/${reportId}.json`
-  await c.env.PORTAL_STORAGE.put(r2Key, JSON.stringify(snapshot), {
-    httpMetadata: { contentType: 'application/json' },
-  })
-
   const report = await repo.createReport({
     id: reportId,
     projectId: project.id,
     title: `${project.name} Competitive Report`,
-    r2Key,
+    snapshotJson: JSON.stringify(snapshot),
     generatedAt: now,
   })
 
@@ -575,15 +569,11 @@ app.get('/reports/:id', async (c) => {
   if (!report) return c.json(err('Report not found'), 404)
 
   let snapshot: unknown = null
-  if (report.r2_key) {
-    const obj = await c.env.PORTAL_STORAGE.get(report.r2_key)
-    if (obj) {
-      try {
-        const text = await obj.text()
-        snapshot = JSON.parse(text) as unknown
-      } catch {
-        // Snapshot unreadable — return report without it
-      }
+  if (report.snapshot_json) {
+    try {
+      snapshot = JSON.parse(report.snapshot_json) as unknown
+    } catch {
+      // Snapshot unreadable — return report without it
     }
   }
 
