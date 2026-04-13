@@ -56,9 +56,14 @@ const NAV_ITEMS: NavItem[] = [
 interface PortalLayoutProps {
   children: ReactNode
   currentPath: string
+  role?: string
 }
 
-export function PortalLayout({ children, currentPath }: PortalLayoutProps) {
+export function PortalLayout({ children, currentPath, role }: PortalLayoutProps) {
+  const isClientViewer = role === 'client_viewer'
+  const visibleNavItems = isClientViewer
+    ? NAV_ITEMS.filter((item) => item.path === '/portal/reports')
+    : NAV_ITEMS
   function navigate(path: string) {
     window.history.pushState({}, '', path)
     window.dispatchEvent(new PopStateEvent('popstate'))
@@ -85,7 +90,7 @@ export function PortalLayout({ children, currentPath }: PortalLayoutProps) {
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5" aria-label="Portal navigation">
-          {NAV_ITEMS.map((item) => {
+          {visibleNavItems.map((item) => {
             const isActive = currentPath === item.path || (currentPath === '/portal' && item.path === '/portal/dashboard')
             return (
               <button
@@ -128,7 +133,7 @@ export function PortalLayout({ children, currentPath }: PortalLayoutProps) {
         {/* Top bar */}
         <header className="h-14 flex items-center px-6 bg-white border-b border-gray-200 flex-shrink-0">
           <h1 className="text-sm font-medium text-gray-900">
-            {NAV_ITEMS.find(i => i.path === currentPath)?.label ?? 'Dashboard'}
+            {NAV_ITEMS.find(i => i.path === currentPath)?.label ?? (isClientViewer ? 'Reports' : 'Dashboard')}
           </h1>
           <div className="ml-auto flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-medium bg-indigo-50 text-indigo-600 border border-indigo-100">

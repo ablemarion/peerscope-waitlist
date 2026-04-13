@@ -3,6 +3,7 @@ import { PortalLayout } from './PortalLayout'
 import { PortalDashboard } from './PortalDashboard'
 import { PortalClients } from './PortalClients'
 import { PortalProjects } from './PortalProjects'
+import { ClientPortal } from './ClientPortal'
 
 function PortalReports() {
   return (
@@ -37,8 +38,23 @@ function normalisePath(path: string) {
   return path
 }
 
+/** Extract role from the stored JWT without verifying signature (client-side only). */
+function getSessionRole(): string | undefined {
+  try {
+    const raw = localStorage.getItem('peerscope_session')
+    if (!raw) return undefined
+    const parts = raw.split('.')
+    if (parts.length < 2) return undefined
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))) as Record<string, unknown>
+    return typeof payload.role === 'string' ? payload.role : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export function Portal() {
   const [currentPath, setCurrentPath] = useState(() => normalisePath(window.location.pathname))
+  const role = getSessionRole()
 
   useEffect(() => {
     function onPopState() {
@@ -48,10 +64,15 @@ export function Portal() {
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
 
+  // client_viewer gets the standalone ClientPortal view (no sidebar layout)
+  if (role === 'client_viewer') {
+    return <ClientPortal />
+  }
+
   const page = getPage(currentPath)
 
   return (
-    <PortalLayout currentPath={currentPath}>
+    <PortalLayout currentPath={currentPath} role={role}>
       {page === 'dashboard' && <PortalDashboard />}
       {page === 'clients' && <PortalClients />}
       {page === 'projects' && <PortalProjects />}

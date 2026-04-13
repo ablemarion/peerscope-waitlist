@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { LandingPage } from './components/LandingPage'
 import { Portal } from './components/portal/index.tsx'
+import { PortalJoin } from './components/portal/PortalJoin.tsx'
 
 // Cloudflare Web Analytics — only injected when token is configured
 const analyticsToken = import.meta.env.VITE_CF_ANALYTICS_TOKEN
@@ -53,10 +54,11 @@ if (analyticsToken) {
 
 const path = window.location.pathname
 const isLandingPage = path === '/lp' || path === '/lp/'
-const isPortal = path.startsWith('/portal')
+const isPortalJoin = path === '/portal/join' || path === '/portal/join/'
+const isPortal = path.startsWith('/portal') && !isPortalJoin
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {isPortal ? <Portal /> : isLandingPage ? <LandingPage /> : <App />}
+    {isPortalJoin ? <PortalJoin /> : isPortal ? <Portal /> : isLandingPage ? <LandingPage /> : <App />}
   </StrictMode>,
 )
