@@ -2,7 +2,20 @@ import { useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'peerscope_urgency_banner_v1'
 const FOUNDING_CAP = 50
-const DEADLINE = new Date('2026-04-15T23:59:59+08:00') // Perth AWST
+const DEADLINE = new Date('2026-04-15T23:59:59+10:00') // AEST
+const URGENT_THRESHOLD_MS = 48 * 60 * 60 * 1000
+
+function getBannerTimeLeft(): { hours: number; minutes: number } | null {
+  const total = DEADLINE.getTime() - Date.now()
+  if (total <= 0) return null
+  const totalHours = Math.floor(total / (1000 * 60 * 60))
+  const minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60))
+  return { hours: totalHours, minutes }
+}
+
+function pad(n: number): string {
+  return String(n).padStart(2, '0')
+}
 
 export function FoundingBanner() {
   const [dismissed, setDismissed] = useState(() => {
@@ -20,6 +33,10 @@ export function FoundingBanner() {
   })
   const [spotsLeft, setSpotsLeft] = useState<number | null>(null)
   const [past, setPast] = useState(() => Date.now() > DEADLINE.getTime())
+  const [bannerTime, setBannerTime] = useState<{ hours: number; minutes: number } | null>(() => {
+    const total = DEADLINE.getTime() - Date.now()
+    return total <= URGENT_THRESHOLD_MS ? getBannerTimeLeft() : null
+  })
 
   useEffect(() => {
     fetch('/api/public/stats')
@@ -40,6 +57,15 @@ export function FoundingBanner() {
     return () => clearTimeout(t)
   }, [past])
 
+  // Tick the banner time every minute when in urgent window
+  useEffect(() => {
+    const total = DEADLINE.getTime() - Date.now()
+    if (total > URGENT_THRESHOLD_MS || past) return
+    setBannerTime(getBannerTimeLeft())
+    const id = setInterval(() => setBannerTime(getBannerTimeLeft()), 60_000)
+    return () => clearInterval(id)
+  }, [past])
+
   if (dismissed || past) return null
 
   function dismiss() {
@@ -56,6 +82,10 @@ export function FoundingBanner() {
       ? ` — ${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} remaining`
       : ''
 
+  const urgentFragment = bannerTime
+    ? `${pad(bannerTime.hours)}h ${pad(bannerTime.minutes)}m`
+    : null
+
   return (
     <div
       role="banner"
@@ -63,8 +93,17 @@ export function FoundingBanner() {
       style={{ minHeight: '40px', background: '#B8622A' }}
     >
       <p className="text-center leading-snug text-white" style={{ fontSize: '13px' }}>
-        <span>⏰ Founding member pricing closes April 15</span>
-        <span className="hidden sm:inline">{spotsFragment}</span>
+        {urgentFragment ? (
+          <>
+            <span className="font-bold">{urgentFragment} left</span>
+            <span> — founding price closes April 15</span>
+          </>
+        ) : (
+          <>
+            <span>⏰ Founding member pricing closes April 15</span>
+            <span className="hidden sm:inline">{spotsFragment}</span>
+          </>
+        )}
         <span> · </span>
         <a
           href="#waitlist"
