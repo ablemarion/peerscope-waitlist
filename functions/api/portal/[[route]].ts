@@ -505,5 +505,61 @@ app.post('/reports/generate', async (c) => {
   return c.json(ok(report), 201)
 })
 
+// ── GET /reports — list reports (filtered by projectId query param) ───────────
+app.get('/reports', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  const url = new URL(c.req.url)
+  const projectId = url.searchParams.get('projectId') ?? undefined
+  const publishedOnly = role === 'client_viewer'
+  const repo = createRepo(c.env.DB, agencyId)
+  const reports = await repo.listReports({ projectId, publishedOnly })
+  return c.json(ok(reports))
+})
+
+// ── GET /reports/:id — get report + load snapshot from R2 ─────────────────────
+app.get('/reports/:id', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  const publishedOnly = role === 'client_viewer'
+  const repo = createRepo(c.env.DB, agencyId)
+  const report = await repo.getReport(c.req.param('id'), publishedOnly)
+  if (!report) return c.json(err('Report not found'), 404)
+
+  let snapshot: unknown = null
+  if (report.r2_key) {
+    const obj = await c.env.PORTAL_STORAGE.get(report.r2_key)
+    if (obj) {
+      try {
+        const text = await obj.text()
+        snapshot = JSON.parse(text) as unknown
+      } catch {
+        // Snapshot unreadable — return report without it
+      }
+    }
+  }
+
+  return c.json(ok({ ...report, snapshot }))
+})
+
+// ── PATCH /reports/:id/publish — toggle draft → published ─────────────────────
+app.patch('/reports/:id/publish', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const report = await repo.getReport(c.req.param('id'))
+  if (!report) return c.json(err('Report not found'), 404)
+
+  const now = new Date().toISOString()
+  const updated = await c.env.DB
+    .prepare(
+      "UPDATE reports SET status = 'published', published_at = ? WHERE id = ? AND agency_id = ? RETURNING *"
+    )
+    .bind(now, report.id, agencyId)
+    .first<ReportRow>()
+
+  if (!updated) return c.json(err('Failed to publish report'), 500)
+  return c.json(ok(updated))
+})
+
 // ─── Export ───────────────────────────────────────────────────────────────────
 export const onRequest = handle(app)

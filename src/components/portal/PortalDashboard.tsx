@@ -1,16 +1,24 @@
+import { useState, useEffect } from 'react'
+import { portalFetch } from '../../lib/portalApi'
+
 interface StatCardProps {
   label: string
   value: string | number
   trend?: string
   trendUp?: boolean
+  loading?: boolean
 }
 
-function StatCard({ label, value, trend, trendUp }: StatCardProps) {
+function StatCard({ label, value, trend, trendUp, loading }: StatCardProps) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{label}</p>
-      <p className="mt-1.5 text-2xl font-semibold text-gray-900">{value}</p>
-      {trend && (
+      {loading ? (
+        <div className="mt-1.5 h-8 bg-gray-200 rounded w-12 animate-pulse" />
+      ) : (
+        <p className="mt-1.5 text-2xl font-semibold text-gray-900">{value}</p>
+      )}
+      {trend && !loading && (
         <p className={`mt-1 text-xs ${trendUp ? 'text-emerald-600' : 'text-gray-400'}`}>
           {trend}
         </p>
@@ -19,7 +27,43 @@ function StatCard({ label, value, trend, trendUp }: StatCardProps) {
   )
 }
 
+interface DashboardStats {
+  clientCount: number
+  projectCount: number
+  reportCount: number
+}
+
 export function PortalDashboard() {
+  const [stats, setStats] = useState<DashboardStats>({ clientCount: 0, projectCount: 0, reportCount: 0 })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const [clientsRes, projectsRes, reportsRes] = await Promise.all([
+          portalFetch('/api/portal/clients'),
+          portalFetch('/api/portal/projects'),
+          portalFetch('/api/portal/reports'),
+        ])
+        const [clientsJson, projectsJson, reportsJson] = await Promise.all([
+          clientsRes.json() as Promise<{ data: unknown[] | null }>,
+          projectsRes.json() as Promise<{ data: unknown[] | null }>,
+          reportsRes.json() as Promise<{ data: unknown[] | null }>,
+        ])
+        setStats({
+          clientCount: clientsJson.data?.length ?? 0,
+          projectCount: projectsJson.data?.length ?? 0,
+          reportCount: reportsJson.data?.length ?? 0,
+        })
+      } catch {
+        // Non-critical — leave at 0
+      } finally {
+        setLoading(false)
+      }
+    }
+    void loadStats()
+  }, [])
+
   return (
     <div className="max-w-5xl space-y-6">
       {/* Page header */}
@@ -30,10 +74,25 @@ export function PortalDashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Clients" value="0" trend="No clients yet" />
-        <StatCard label="Active Projects" value="0" trend="No projects yet" />
-        <StatCard label="Reports Generated" value="0" trend="Get started below" />
-        <StatCard label="Pending Invites" value="0" />
+        <StatCard
+          label="Total Clients"
+          value={stats.clientCount}
+          trend={stats.clientCount === 0 ? 'No clients yet' : undefined}
+          loading={loading}
+        />
+        <StatCard
+          label="Active Projects"
+          value={stats.projectCount}
+          trend={stats.projectCount === 0 ? 'No projects yet' : undefined}
+          loading={loading}
+        />
+        <StatCard
+          label="Reports Generated"
+          value={stats.reportCount}
+          trend={stats.reportCount === 0 ? 'Get started below' : undefined}
+          loading={loading}
+        />
+        <StatCard label="Pending Invites" value="—" trend="Coming soon" />
       </div>
 
       {/* Quick actions */}

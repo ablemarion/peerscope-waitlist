@@ -1,29 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { EmptyState } from './PortalDashboard'
+import { portalFetch } from '../../lib/portalApi'
 
-type InviteStatus = 'pending' | 'accepted'
-
-interface Client {
+interface ClientRow {
   id: string
+  agency_id: string
   name: string
   email: string
-  inviteStatus: InviteStatus
-  invitedAt: string
+  status: 'active' | 'inactive'
+  created_at: string
 }
 
-function StatusBadge({ status }: { status: InviteStatus }) {
-  if (status === 'accepted') {
+function StatusBadge({ status }: { status: 'active' | 'inactive' }) {
+  if (status === 'active') {
     return (
       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-        Accepted
+        Active
       </span>
     )
   }
   return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
       <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-      Pending
+      Inactive
     </span>
   )
 }
@@ -56,16 +56,13 @@ function InviteButton({ clientId }: InviteButtonProps) {
   async function handleInvite() {
     setState('loading')
     try {
-      // Mock API call — POST /api/portal/clients/:id/invite
-      const res = await fetch(`/api/portal/clients/${clientId}/invite`, {
+      const res = await portalFetch(`/api/portal/clients/${clientId}/invite`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
       })
       if (!res.ok) throw new Error('Failed')
       setState('sent')
     } catch {
-      // In dev/demo: treat as success since API is mocked
-      setState('sent')
+      setState('error')
     }
     setTimeout(() => setState('idle'), 3000)
   }
@@ -77,6 +74,14 @@ function InviteButton({ clientId }: InviteButtonProps) {
           <path d="M2.5 7l3 3 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         Invite sent
+      </span>
+    )
+  }
+
+  if (state === 'error') {
+    return (
+      <span className="inline-flex items-center gap-1.5 text-xs text-red-600 font-medium">
+        Failed — retry?
       </span>
     )
   }
@@ -106,12 +111,27 @@ function InviteButton({ clientId }: InviteButtonProps) {
   )
 }
 
-// Demo data — replace with real API fetch
-const DEMO_CLIENTS: Client[] = []
-
 export function PortalClients() {
-  const [loading] = useState(false)
-  const clients = DEMO_CLIENTS
+  const [clients, setClients] = useState<ClientRow[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const loadClients = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await portalFetch('/api/portal/clients')
+      const json = await res.json() as { data: ClientRow[] | null; error: string | null }
+      if (!res.ok || json.error) throw new Error(json.error ?? 'Failed to load clients')
+      setClients(json.data ?? [])
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to load clients')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { void loadClients() }, [loadClients])
 
   return (
     <div className="max-w-5xl space-y-5">
@@ -143,6 +163,17 @@ export function PortalClients() {
 
         {loading ? (
           <TableSkeleton />
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <p className="text-sm font-medium text-gray-700">Failed to load clients</p>
+            <p className="text-xs text-gray-400 mt-1">{error}</p>
+            <button
+              onClick={() => void loadClients()}
+              className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
         ) : clients.length === 0 ? (
           <EmptyState
             icon={
@@ -177,7 +208,7 @@ export function PortalClients() {
                 {/* Email */}
                 <span className="text-sm text-gray-500 truncate">{client.email}</span>
                 {/* Status badge */}
-                <StatusBadge status={client.inviteStatus} />
+                <StatusBadge status={client.status} />
                 {/* Invite action */}
                 <InviteButton clientId={client.id} />
               </div>

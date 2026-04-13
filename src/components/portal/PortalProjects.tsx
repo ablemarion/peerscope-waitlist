@@ -1,15 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { EmptyState } from './PortalDashboard'
+import { portalFetch } from '../../lib/portalApi'
 
-interface Project {
+interface ProjectRow {
   id: string
+  agency_id: string
+  client_id: string
   name: string
-  clientName: string
-  competitorCount: number
-  lastReportAt?: string
+  description: string | null
+  created_at: string
 }
 
-function ProjectCardSkeleton() {
+interface ClientRow {
+  id: string
+  name: string
+}
+
+interface ReportRow {
+  id: string
+  project_id: string
+  generated_at: string | null
+}
+
+interface ProjectCardSkeleton_Props { _?: never }
+
+function ProjectCardSkeleton(_: ProjectCardSkeleton_Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 animate-pulse">
       <div className="flex items-start justify-between mb-4">
@@ -31,17 +46,14 @@ function GenerateReportButton({ projectId }: { projectId: string }) {
   async function handleGenerate() {
     setState('loading')
     try {
-      // POST /api/portal/reports/generate
-      const res = await fetch('/api/portal/reports/generate', {
+      const res = await portalFetch('/api/portal/reports/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ projectId }),
       })
       if (!res.ok) throw new Error('Failed')
       setState('done')
     } catch {
-      // Demo: treat as success
-      setState('done')
+      setState('error')
     }
     setTimeout(() => setState('idle'), 4000)
   }
@@ -53,6 +65,14 @@ function GenerateReportButton({ projectId }: { projectId: string }) {
           <path d="M2.5 7l3 3 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         Report queued
+      </div>
+    )
+  }
+
+  if (state === 'error') {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-red-500 font-medium justify-center py-2">
+        Failed to generate — retry?
       </div>
     )
   }
@@ -83,7 +103,13 @@ function GenerateReportButton({ projectId }: { projectId: string }) {
   )
 }
 
-function ProjectCard({ project }: { project: Project }) {
+interface ProjectCardProps {
+  project: ProjectRow
+  clientName: string
+  lastReportAt: string | null
+}
+
+function ProjectCard({ project, clientName, lastReportAt }: ProjectCardProps) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-indigo-200 hover:shadow-sm transition-all duration-150 flex flex-col gap-4">
       {/* Header */}
@@ -91,20 +117,15 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="min-w-0">
           <h3 className="text-sm font-semibold text-gray-900 truncate">{project.name}</h3>
           <p className="text-xs text-gray-500 mt-0.5 truncate">
-            <span className="text-gray-400">Client:</span> {project.clientName}
+            <span className="text-gray-400">Client:</span> {clientName}
           </p>
-        </div>
-        {/* Competitor count badge */}
-        <div className="flex-shrink-0 text-center">
-          <p className="text-lg font-bold text-indigo-600 leading-none">{project.competitorCount}</p>
-          <p className="text-[10px] text-gray-400 mt-0.5">competitors</p>
         </div>
       </div>
 
       {/* Last report */}
       <p className="text-xs text-gray-400">
-        {project.lastReportAt
-          ? `Last report: ${new Date(project.lastReportAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}`
+        {lastReportAt
+          ? `Last report: ${new Date(lastReportAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}`
           : 'No reports generated yet'}
       </p>
 
@@ -114,12 +135,59 @@ function ProjectCard({ project }: { project: Project }) {
   )
 }
 
-// Demo data — replace with real API fetch
-const DEMO_PROJECTS: Project[] = []
-
 export function PortalProjects() {
-  const [loading] = useState(false)
-  const projects = DEMO_PROJECTS
+  const [projects, setProjects] = useState<ProjectRow[]>([])
+  const [clientMap, setClientMap] = useState<Record<string, string>>({})
+  const [lastReportMap, setLastReportMap] = useState<Record<string, string>>({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const loadData = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const [projectsRes, clientsRes, reportsRes] = await Promise.all([
+        portalFetch('/api/portal/projects'),
+        portalFetch('/api/portal/clients'),
+        portalFetch('/api/portal/reports'),
+      ])
+
+      const [projectsJson, clientsJson, reportsJson] = await Promise.all([
+        projectsRes.json() as Promise<{ data: ProjectRow[] | null; error: string | null }>,
+        clientsRes.json() as Promise<{ data: ClientRow[] | null; error: string | null }>,
+        reportsRes.json() as Promise<{ data: ReportRow[] | null; error: string | null }>,
+      ])
+
+      if (!projectsRes.ok || projectsJson.error) throw new Error(projectsJson.error ?? 'Failed to load projects')
+
+      setProjects(projectsJson.data ?? [])
+
+      // Build client name lookup
+      const cm: Record<string, string> = {}
+      for (const c of clientsJson.data ?? []) {
+        cm[c.id] = c.name
+      }
+      setClientMap(cm)
+
+      // Build last-report-per-project lookup
+      const rm: Record<string, string> = {}
+      for (const r of reportsJson.data ?? []) {
+        if (r.generated_at) {
+          const existing = rm[r.project_id]
+          if (!existing || r.generated_at > existing) {
+            rm[r.project_id] = r.generated_at
+          }
+        }
+      }
+      setLastReportMap(rm)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to load projects')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { void loadData() }, [loadData])
 
   return (
     <div className="max-w-5xl space-y-5">
@@ -141,6 +209,17 @@ export function PortalProjects() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => <ProjectCardSkeleton key={i} />)}
+        </div>
+      ) : error ? (
+        <div className="bg-white rounded-xl border border-gray-200 flex flex-col items-center justify-center py-10 text-center">
+          <p className="text-sm font-medium text-gray-700">Failed to load projects</p>
+          <p className="text-xs text-gray-400 mt-1">{error}</p>
+          <button
+            onClick={() => void loadData()}
+            className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+          >
+            Retry
+          </button>
         </div>
       ) : projects.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200">
@@ -168,7 +247,12 @@ export function PortalProjects() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              clientName={clientMap[project.client_id] ?? 'Unknown client'}
+              lastReportAt={lastReportMap[project.id] ?? null}
+            />
           ))}
         </div>
       )}
