@@ -21,7 +21,7 @@ function normalisePath(path: string) {
 /** Extract role from the stored JWT without verifying signature (client-side only). */
 function getSessionRole(): string | undefined {
   try {
-    const raw = localStorage.getItem('peerscope_session')
+    const raw = localStorage.getItem('peerscope_portal_jwt')
     if (!raw) return undefined
     const parts = raw.split('.')
     if (parts.length < 2) return undefined

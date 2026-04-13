@@ -40,9 +40,22 @@ export function PortalJoin() {
           return
         }
 
-        const data = await res.json() as { sessionToken: string }
+        const body = await res.json() as { data: { sessionToken: string } }
+        const sessionToken = body.data.sessionToken
+
+        // Exchange the session token for a signed JWT.
+        const tokenRes = await fetch('/api/portal/auth/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionToken }),
+        })
+        if (!tokenRes.ok) {
+          setState({ phase: 'error', message: 'Failed to complete sign-in. Please try your invite link again.' })
+          return
+        }
+        const tokenBody = await tokenRes.json() as { data: { token: string } }
         try {
-          localStorage.setItem('peerscope_session', data.sessionToken)
+          localStorage.setItem('peerscope_portal_jwt', tokenBody.data.token)
         } catch { /* localStorage unavailable */ }
 
         setState({ phase: 'success' })
