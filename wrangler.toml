@@ -15,3 +15,11 @@ migrations_dir = "migrations"
 [[kv_namespaces]]
 binding = "DEBOUNCE"
 id = "74584493a8354139b672365bf43b3cb2"
+
+# Client Portal: report blobs + agency logos
+# R2 bucket must be created via CF dashboard before deploy:
+#   wrangler r2 bucket create peerscope-portal
+[[r2_buckets]]
+binding = "PORTAL_STORAGE"
+bucket_name = "peerscope-portal"
+
