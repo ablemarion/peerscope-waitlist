@@ -6,7 +6,7 @@
  */
 
 import { z } from 'zod'
-import type { AgencyRow, ClientRow, CompetitorTargetRow, ProjectRow } from '../db/repo'
+import type { AgencyRow, ClientRow, CompetitorTargetRow, ProjectRow, ReportRow } from '../db/repo'
 
 // ─── Request schemas ──────────────────────────────────────────────────────────
 
@@ -49,6 +49,16 @@ export const CreateCompetitorTargetSchema = z.object({
 })
 export type CreateCompetitorTargetInput = z.infer<typeof CreateCompetitorTargetSchema>
 
+export const AcceptInviteSchema = z.object({
+  token: z.string().min(1),
+})
+export type AcceptInviteInput = z.infer<typeof AcceptInviteSchema>
+
+export const GenerateReportSchema = z.object({
+  projectId: z.string().min(1),
+})
+export type GenerateReportInput = z.infer<typeof GenerateReportSchema>
+
 // ─── Response types ────────────────────────────────────────────────────────────
 
 /** Standard API envelope — every portal endpoint wraps its payload here. */
@@ -63,3 +73,10 @@ export type AgencyResponse = Pick<
 export type ClientResponse = ClientRow
 export type ProjectResponse = ProjectRow
 export type CompetitorTargetResponse = CompetitorTargetRow
+export type ReportResponse = ReportRow
+
+export interface AcceptInviteResponse {
+  sessionToken: string
+  userId: string
+  agencyId: string
+}

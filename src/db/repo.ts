@@ -215,6 +215,44 @@ export class AgencyRepo {
     return rows(result)
   }
 
+  // ── Client invitations (create) ──────────────────────────────────────────────
+
+  async createInvitation(data: {
+    clientId: string
+    email: string
+    tokenHash: string
+    expiresAt: string
+  }): Promise<ClientInvitationRow> {
+    const result = await this.db
+      .prepare(
+        'INSERT INTO client_invitations (agency_id, client_id, email, token_hash, expires_at) VALUES (?, ?, ?, ?, ?) RETURNING *'
+      )
+      .bind(this.agencyId, data.clientId, data.email, data.tokenHash, data.expiresAt)
+      .first<ClientInvitationRow>()
+    if (!result) throw new Error('Failed to create invitation')
+    return result
+  }
+
+  // ── Reports (create) ──────────────────────────────────────────────────────────
+
+  async createReport(data: {
+    id: string
+    projectId: string
+    title: string
+    r2Key: string
+    generatedAt: string
+  }): Promise<ReportRow> {
+    const result = await this.db
+      .prepare(
+        `INSERT INTO reports (id, project_id, agency_id, title, status, r2_key, generated_at)
+         VALUES (?, ?, ?, ?, 'draft', ?, ?) RETURNING *`
+      )
+      .bind(data.id, data.projectId, this.agencyId, data.title, data.r2Key, data.generatedAt)
+      .first<ReportRow>()
+    if (!result) throw new Error('Failed to create report')
+    return result
+  }
+
   async createCompetitorTarget(data: {
     projectId: string
     domain: string
