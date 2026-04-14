@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope PH — Clients</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1270px;
+  height: 760px;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  background: #F5F5F0;
+  display: flex;
+}
+
+/* Reuse sidebar styles */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #0D0F1A;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+.sidebar-logo { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.logo-row {
+  display: flex; align-items: center; gap: 9px;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px;
+  color: rgba(255,255,255,0.85);
+}
+.logo-row span { color: #F07C35; }
+.agency-badge { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
+.agency-icon { width: 24px; height: 24px; border-radius: 6px; background: rgba(184,98,42,0.15); display: flex; align-items: center; justify-content: center; }
+.agency-label { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 500; }
+.nav { flex: 1; padding: 16px 12px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 2px; }
+.nav-item.active { background: rgba(184,98,42,0.12); color: #F07C35; }
+.nav-item .dot { margin-left: auto; width: 4px; height: 16px; border-radius: 2px; background: #F07C35; }
+.nav-icon { width: 18px; height: 18px; opacity: 0.6; }
+.nav-item.active .nav-icon { opacity: 1; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(184,98,42,0.15); color: #F07C35; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+.user-name { font-size: 12px; color: rgba(255,255,255,0.55); }
+.user-email { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 1px; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { height: 56px; background: white; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; }
+.topbar-title { font-size: 14px; font-weight: 600; color: #111827; }
+.live-pill { margin-left: auto; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; background: rgba(184,98,42,0.08); border: 1px solid rgba(184,98,42,0.2); font-size: 10px; font-weight: 600; color: #F07C35; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: #F07C35; }
+.content { flex: 1; padding: 24px; overflow: hidden; }
+
+/* Page specific */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 18px; font-weight: 600; color: #111827; }
+.page-sub { font-size: 13px; color: #6B7280; margin-top: 3px; }
+.btn-primary {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 8px;
+  background: #B8622A; color: white;
+  font-size: 13px; font-weight: 600;
+  border: none; cursor: pointer;
+}
+
+/* Table */
+.table-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+}
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 0.8fr 0.8fr 0.8fr 1fr;
+  padding: 12px 20px;
+  background: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+}
+.th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #9CA3AF;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 0.8fr 0.8fr 0.8fr 1fr;
+  padding: 14px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  align-items: center;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: #FAFAF8; }
+
+.client-cell { display: flex; align-items: center; gap: 10px; }
+.client-avatar {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.client-name { font-size: 13.5px; font-weight: 600; color: #111827; }
+.client-domain { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+
+.td { font-size: 13px; color: #374151; }
+.td-muted { font-size: 12px; color: #9CA3AF; }
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.status-active { background: #D1FAE5; color: #065F46; }
+.status-pending { background: #FEF3C7; color: #92400E; }
+.status-invited { background: #EDE9FE; color: #5B21B6; }
+
+.action-btn {
+  font-size: 12px; color: #B8622A; font-weight: 500;
+  background: none; border: none; cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-row">
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="11" r="9.5" stroke="#F07C35" stroke-width="1.8"/>
+        <circle cx="11" cy="11" r="5" stroke="#F07C35" stroke-width="1.2" stroke-opacity="0.55"/>
+        <circle cx="11" cy="11" r="2" fill="#F07C35"/>
+      </svg>
+      Peer<span>scope</span>
+    </div>
+    <div class="agency-badge">
+      <div class="agency-icon">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="0.5" y="0.5" width="10" height="10" rx="2" fill="#B8622A"/></svg>
+      </div>
+      <span class="agency-label">Acme Digital Agency</span>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="#F07C35" stroke-width="1.5" fill="none"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+      Clients
+      <div class="dot"></div>
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><path d="M2 4h14M2 9h10M2 14h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Projects
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="1" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 6h8M5 9h8M5 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Reports
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar">A</div>
+    <div>
+      <div class="user-name">Acme Digital</div>
+      <div class="user-email">admin@acmedigital.io</div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title">Clients</span>
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+  </header>
+  <div class="content">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Clients</div>
+        <div class="page-sub">Manage your agency clients and their portal access.</div>
+      </div>
+      <button class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        Add Client
+      </button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <div class="th">Client</div>
+        <div class="th">Email</div>
+        <div class="th">Projects</div>
+        <div class="th">Reports</div>
+        <div class="th">Status</div>
+        <div class="th">Action</div>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="table-row">
+        <div class="client-cell">
+          <div class="client-avatar" style="background:#EFF6FF;color:#1D4ED8;">TS</div>
+          <div>
+            <div class="client-name">TechStart Inc.</div>
+            <div class="client-domain">techstart.io</div>
+          </div>
+        </div>
+        <div class="td-muted">sarah@techstart.io</div>
+        <div class="td" style="font-weight:600;">3</div>
+        <div class="td" style="font-weight:600;">12</div>
+        <div><span class="status-pill status-active">● Active</span></div>
+        <div><button class="action-btn">View →</button></div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="table-row">
+        <div class="client-cell">
+          <div class="client-avatar" style="background:#F0FDF4;color:#166534;">GW</div>
+          <div>
+            <div class="client-name">Greenwave SaaS</div>
+            <div class="client-domain">greenwave.app</div>
+          </div>
+        </div>
+        <div class="td-muted">tom@greenwave.app</div>
+        <div class="td" style="font-weight:600;">2</div>
+        <div class="td" style="font-weight:600;">8</div>
+        <div><span class="status-pill status-active">● Active</span></div>
+        <div><button class="action-btn">View →</button></div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="table-row">
+        <div class="client-cell">
+          <div class="client-avatar" style="background:#FFF7ED;color:#C2410C;">NS</div>
+          <div>
+            <div class="client-name">Northstar CRM</div>
+            <div class="client-domain">northstarcrm.com</div>
+          </div>
+        </div>
+        <div class="td-muted">ops@northstarcrm.com</div>
+        <div class="td" style="font-weight:600;">4</div>
+        <div class="td" style="font-weight:600;">19</div>
+        <div><span class="status-pill status-active">● Active</span></div>
+        <div><button class="action-btn">View →</button></div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="table-row">
+        <div class="client-cell">
+          <div class="client-avatar" style="background:#EDE9FE;color:#6D28D9;">LS</div>
+          <div>
+            <div class="client-name">LoopStack</div>
+            <div class="client-domain">loopstack.dev</div>
+          </div>
+        </div>
+        <div class="td-muted">founders@loopstack.dev</div>
+        <div class="td" style="font-weight:600;">2</div>
+        <div class="td" style="font-weight:600;">4</div>
+        <div><span class="status-pill status-pending">⏳ Setup</span></div>
+        <div><button class="action-btn">View →</button></div>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="table-row">
+        <div class="client-cell">
+          <div class="client-avatar" style="background:#FFF1F2;color:#BE123C;">RF</div>
+          <div>
+            <div class="client-name">Rafter Finance</div>
+            <div class="client-domain">rafter.finance</div>
+          </div>
+        </div>
+        <div class="td-muted">ceo@rafter.finance</div>
+        <div class="td" style="font-weight:600;">1</div>
+        <div class="td" style="font-weight:600;">2</div>
+        <div><span class="status-pill status-invited">✉ Invited</span></div>
+        <div><button class="action-btn">Resend →</button></div>
+      </div>
+
+      <!-- Row 6 -->
+      <div class="table-row">
+        <div class="client-cell">
+          <div class="client-avatar" style="background:#F0F9FF;color:#0369A1;">VP</div>
+          <div>
+            <div class="client-name">Velox Platform</div>
+            <div class="client-domain">velox.io</div>
+          </div>
+        </div>
+        <div class="td-muted">product@velox.io</div>
+        <div class="td" style="font-weight:600;">2</div>
+        <div class="td" style="font-weight:600;">7</div>
+        <div><span class="status-pill status-active">● Active</span></div>
+        <div><button class="action-btn">View →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope PH — Agency Dashboard</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1270px;
+  height: 760px;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  background: #F5F5F0;
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #0D0F1A;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+.sidebar-logo {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: rgba(255,255,255,0.85);
+}
+.logo-row span { color: #F07C35; }
+.agency-badge {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.agency-icon {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: rgba(184,98,42,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agency-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  font-weight: 500;
+}
+
+/* Nav */
+.nav {
+  flex: 1;
+  padding: 16px 12px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 2px;
+}
+.nav-item.active {
+  background: rgba(184,98,42,0.12);
+  color: #F07C35;
+}
+.nav-item .dot {
+  margin-left: auto;
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  background: #F07C35;
+}
+.nav-icon {
+  width: 18px; height: 18px;
+  opacity: 0.6;
+}
+.nav-item.active .nav-icon { opacity: 1; }
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(184,98,42,0.15);
+  color: #F07C35;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+.user-name { font-size: 12px; color: rgba(255,255,255,0.55); }
+.user-email { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 1px; }
+
+/* Main area */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.topbar {
+  height: 56px;
+  background: white;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+.topbar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+.live-pill {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(184,98,42,0.08);
+  border: 1px solid rgba(184,98,42,0.2);
+  font-size: 10px;
+  font-weight: 600;
+  color: #F07C35;
+}
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #F07C35;
+}
+
+/* Page content */
+.content {
+  flex: 1;
+  padding: 24px;
+  overflow: hidden;
+}
+.page-header { margin-bottom: 20px; }
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+.page-sub { font-size: 13px; color: #6B7280; margin-top: 3px; }
+
+/* Stat cards */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  border-left: 3px solid rgba(184,98,42,0.35);
+  padding: 18px 20px;
+}
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #9CA3AF;
+  margin-bottom: 8px;
+}
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+  line-height: 1;
+}
+.stat-trend {
+  font-size: 11px;
+  color: #10B981;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Quick actions + activity grid */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 14px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  padding: 18px 20px;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 14px;
+}
+
+/* Quick actions */
+.qa-list { display: flex; flex-direction: column; gap: 8px; }
+.qa-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #F3F4F6;
+  background: #FAFAF8;
+}
+.qa-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: rgba(184,98,42,0.08);
+  display: flex; align-items: center; justify-content: center;
+}
+.qa-text { font-size: 13px; font-weight: 500; color: #374151; }
+.qa-sub { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+
+/* Activity feed */
+.activity-list { display: flex; flex-direction: column; gap: 10px; }
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #F9FAFB;
+}
+.activity-item:last-child { border-bottom: none; padding-bottom: 0; }
+.act-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.act-text { font-size: 12.5px; color: #374151; line-height: 1.4; }
+.act-meta { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-row">
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="11" r="9.5" stroke="#F07C35" stroke-width="1.8"/>
+        <circle cx="11" cy="11" r="5" stroke="#F07C35" stroke-width="1.2" stroke-opacity="0.55"/>
+        <circle cx="11" cy="11" r="2" fill="#F07C35"/>
+      </svg>
+      Peer<span>scope</span>
+    </div>
+    <div class="agency-badge">
+      <div class="agency-icon">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <rect x="0.5" y="0.5" width="10" height="10" rx="2" fill="#B8622A"/>
+        </svg>
+      </div>
+      <span class="agency-label">Acme Digital Agency</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="#F07C35" stroke-width="1.5" fill="none"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="#F07C35" stroke-width="1.5" fill="none"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="#F07C35" stroke-width="1.5" fill="none"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="#F07C35" stroke-width="1.5" fill="none"/></svg>
+      Dashboard
+      <div class="dot"></div>
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+      Clients
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><path d="M2 4h14M2 9h10M2 14h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Projects
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="1" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 6h8M5 9h8M5 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Reports
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="avatar">A</div>
+    <div>
+      <div class="user-name">Acme Digital</div>
+      <div class="user-email">admin@acmedigital.io</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title">Dashboard</span>
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      Live
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <div class="page-title">Overview</div>
+      <div class="page-sub">Here's what's happening across your clients this week.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Clients</div>
+        <div class="stat-value">8</div>
+        <div class="stat-trend">↑ 2 added this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Projects</div>
+        <div class="stat-value">14</div>
+        <div class="stat-trend">↑ 3 new projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Reports Generated</div>
+        <div class="stat-value">47</div>
+        <div class="stat-trend">↑ 12 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Competitor Alerts</div>
+        <div class="stat-value" style="color:#F07C35;">6</div>
+        <div class="stat-trend" style="color:#EF4444;">3 pricing changes</div>
+      </div>
+    </div>
+
+    <!-- Bottom grid -->
+    <div class="bottom-grid">
+      <!-- Quick actions -->
+      <div class="card">
+        <div class="card-title">Quick Actions</div>
+        <div class="qa-list">
+          <div class="qa-item">
+            <div class="qa-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="#B8622A" stroke-width="1.4" fill="none"/><path d="M2 14c0-2.761 2.686-5 6-5s6 2.239 6 5" stroke="#B8622A" stroke-width="1.4" stroke-linecap="round" fill="none"/><path d="M12 2v4M10 4h4" stroke="#B8622A" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="qa-text">Invite a Client</div>
+              <div class="qa-sub">Add new client to your portal</div>
+            </div>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="2" stroke="#B8622A" stroke-width="1.4" fill="none"/><path d="M5 5h6M5 8h6M5 11h4" stroke="#B8622A" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="qa-text">New Project</div>
+              <div class="qa-sub">Set up competitor tracking</div>
+            </div>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="#B8622A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v1a2 2 0 002 2h6a2 2 0 002-2v-1" stroke="#B8622A" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="qa-text">Generate Report</div>
+              <div class="qa-sub">Export intelligence for a client</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card">
+        <div class="card-title">Recent Activity</div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="act-dot" style="background:#F07C35;"></div>
+            <div>
+              <div class="act-text"><strong>HubSpot</strong> raised Starter pricing 33% — affects TechStart Inc. report</div>
+              <div class="act-meta">Detected 14 min ago · TechStart Inc.</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:#10B981;"></div>
+            <div>
+              <div class="act-text">Report shared with <strong>Greenwave SaaS</strong> — competitor analysis Q2</div>
+              <div class="act-meta">2 hrs ago · Greenwave SaaS</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:#6366F1;"></div>
+            <div>
+              <div class="act-text"><strong>Intercom</strong> launched AI features on all plans — 3 clients impacted</div>
+              <div class="act-meta">6 hrs ago · 3 projects</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:#F07C35;"></div>
+            <div>
+              <div class="act-text">New client <strong>LoopStack</strong> added to portal with 2 competitors</div>
+              <div class="act-meta">Yesterday · LoopStack</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-dot" style="background:#9CA3AF;"></div>
+            <div>
+              <div class="act-text"><strong>Pipedrive</strong> updated pricing page copy — minor positioning change</div>
+              <div class="act-meta">2 days ago · Northstar CRM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
