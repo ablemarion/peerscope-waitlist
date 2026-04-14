@@ -1,73 +1,98 @@
-# React + TypeScript + Vite
+# Peerscope
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Track your competitors. Not your budget.**
 
-Currently, two official plugins are available:
+SMB competitive intelligence monitor. Peerscope tracks competitor pricing, features, job postings, and reviews — so small businesses stay ahead without enterprise-level spend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Live:** https://peerscope-waitlist.pages.dev
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+| Layer | Technology |
+|---|---|
+| Frontend | Vite 6, React 19, TypeScript, Tailwind CSS 4 |
+| Backend | Cloudflare Workers, Hono |
+| Database | Cloudflare D1 (SQLite edge) |
+| Cache | Cloudflare KV |
+| Storage | Cloudflare R2 |
+| Email | Resend (onboarding@resend.dev) |
+| Payments | Stripe (subscriptions, webhooks) |
+| Auth | Better Auth |
+| Package manager | pnpm |
+| CI/CD | GitHub Actions → Cloudflare Pages |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Local Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
+pnpm dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+App runs at `http://localhost:5173`. The API runs as Cloudflare Pages Functions (via `functions/`) — served automatically by `vite` in dev mode via the Cloudflare adapter.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Database (D1)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Apply migrations locally
+pnpm db:migrate:local
+
+# Apply to production
+pnpm db:migrate:remote
 ```
+
+### Environment variables
+
+Secret values are set via the Cloudflare Pages dashboard or `wrangler pages secret put`. See `wrangler.toml` for the full list of required secrets.
+
+For local dev, create a `.dev.vars` file (gitignored) with:
+
+```
+RESEND_API_KEY=re_...
+BETTER_AUTH_SECRET=...
+ADMIN_KEY=...
+```
+
+## Build & Deploy
+
+```bash
+# Build only
+pnpm build
+
+# Build + deploy to Cloudflare Pages
+pnpm deploy
+```
+
+CI/CD: GitHub Actions deploys automatically on push to `main`.
+
+## Testing
+
+```bash
+pnpm test          # run once
+pnpm test:watch    # watch mode
+```
+
+## A/B Testing
+
+Two landing page variants are live:
+
+- `?variant=a` — problem-led copy
+- `?variant=b` — value-led copy (default)
+
+## Project Structure
+
+```
+├── src/               # React frontend
+├── functions/         # Cloudflare Pages Functions (API)
+│   └── api/           # Hono routes: /waitlist, /portal, /auth, /stripe
+├── workers/           # Standalone Cloudflare Workers (crawl pipeline)
+├── migrations/        # D1 SQL migrations
+├── email-templates/   # Transactional email HTML
+├── scripts/           # Build scripts (OG image generation)
+└── public/            # Static assets
+```
+
+## Goal
+
+AUD$10K MRR by December 2026. 100 SMB customers at AUD$99/mo average.
