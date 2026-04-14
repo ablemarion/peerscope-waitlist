@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Logo } from '../shared'
 
 type NavItem = {
@@ -60,91 +60,127 @@ interface PortalLayoutProps {
 }
 
 export function PortalLayout({ children, currentPath, role }: PortalLayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const isClientViewer = role === 'client_viewer'
   const visibleNavItems = isClientViewer
     ? NAV_ITEMS.filter((item) => item.path === '/portal/reports')
     : NAV_ITEMS
+
   function navigate(path: string) {
     window.history.pushState({}, '', path)
     window.dispatchEvent(new PopStateEvent('popstate'))
+    setSidebarOpen(false)
   }
+
+  const sidebarContent = (
+    <>
+      {/* Logo area */}
+      <div className="px-5 py-5 border-b border-white/5">
+        <div className="flex items-center gap-2">
+          <Logo dark />
+        </div>
+        <div className="mt-3 flex items-center gap-2">
+          <div className="w-6 h-6 rounded bg-[#B8622A]/15 flex items-center justify-center">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <rect x="1" y="1" width="10" height="10" rx="2" fill="#B8622A" />
+            </svg>
+          </div>
+          <span className="text-xs text-white/40 font-sans">Agency Portal</span>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5" aria-label="Portal navigation">
+        {visibleNavItems.map((item) => {
+          const isActive = currentPath === item.path || (currentPath === '/portal' && item.path === '/portal/dashboard')
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={[
+                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-left',
+                isActive
+                  ? 'bg-[#B8622A]/12 text-[#F07C35] font-medium'
+                  : 'text-white/50 hover:text-white/80 hover:bg-white/5',
+              ].join(' ')}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <span className={isActive ? 'text-[#F07C35]' : 'text-white/30'}>{item.icon}</span>
+              {item.label}
+              {isActive && (
+                <span className="ml-auto w-1 h-4 rounded-full bg-[#F07C35]" />
+              )}
+            </button>
+          )
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="px-5 py-4 border-t border-white/5">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-full bg-[#B8622A]/15 flex items-center justify-center text-[#F07C35] text-xs font-medium">
+            A
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs text-white/60 truncate">Agency</p>
+            <p className="text-[10px] text-white/30 truncate">admin@agency.com</p>
+          </div>
+        </div>
+      </div>
+    </>
+  )
 
   return (
     <div className="flex h-screen bg-[#F5F5F0] font-sans overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-60 flex-shrink-0 bg-[#0D0F1A] flex flex-col border-r border-white/5">
-        {/* Logo area */}
-        <div className="px-5 py-5 border-b border-white/5">
-          <div className="flex items-center gap-2">
-            <Logo dark />
-          </div>
-          <div className="mt-3 flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-indigo-500/20 flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <rect x="1" y="1" width="10" height="10" rx="2" fill="#6366f1" />
-              </svg>
-            </div>
-            <span className="text-xs text-white/40 font-sans">Agency Portal</span>
-          </div>
-        </div>
-
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-0.5" aria-label="Portal navigation">
-          {visibleNavItems.map((item) => {
-            const isActive = currentPath === item.path || (currentPath === '/portal' && item.path === '/portal/dashboard')
-            return (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={[
-                  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-left',
-                  isActive
-                    ? 'bg-indigo-500/15 text-indigo-300 font-medium'
-                    : 'text-white/50 hover:text-white/80 hover:bg-white/5',
-                ].join(' ')}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <span className={isActive ? 'text-indigo-400' : 'text-white/30'}>{item.icon}</span>
-                {item.label}
-                {isActive && (
-                  <span className="ml-auto w-1 h-4 rounded-full bg-indigo-400" />
-                )}
-              </button>
-            )
-          })}
-        </nav>
-
-        {/* Footer */}
-        <div className="px-5 py-4 border-t border-white/5">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-300 text-xs font-medium">
-              A
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-white/60 truncate">Agency</p>
-              <p className="text-[10px] text-white/30 truncate">admin@agency.com</p>
-            </div>
-          </div>
-        </div>
+      {/* Sidebar — desktop: permanent, mobile: overlay */}
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex w-60 flex-shrink-0 bg-[#0D0F1A] flex-col border-r border-white/5">
+        {sidebarContent}
       </aside>
+
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40 bg-black/50 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Slide-in sidebar */}
+          <aside className="fixed inset-y-0 left-0 z-50 w-60 bg-[#0D0F1A] flex flex-col border-r border-white/5 md:hidden">
+            {sidebarContent}
+          </aside>
+        </>
+      )}
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top bar */}
-        <header className="h-14 flex items-center px-6 bg-white border-b border-gray-200 flex-shrink-0">
+        <header className="h-14 flex items-center px-4 md:px-6 bg-white border-b border-gray-200 flex-shrink-0">
+          {/* Hamburger — mobile only */}
+          <button
+            className="md:hidden mr-3 p-1.5 rounded text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open navigation"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
           <h1 className="text-sm font-medium text-gray-900">
             {NAV_ITEMS.find(i => i.path === currentPath)?.label ?? (isClientViewer ? 'Reports' : 'Dashboard')}
           </h1>
           <div className="ml-auto flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-medium bg-indigo-50 text-indigo-600 border border-indigo-100">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-medium bg-[#B8622A]/8 text-[#F07C35] border border-[#B8622A]/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F07C35] animate-pulse" />
               Live
             </span>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
           {children}
         </main>
       </div>

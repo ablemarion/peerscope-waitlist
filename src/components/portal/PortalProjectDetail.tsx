@@ -26,7 +26,7 @@ function TrackBadge({ label, active }: { label: string; active: boolean }) {
     <span
       className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
         active
-          ? 'bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-200'
+          ? 'bg-[#B8622A]/8 text-[#B8622A] ring-1 ring-inset ring-[#B8622A]/20'
           : 'bg-gray-100 text-gray-400 line-through'
       }`}
     >
@@ -174,7 +174,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 text-sm text-gray-500 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors"
+        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 text-sm text-gray-500 hover:border-[#B8622A]/40 hover:text-[#B8622A] hover:bg-[#B8622A]/5 transition-colors"
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -205,7 +205,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
             placeholder="competitor.com"
             required
             autoFocus
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:border-transparent"
           />
         </div>
 
@@ -220,7 +220,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
             onChange={(e) => setName(e.target.value)}
             placeholder="Competitor Inc."
             required
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:border-transparent"
           />
         </div>
       </div>
@@ -234,7 +234,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
                 type="checkbox"
                 checked={tracks[key]}
                 onChange={() => toggleTrack(key)}
-                className="w-3.5 h-3.5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                className="w-3.5 h-3.5 rounded border-gray-300 text-[#B8622A] focus:ring-[#B8622A]"
               />
               <span className="text-sm text-gray-700">{label}</span>
             </label>
@@ -250,7 +250,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
         <button
           type="submit"
           disabled={busy}
-          className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
           {busy ? 'Adding…' : 'Add competitor'}
         </button>
@@ -335,7 +335,7 @@ export function PortalProjectDetail({ projectId }: Props) {
 
       {loading && (
         <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center py-16">
-          <div className="w-7 h-7 rounded-full border-2 border-indigo-200 border-t-indigo-500 animate-spin" />
+          <div className="w-7 h-7 rounded-full border-2 border-[#B8622A]/20 border-t-[#F07C35] animate-spin" />
         </div>
       )}
 

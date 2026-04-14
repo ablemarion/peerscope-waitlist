@@ -132,7 +132,7 @@ export function ClientPortal() {
         {/* Reports list */}
         {loading && (
           <div className="bg-white rounded-xl border border-gray-200 py-16 flex flex-col items-center gap-3">
-            <div className="w-8 h-8 rounded-full border-2 border-indigo-200 border-t-indigo-500 animate-spin" />
+            <div className="w-8 h-8 rounded-full border-2 border-[#B8622A]/20 border-t-[#F07C35] animate-spin" />
             <p className="text-sm text-gray-400">Loading your reports…</p>
           </div>
         )}
@@ -164,7 +164,7 @@ export function ClientPortal() {
             {reports.map((report) => (
               <article
                 key={report.id}
-                className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4 hover:border-indigo-200 hover:shadow-sm transition-all duration-150"
+                className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4 hover:border-[#B8622A]/30 hover:shadow-sm transition-all duration-150"
               >
                 {/* Report icon */}
                 <div

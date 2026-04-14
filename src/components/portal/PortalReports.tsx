@@ -264,7 +264,7 @@ function CompetitorCard({ competitor }: { competitor: CompetitorInSnapshot }) {
         </div>
         {(() => {
           const colours = [
-            'bg-indigo-100 text-indigo-700',
+            'bg-[#B8622A]/15 text-[#B8622A]',
             'bg-violet-100 text-violet-700',
             'bg-sky-100 text-sky-700',
             'bg-teal-100 text-teal-700',
@@ -355,7 +355,7 @@ function PublishButton({ reportId, onPublished }: PublishButtonProps) {
     <button
       onClick={handlePublish}
       disabled={state === 'loading'}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
     >
       {state === 'loading' ? (
         <>
@@ -571,7 +571,7 @@ export function PortalReports() {
                   window.history.pushState({}, '', '/portal/projects')
                   window.dispatchEvent(new PopStateEvent('popstate'))
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-150"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150"
               >
                 Go to Projects
               </button>

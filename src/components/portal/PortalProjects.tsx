@@ -81,7 +81,7 @@ function GenerateReportButton({ projectId }: { projectId: string }) {
     <button
       onClick={handleGenerate}
       disabled={state === 'loading'}
-      className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+      className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-xs font-medium hover:bg-[#9E5224] active:bg-[#8A4820] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
     >
       {state === 'loading' ? (
         <>
@@ -116,7 +116,7 @@ function ProjectCard({ project, clientName, lastReportAt }: ProjectCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-indigo-200 hover:shadow-sm transition-all duration-150 flex flex-col gap-4">
+    <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-[#B8622A]/30 hover:shadow-sm transition-all duration-150 flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -127,7 +127,7 @@ function ProjectCard({ project, clientName, lastReportAt }: ProjectCardProps) {
         </div>
         <button
           onClick={() => navigate(`/portal/projects/${project.id}`)}
-          className="flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors"
+          className="flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#B8622A] bg-[#B8622A]/8 hover:bg-[#B8622A]/15 transition-colors"
           aria-label={`Manage competitors for ${project.name}`}
         >
           <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
@@ -214,7 +214,7 @@ export function PortalProjects() {
           <h2 className="text-lg font-semibold text-gray-900">Projects</h2>
           <p className="text-sm text-gray-500 mt-0.5">Manage competitive tracking projects for your clients.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-150">
+        <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
@@ -252,7 +252,7 @@ export function PortalProjects() {
             title="No projects yet"
             description="Create a project to start tracking competitors for a client. Each project maps to one client's competitive landscape."
             action={
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-150">
+              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>

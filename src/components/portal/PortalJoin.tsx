@@ -87,7 +87,7 @@ export function PortalJoin() {
           {/* Loading */}
           {(state.phase === 'loading' || state.phase === 'accepting') && (
             <>
-              <div className="w-12 h-12 rounded-full border-2 border-indigo-500/30 border-t-indigo-400 animate-spin mx-auto mb-5" />
+              <div className="w-12 h-12 rounded-full border-2 border-[#B8622A]/30 border-t-[#F07C35] animate-spin mx-auto mb-5" />
               <h1 className="text-base font-semibold text-white">
                 {state.phase === 'loading' ? 'Checking your invite…' : 'Accepting your invite…'}
               </h1>
@@ -158,7 +158,7 @@ function SupportCTA() {
         Need help?{' '}
         <a
           href="mailto:onboarding@resend.dev"
-          className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 transition-colors"
+          className="text-[#F07C35] hover:text-[#B8622A] underline underline-offset-2 transition-colors"
         >
           Contact support
         </a>

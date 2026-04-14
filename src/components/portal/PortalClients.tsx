@@ -90,7 +90,7 @@ function InviteButton({ clientId }: InviteButtonProps) {
     <button
       onClick={handleInvite}
       disabled={state === 'loading'}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#B8622A]/8 text-[#B8622A] border border-[#B8622A]/20 hover:bg-[#B8622A]/15 transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
     >
       {state === 'loading' ? (
         <>
@@ -141,7 +141,7 @@ export function PortalClients() {
           <h2 className="text-lg font-semibold text-gray-900">Clients</h2>
           <p className="text-sm text-gray-500 mt-0.5">Manage your agency clients and their portal access.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-150">
+        <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
@@ -186,7 +186,7 @@ export function PortalClients() {
             title="No clients yet"
             description="Add your first client and send them a portal invite to get started."
             action={
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-150">
+              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
@@ -200,7 +200,7 @@ export function PortalClients() {
               <div key={client.id} className="grid grid-cols-[1fr_1fr_120px_120px] gap-4 items-center px-6 py-4 hover:bg-gray-50 transition-colors duration-100">
                 {/* Client name + avatar */}
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-semibold flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#B8622A]/15 flex items-center justify-center text-[#B8622A] text-xs font-semibold flex-shrink-0">
                     {client.name.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-sm font-medium text-gray-900 truncate">{client.name}</span>

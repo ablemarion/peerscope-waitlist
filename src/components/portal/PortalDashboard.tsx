@@ -11,7 +11,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, trend, trendUp, loading }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 border-l-2 border-l-[#B8622A]/40 p-5">
       <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{label}</p>
       {loading ? (
         <div className="mt-1.5 h-8 bg-gray-200 rounded w-12 animate-pulse" />
@@ -102,7 +102,7 @@ export function PortalDashboard() {
       ) : (
         <>
           {/* Quick actions */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="bg-white rounded-xl border border-gray-200 border-l-2 border-l-[#B8622A]/40 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <QuickAction
@@ -152,7 +152,7 @@ export function PortalDashboard() {
           </div>
 
           {/* Recent activity — empty state */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="bg-white rounded-xl border border-gray-200 border-l-2 border-l-[#B8622A]/40 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Recent Activity</h3>
             <EmptyState
               icon={
@@ -179,11 +179,11 @@ function GettingStarted({ onAddClient }: { onAddClient: () => void }) {
       <div className="space-y-5">
         {/* Step 1 - active */}
         <div className="flex items-start gap-4">
-          <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 mt-0.5">1</div>
+          <div className="w-6 h-6 rounded-full bg-[#B8622A] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 mt-0.5">1</div>
           <div className="flex-1">
             <p className="text-sm font-medium text-gray-900">Add a client</p>
             <p className="text-xs text-gray-500 mt-0.5">Add your client and invite them to their own view.</p>
-            <button onClick={onAddClient} className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 transition-colors">Add your first client →</button>
+            <button onClick={onAddClient} className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-xs font-medium hover:bg-[#9E5224] transition-colors">Add your first client →</button>
           </div>
         </div>
         {/* Step 2 - pending */}
@@ -221,11 +221,11 @@ function QuickAction({
   return (
     <button
       onClick={onClick}
-      className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all duration-150 text-left group"
+      className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 hover:border-[#B8622A]/30 hover:bg-[#B8622A]/5 transition-all duration-150 text-left group"
     >
       <span className="mt-0.5 flex-shrink-0">{icon}</span>
       <div>
-        <p className="text-sm font-medium text-gray-900 group-hover:text-indigo-700">{label}</p>
+        <p className="text-sm font-medium text-gray-900 group-hover:text-[#B8622A]">{label}</p>
         <p className="text-xs text-gray-500 mt-0.5">{description}</p>
       </div>
     </button>
