@@ -5,7 +5,7 @@ import { EmptyState } from './PortalDashboard'
 interface Report {
   id: string
   title: string
-  generatedAt: string
+  generated_at: string | null
   clientName?: string
 }
 
@@ -181,7 +181,7 @@ export function ClientPortal() {
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-gray-900 truncate">{report.title}</p>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    Generated {formatDate(report.generatedAt)}
+                    {report.generated_at ? `Generated ${formatDate(report.generated_at)}` : ''}
                     {report.clientName && ` · ${report.clientName}`}
                   </p>
                 </div>
