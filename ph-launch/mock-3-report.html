@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope PH — Report Detail</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1270px;
+  height: 760px;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  background: #F5F5F0;
+  display: flex;
+}
+.sidebar { width: 240px; flex-shrink: 0; background: #0D0F1A; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.05); }
+.sidebar-logo { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.logo-row { display: flex; align-items: center; gap: 9px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; color: rgba(255,255,255,0.85); }
+.logo-row span { color: #F07C35; }
+.agency-badge { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
+.agency-icon { width: 24px; height: 24px; border-radius: 6px; background: rgba(184,98,42,0.15); display: flex; align-items: center; justify-content: center; }
+.agency-label { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 500; }
+.nav { flex: 1; padding: 16px 12px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 2px; }
+.nav-item.active { background: rgba(184,98,42,0.12); color: #F07C35; }
+.nav-item .dot { margin-left: auto; width: 4px; height: 16px; border-radius: 2px; background: #F07C35; }
+.nav-icon { width: 18px; height: 18px; opacity: 0.6; }
+.nav-item.active .nav-icon { opacity: 1; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(184,98,42,0.15); color: #F07C35; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+.user-name { font-size: 12px; color: rgba(255,255,255,0.55); }
+.user-email { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 1px; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { height: 56px; background: white; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 12px; }
+.topbar-title { font-size: 14px; font-weight: 600; color: #111827; }
+.breadcrumb { font-size: 13px; color: #9CA3AF; }
+.live-pill { margin-left: auto; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; background: rgba(184,98,42,0.08); border: 1px solid rgba(184,98,42,0.2); font-size: 10px; font-weight: 600; color: #F07C35; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: #F07C35; }
+.content { flex: 1; padding: 20px 24px; overflow: hidden; display: flex; flex-direction: column; }
+
+/* Report header */
+.report-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.report-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.client-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px;
+  background: #EFF6FF; color: #1D4ED8;
+  font-size: 11px; font-weight: 600;
+}
+.report-date { font-size: 11px; color: #9CA3AF; }
+.report-title { font-size: 20px; font-weight: 700; color: #111827; font-family: 'Syne', sans-serif; }
+.report-sub { font-size: 13px; color: #6B7280; margin-top: 4px; }
+.share-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  background: #B8622A; color: white;
+  font-size: 13px; font-weight: 600;
+  border: none; cursor: pointer;
+}
+
+/* Main report grid */
+.report-grid { display: grid; grid-template-columns: 1fr 320px; gap: 14px; flex: 1; min-height: 0; }
+
+/* Intel feed */
+.intel-card { background: white; border-radius: 12px; border: 1px solid #E5E7EB; overflow: hidden; display: flex; flex-direction: column; }
+.intel-tabs { display: flex; padding: 0 16px; border-bottom: 1px solid #F3F4F6; gap: 0; }
+.intel-tab { padding: 12px 14px; font-size: 12px; font-weight: 500; color: #9CA3AF; border-bottom: 2px solid transparent; }
+.intel-tab.active { color: #B8622A; border-bottom-color: #B8622A; }
+.intel-items { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; flex: 1; }
+
+.intel-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #F3F4F6;
+}
+.intel-item.alert { background: #FFFBEB; border-color: #FDE68A; }
+.intel-item.feature { background: #F0FDF4; border-color: #BBF7D0; }
+.intel-item.copy { background: #F8F7FF; border-color: #DDD6FE; }
+
+.intel-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.intel-icon.orange { background: #FEF3C7; }
+.intel-icon.green { background: #D1FAE5; }
+.intel-icon.purple { background: #EDE9FE; }
+
+.intel-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.intel-type.orange { color: #D97706; }
+.intel-type.green { color: #059669; }
+.intel-type.purple { color: #7C3AED; }
+.intel-headline { font-size: 13px; font-weight: 600; color: #111827; line-height: 1.4; }
+.intel-detail { font-size: 11.5px; color: #6B7280; margin-top: 3px; line-height: 1.4; }
+.intel-comp { font-size: 11px; color: #9CA3AF; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+.comp-dot { width: 6px; height: 6px; border-radius: 50%; }
+.intel-time { margin-left: auto; font-size: 10px; color: #D1D5DB; }
+
+/* Right sidebar */
+.right-panel { display: flex; flex-direction: column; gap: 12px; }
+
+.summary-card { background: white; border-radius: 12px; border: 1px solid #E5E7EB; padding: 16px; }
+.card-title { font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+.comp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.comp-row:last-child { margin-bottom: 0; }
+.comp-name-sm { font-size: 13px; font-weight: 500; color: #111827; }
+.comp-changes { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.change-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+.threat-card { background: #FFF7ED; border-radius: 12px; border: 1px solid #FDE68A; padding: 16px; }
+.threat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.threat-icon { width: 24px; height: 24px; border-radius: 6px; background: rgba(217,119,6,0.15); display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.threat-label { font-size: 12px; font-weight: 700; color: #D97706; }
+.threat-body { font-size: 12px; color: #92400E; line-height: 1.5; }
+.threat-body strong { color: #78350F; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-row">
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="11" r="9.5" stroke="#F07C35" stroke-width="1.8"/>
+        <circle cx="11" cy="11" r="5" stroke="#F07C35" stroke-width="1.2" stroke-opacity="0.55"/>
+        <circle cx="11" cy="11" r="2" fill="#F07C35"/>
+      </svg>
+      Peer<span>scope</span>
+    </div>
+    <div class="agency-badge">
+      <div class="agency-icon">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="0.5" y="0.5" width="10" height="10" rx="2" fill="#B8622A"/></svg>
+      </div>
+      <span class="agency-label">Acme Digital Agency</span>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+      Clients
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><path d="M2 4h14M2 9h10M2 14h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Projects
+    </div>
+    <div class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="1" width="14" height="16" rx="2" stroke="#F07C35" stroke-width="1.5" fill="none"/><path d="M5 6h8M5 9h8M5 12h5" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Reports
+      <div class="dot"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar">A</div>
+    <div>
+      <div class="user-name">Acme Digital</div>
+      <div class="user-email">admin@acmedigital.io</div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="breadcrumb">Reports</span>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#D1D5DB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="topbar-title">TechStart — Q2 Intelligence Report</span>
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+  </header>
+
+  <div class="content">
+    <!-- Report header -->
+    <div class="report-header">
+      <div>
+        <div class="report-meta">
+          <span class="client-chip">TechStart Inc.</span>
+          <span class="report-date">Generated 14 Apr 2026 · 3 competitors tracked</span>
+        </div>
+        <div class="report-title">Q2 Competitive Intelligence</div>
+        <div class="report-sub">HubSpot · Intercom · Pipedrive · Pricing, features &amp; positioning changes</div>
+      </div>
+      <button class="share-btn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 1l3 3-3 3M7 4h6M6 4a5 5 0 100 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Share with Client
+      </button>
+    </div>
+
+    <!-- Report grid -->
+    <div class="report-grid">
+      <!-- Intel feed -->
+      <div class="intel-card">
+        <div class="intel-tabs">
+          <div class="intel-tab active">All Changes (7)</div>
+          <div class="intel-tab">Pricing (3)</div>
+          <div class="intel-tab">Features (2)</div>
+          <div class="intel-tab">Copy (2)</div>
+        </div>
+        <div class="intel-items">
+          <div class="intel-item alert">
+            <div class="intel-icon orange">💰</div>
+            <div style="flex:1;">
+              <div class="intel-type orange">Pricing Change · Critical</div>
+              <div class="intel-headline">HubSpot Starter raised 33% — from $45 to $60/mo</div>
+              <div class="intel-detail">Seat limit reduced from 2 users to 1. Your TechStart positioning is now 40% cheaper at the same feature tier.</div>
+              <div class="intel-comp">
+                <span class="comp-dot" style="background:#2563EB;"></span>
+                HubSpot · Marketing Hub · Pricing page
+                <span class="intel-time">14 min ago</span>
+              </div>
+            </div>
+          </div>
+          <div class="intel-item feature">
+            <div class="intel-icon green">✦</div>
+            <div style="flex:1;">
+              <div class="intel-type green">Feature Launch</div>
+              <div class="intel-headline">Intercom AI inbox on all plans — previously Enterprise-only</div>
+              <div class="intel-detail">AI-powered email personalisation now included from free tier. Affects positioning against Starter plans.</div>
+              <div class="intel-comp">
+                <span class="comp-dot" style="background:#10B981;"></span>
+                Intercom · Product changelog
+                <span class="intel-time">2 hrs ago</span>
+              </div>
+            </div>
+          </div>
+          <div class="intel-item copy">
+            <div class="intel-icon purple">📄</div>
+            <div style="flex:1;">
+              <div class="intel-type purple">Copy Change</div>
+              <div class="intel-headline">Pipedrive hero — "Sales CRM" → "AI Sales Platform"</div>
+              <div class="intel-detail">Major positioning shift detected. New messaging emphasises AI automation across all 3 homepage variants.</div>
+              <div class="intel-comp">
+                <span class="comp-dot" style="background:#7C3AED;"></span>
+                Pipedrive · pipedrive.com homepage
+                <span class="intel-time">Yesterday</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="right-panel">
+        <div class="summary-card">
+          <div class="card-title">Competitors Tracked</div>
+          <div class="comp-row">
+            <span class="comp-name-sm">HubSpot</span>
+            <div class="comp-changes">
+              <span class="change-dot" style="background:#EF4444;"></span>
+              <span style="font-weight:600;color:#EF4444;">3</span>
+              <span style="color:#9CA3AF;">changes</span>
+            </div>
+          </div>
+          <div class="comp-row">
+            <span class="comp-name-sm">Intercom</span>
+            <div class="comp-changes">
+              <span class="change-dot" style="background:#F59E0B;"></span>
+              <span style="font-weight:600;color:#F59E0B;">2</span>
+              <span style="color:#9CA3AF;">changes</span>
+            </div>
+          </div>
+          <div class="comp-row">
+            <span class="comp-name-sm">Pipedrive</span>
+            <div class="comp-changes">
+              <span class="change-dot" style="background:#8B5CF6;"></span>
+              <span style="font-weight:600;color:#8B5CF6;">2</span>
+              <span style="color:#9CA3AF;">changes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="threat-card">
+          <div class="threat-header">
+            <div class="threat-icon">🔔</div>
+            <div class="threat-label">Smart Alert</div>
+          </div>
+          <div class="threat-body">
+            <strong>HubSpot raised pricing 33%.</strong> TechStart's Starter plan is now 40% cheaper at the same feature tier. Consider updating the comparison page before this week's renewal cycle.
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="card-title">Report Stats</div>
+          <div style="display:flex;gap:10px;">
+            <div style="flex:1;text-align:center;padding:10px;background:#F9FAFB;border-radius:8px;">
+              <div style="font-size:22px;font-weight:700;color:#111827;font-family:'Syne',sans-serif;">7</div>
+              <div style="font-size:10px;color:#9CA3AF;margin-top:3px;">Changes</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px;background:#FFF7ED;border-radius:8px;">
+              <div style="font-size:22px;font-weight:700;color:#B8622A;font-family:'Syne',sans-serif;">3</div>
+              <div style="font-size:10px;color:#9CA3AF;margin-top:3px;">Alerts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

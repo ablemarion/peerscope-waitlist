@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Peerscope PH — Client Portal View</title>
+<style>
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../fonts/syne-latin.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  font-display: block;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1270px;
+  height: 760px;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  background: #F5F5F0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top header for client view */
+.client-header {
+  height: 60px;
+  background: #0D0F1A;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.logo-row {
+  display: flex; align-items: center; gap: 9px;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px;
+  color: rgba(255,255,255,0.85);
+}
+.logo-row span { color: #F07C35; }
+.powered-by {
+  margin-left: 16px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  display: flex; align-items: center; gap: 6px;
+}
+.powered-sep { width: 1px; height: 12px; background: rgba(255,255,255,0.1); }
+.powered-agency { color: rgba(255,255,255,0.45); font-weight: 500; }
+.client-badge {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+}
+.client-avatar { width: 30px; height: 30px; border-radius: 50%; background: #EFF6FF; color: #1D4ED8; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.client-name-header { font-size: 12px; color: rgba(255,255,255,0.5); }
+.live-pill { display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; background: rgba(184,98,42,0.15); border: 1px solid rgba(184,98,42,0.3); font-size: 10px; font-weight: 600; color: #F07C35; margin-left: 12px; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: #F07C35; }
+
+/* Main */
+.main { flex: 1; display: flex; min-height: 0; }
+.sidebar { width: 200px; flex-shrink: 0; background: #0D0F1A; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.05); }
+.nav { flex: 1; padding: 16px 10px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 2px; }
+.nav-item.active { background: rgba(184,98,42,0.12); color: #F07C35; }
+.nav-dot { margin-left: auto; width: 4px; height: 14px; border-radius: 2px; background: #F07C35; }
+
+/* Content */
+.content { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.content-header { height: 52px; background: white; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; }
+.content-title { font-size: 14px; font-weight: 600; color: #111827; }
+
+.page-body { flex: 1; padding: 20px 24px; overflow: hidden; display: flex; gap: 16px; }
+
+/* Report list */
+.report-list { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+.report-item {
+  background: white; border-radius: 10px; border: 1px solid #E5E7EB;
+  padding: 14px; cursor: pointer;
+}
+.report-item.active { border-color: #B8622A; background: #FFF7F3; }
+.ri-client { font-size: 10px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+.ri-title { font-size: 13px; font-weight: 600; color: #111827; line-height: 1.3; }
+.ri-date { font-size: 11px; color: #9CA3AF; margin-top: 4px; }
+.ri-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; margin-top: 6px; }
+.ri-pill.new { background: #FEE2E2; color: #991B1B; }
+.ri-pill.seen { background: #F3F4F6; color: #6B7280; }
+
+/* Report detail */
+.report-detail { flex: 1; min-width: 0; background: white; border-radius: 12px; border: 1px solid #E5E7EB; display: flex; flex-direction: column; overflow: hidden; }
+.rd-header { padding: 18px 20px; border-bottom: 1px solid #F3F4F6; display: flex; align-items: flex-start; justify-content: space-between; }
+.rd-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; background: #FEF3C7; color: #D97706; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 7px; }
+.rd-title { font-size: 18px; font-weight: 700; color: #111827; font-family: 'Syne', sans-serif; }
+.rd-sub { font-size: 12px; color: #6B7280; margin-top: 4px; }
+.download-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; background: #F3F4F6; color: #374151; font-size: 12px; font-weight: 500; border: 1px solid #E5E7EB; cursor: pointer; white-space: nowrap; }
+
+.rd-body { padding: 16px 20px; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px; }
+
+.change-item { display: flex; gap: 10px; padding: 12px 14px; border-radius: 8px; border: 1px solid #F3F4F6; }
+.change-item.alert-item { background: #FFFBEB; border-color: #FDE68A; }
+.change-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.ci-orange { background: #FEF3C7; }
+.ci-green { background: #D1FAE5; }
+.ci-purple { background: #EDE9FE; }
+.change-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.ct-orange { color: #D97706; }
+.ct-green { color: #059669; }
+.ct-purple { color: #7C3AED; }
+.change-title { font-size: 13px; font-weight: 600; color: #111827; }
+.change-body { font-size: 12px; color: #6B7280; margin-top: 3px; line-height: 1.4; }
+.change-comp { font-size: 11px; color: #9CA3AF; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+.cc-dot { width: 5px; height: 5px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<!-- Client-facing header -->
+<header class="client-header">
+  <div class="logo-row">
+    <svg width="19" height="19" viewBox="0 0 22 22" fill="none">
+      <circle cx="11" cy="11" r="9.5" stroke="#F07C35" stroke-width="1.8"/>
+      <circle cx="11" cy="11" r="5" stroke="#F07C35" stroke-width="1.2" stroke-opacity="0.55"/>
+      <circle cx="11" cy="11" r="2" fill="#F07C35"/>
+    </svg>
+    Peer<span>scope</span>
+  </div>
+  <div class="powered-by">
+    <span class="powered-sep"></span>
+    <span>Delivered by</span>
+    <span class="powered-agency">Acme Digital Agency</span>
+  </div>
+  <div class="client-badge">
+    <div class="client-avatar">S</div>
+    <span class="client-name-header">TechStart Inc.</span>
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+  </div>
+</header>
+
+<div class="main">
+  <!-- Minimal nav for client -->
+  <aside class="sidebar">
+    <nav class="nav">
+      <div class="nav-item active">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="2" y="1" width="14" height="16" rx="2" stroke="#F07C35" stroke-width="1.5" fill="none"/><path d="M5 6h8M5 9h8M5 12h5" stroke="#F07C35" stroke-width="1.5" stroke-linecap="round"/></svg>
+        My Reports
+        <div class="nav-dot"></div>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <header class="content-header">
+      <span class="content-title">My Reports</span>
+    </header>
+
+    <div class="page-body">
+      <!-- Report list -->
+      <div class="report-list">
+        <div class="report-item active">
+          <div class="ri-client">TechStart Inc.</div>
+          <div class="ri-title">Q2 Competitive Intelligence — HubSpot, Intercom, Pipedrive</div>
+          <div class="ri-date">14 Apr 2026</div>
+          <div class="ri-pill new">● 3 new alerts</div>
+        </div>
+        <div class="report-item">
+          <div class="ri-client">TechStart Inc.</div>
+          <div class="ri-title">Q1 Competitive Review — Pricing &amp; Feature Analysis</div>
+          <div class="ri-date">2 Jan 2026</div>
+          <div class="ri-pill seen">Read</div>
+        </div>
+        <div class="report-item">
+          <div class="ri-client">TechStart Inc.</div>
+          <div class="ri-title">Dec 2025 Competitive Snapshot</div>
+          <div class="ri-date">1 Dec 2025</div>
+          <div class="ri-pill seen">Read</div>
+        </div>
+        <div class="report-item">
+          <div class="ri-client">TechStart Inc.</div>
+          <div class="ri-title">Nov 2025 Competitive Snapshot</div>
+          <div class="ri-date">3 Nov 2025</div>
+          <div class="ri-pill seen">Read</div>
+        </div>
+      </div>
+
+      <!-- Report detail -->
+      <div class="report-detail">
+        <div class="rd-header">
+          <div>
+            <div class="rd-tag">⚡ 3 New Alerts</div>
+            <div class="rd-title">Q2 Competitive Intelligence</div>
+            <div class="rd-sub">HubSpot · Intercom · Pipedrive · Generated 14 Apr 2026</div>
+          </div>
+          <button class="download-btn">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M4 6.5l2.5 2.5L9 6.5" stroke="#374151" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11h9" stroke="#374151" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Download PDF
+          </button>
+        </div>
+        <div class="rd-body">
+          <div class="change-item alert-item">
+            <div class="change-icon ci-orange">💰</div>
+            <div>
+              <div class="change-type ct-orange">Pricing Change · Critical</div>
+              <div class="change-title">HubSpot Starter raised 33% — $45 → $60/mo</div>
+              <div class="change-body">Seat limit also dropped from 2 to 1. Your plan is now 40% cheaper at the same feature tier — update your comparison page.</div>
+              <div class="change-comp"><span class="cc-dot" style="background:#2563EB;"></span>HubSpot · Marketing Hub</div>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon ci-green">✦</div>
+            <div>
+              <div class="change-type ct-green">Feature Launch</div>
+              <div class="change-title">Intercom AI inbox now on all plans</div>
+              <div class="change-body">Previously Enterprise-only AI personalisation added to free tier. Affects competitive positioning on Starter.</div>
+              <div class="change-comp"><span class="cc-dot" style="background:#10B981;"></span>Intercom · Changelog</div>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon ci-purple">📄</div>
+            <div>
+              <div class="change-type ct-purple">Copy Change</div>
+              <div class="change-title">Pipedrive repositioned as "AI Sales Platform"</div>
+              <div class="change-body">Major messaging shift detected across 3 page variants. Old: "Sales CRM". New: AI-first framing throughout homepage.</div>
+              <div class="change-comp"><span class="cc-dot" style="background:#7C3AED;"></span>Pipedrive · Homepage</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
