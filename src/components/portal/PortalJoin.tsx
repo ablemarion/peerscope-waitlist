@@ -13,21 +13,50 @@ export function PortalJoin() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
-    const token = params.get('token')
+    const inviteToken = params.get('token')
+    // ?session= is used for agency admin magic links (session already created server-side)
+    const sessionParam = params.get('session')
 
-    if (!token) {
+    if (!inviteToken && !sessionParam) {
       setState({ phase: 'invalid' })
       return
     }
 
     setState({ phase: 'accepting' })
 
+    async function exchangeForJwt(sessionToken: string) {
+      const tokenRes = await fetch('/api/portal/auth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionToken }),
+      })
+      if (!tokenRes.ok) {
+        setState({ phase: 'error', message: 'Failed to complete sign-in. Please try your link again.' })
+        return
+      }
+      const tokenBody = await tokenRes.json() as { data: { token: string } }
+      try {
+        localStorage.setItem('peerscope_portal_jwt', tokenBody.data.token)
+      } catch { /* localStorage unavailable */ }
+      setState({ phase: 'success' })
+      setTimeout(() => {
+        window.location.replace('/portal/dashboard')
+      }, 800)
+    }
+
     async function acceptInvite() {
       try {
+        // Agency admin path: session token was pre-created during activation
+        if (sessionParam) {
+          await exchangeForJwt(sessionParam)
+          return
+        }
+
+        // Client invite path: exchange invite token for a session first
         const res = await fetch('/api/portal/auth/accept-invite', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token }),
+          body: JSON.stringify({ token: inviteToken }),
         })
 
         if (!res.ok) {
@@ -41,27 +70,7 @@ export function PortalJoin() {
         }
 
         const body = await res.json() as { data: { sessionToken: string } }
-        const sessionToken = body.data.sessionToken
-
-        // Exchange the session token for a signed JWT.
-        const tokenRes = await fetch('/api/portal/auth/token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionToken }),
-        })
-        if (!tokenRes.ok) {
-          setState({ phase: 'error', message: 'Failed to complete sign-in. Please try your invite link again.' })
-          return
-        }
-        const tokenBody = await tokenRes.json() as { data: { token: string } }
-        try {
-          localStorage.setItem('peerscope_portal_jwt', tokenBody.data.token)
-        } catch { /* localStorage unavailable */ }
-
-        setState({ phase: 'success' })
-        setTimeout(() => {
-          window.location.replace('/portal/dashboard')
-        }, 800)
+        await exchangeForJwt(body.data.sessionToken)
       } catch {
         setState({ phase: 'error', message: 'A network error occurred. Please check your connection and try again.' })
       }

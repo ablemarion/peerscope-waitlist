@@ -4,6 +4,7 @@ interface Env {
   DB: D1Database
   RESEND_API_KEY?: string
   ALERT_EMAIL?: string
+  ADMIN_KEY?: string
 }
 
 interface AgencySignupRequest {
@@ -68,6 +69,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (context.env.RESEND_API_KEY) {
       const resend = new Resend(context.env.RESEND_API_KEY)
       const alertTo = context.env.ALERT_EMAIL ?? ALERT_EMAIL_DEFAULT
+      const activationUrl = `https://peerscope-waitlist.pages.dev/api/portal/admin/activate/${id}?key=${context.env.ADMIN_KEY ?? ''}`
 
       context.waitUntil(
         resend.emails.send({
@@ -84,6 +86,14 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             ${currentMethod ? `<p><strong>Current method:</strong> ${currentMethod}</p>` : ''}
             ${source ? `<p><strong>Lead source:</strong> ${source}${medium ? ` / ${medium}` : ''}${campaign ? ` / ${campaign}` : ''}</p>` : ''}
             <p><strong>Time:</strong> ${now}</p>
+            <hr style="border:none;border-top:1px solid #eee;margin:12px 0" />
+            <p style="margin:16px 0">
+              <a href="${activationUrl}"
+                 style="display:inline-block;padding:12px 24px;background:#F07C35;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;font-size:15px">
+                ✅ Activate this agency →
+              </a>
+            </p>
+            <p style="font-size:12px;color:#888">One click creates the agency, sets up their account, and sends them a welcome email with portal access.</p>
             <hr style="border:none;border-top:1px solid #eee;margin:12px 0" />
             <p><a href="https://peerscope-waitlist.pages.dev/admin/dashboard">View dashboard →</a></p>
           `,

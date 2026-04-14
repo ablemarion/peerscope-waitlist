@@ -1246,5 +1246,194 @@ app.post('/billing/webhook', async (c) => {
   return c.json({ received: true })
 })
 
+// ── GET /admin/activate/:signupId — one-click agency onboarding from Henrik's email ──
+// Protected by ADMIN_KEY in ?key= query param (so it works as an email link).
+// Creates the agency, admin user, session, and sends the prospect a welcome email.
+// Idempotent: clicking the link twice returns a "already activated" page.
+app.get('/admin/activate/:signupId', async (c) => {
+  const adminKey = c.env.ADMIN_KEY
+  const provided = c.req.query('key')
+  if (!adminKey || provided !== adminKey) {
+    return c.html(activateErrorHtml('Forbidden', 'Invalid or missing admin key.'), 403)
+  }
+
+  const signupId = c.req.param('signupId')
+  const baseUrl = c.env.BETTER_AUTH_URL?.replace(/\/$/, '') ?? 'https://peerscope-waitlist.pages.dev'
+
+  interface SignupRow {
+    id: string
+    agency_name: string
+    name: string
+    email: string
+    client_count: string
+    current_method: string | null
+    status: string | null
+    activated_at: string | null
+    agency_id: string | null
+  }
+
+  const signup = await c.env.DB
+    .prepare('SELECT id, agency_name, name, email, client_count, current_method, status, activated_at, agency_id FROM agency_signups WHERE id = ? LIMIT 1')
+    .bind(signupId)
+    .first<SignupRow>()
+
+  if (!signup) {
+    return c.html(activateErrorHtml('Not found', `No signup found with ID: ${signupId}`), 404)
+  }
+
+  // Idempotent — return success if already activated
+  if (signup.status === 'activated' && signup.agency_id) {
+    const dashUrl = `${baseUrl}/portal/dashboard`
+    return c.html(activateSuccessHtml(signup.agency_name, signup.email, dashUrl, true))
+  }
+
+  const db = c.env.DB
+  const now = new Date().toISOString()
+
+  // Generate a URL-safe slug from the agency name
+  const baseSlug = signup.agency_name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40) || 'agency'
+
+  let slug = baseSlug
+  const slugConflict = await db
+    .prepare('SELECT id FROM agencies WHERE slug = ? LIMIT 1')
+    .bind(slug)
+    .first<{ id: string }>()
+  if (slugConflict) {
+    slug = `${baseSlug}-${randomHex(3)}`
+  }
+
+  // Create the agency
+  const agency = await db
+    .prepare('INSERT INTO agencies (name, slug) VALUES (?, ?) RETURNING id, name, slug')
+    .bind(signup.agency_name, slug)
+    .first<{ id: string; name: string; slug: string }>()
+
+  if (!agency) {
+    return c.html(activateErrorHtml('Error', 'Failed to create agency record in database.'), 500)
+  }
+
+  // Create the agency admin user
+  const userId = crypto.randomUUID()
+  const userName = signup.name || signup.email.split('@')[0]
+  await db
+    .prepare(
+      `INSERT INTO user (id, name, email, email_verified, created_at, updated_at, agency_id, agency_role)
+       VALUES (?, ?, ?, 1, ?, ?, ?, 'agency_admin')`
+    )
+    .bind(userId, userName, signup.email, now, now, agency.id)
+    .run()
+
+  // Link user to agency
+  await db
+    .prepare("INSERT OR IGNORE INTO agency_users (agency_id, user_id, role) VALUES (?, ?, 'agency_admin')")
+    .bind(agency.id, userId)
+    .run()
+
+  // Create a 30-day session for the new agency admin
+  const sessionId = crypto.randomUUID()
+  const sessionToken = randomHex(32)
+  const sessionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+  await db
+    .prepare(
+      `INSERT INTO session (id, token, user_id, expires_at, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+    .bind(sessionId, sessionToken, userId, sessionExpiry, now, now)
+    .run()
+
+  // Mark signup as activated
+  await db
+    .prepare("UPDATE agency_signups SET status = 'activated', activated_at = ?, agency_id = ? WHERE id = ?")
+    .bind(now, agency.id, signupId)
+    .run()
+
+  // Portal login magic link for the prospect
+  const portalLoginUrl = `${baseUrl}/portal/join?session=${sessionToken}`
+
+  // Send welcome email to the agency prospect
+  if (c.env.RESEND_API_KEY) {
+    const resend = new Resend(c.env.RESEND_API_KEY)
+    try {
+      await resend.emails.send({
+        from: 'Peerscope <onboarding@resend.dev>',
+        to: signup.email,
+        subject: `You're in — your Peerscope portal is ready`,
+        html: `
+          <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;color:#1a1a1a">
+            <p style="font-size:24px;font-weight:700;margin:0 0 4px">You're approved. 🎉</p>
+            <p style="color:#666;margin:0 0 24px">Hi ${signup.name}, your Peerscope agency portal is live.</p>
+            <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px" />
+            <p style="margin:0 0 8px">Your agency <strong>${signup.agency_name}</strong> is set up and ready to go.</p>
+            <p style="margin:0 0 24px;color:#666">Click below to access your portal and start tracking your clients' competitors:</p>
+            <p style="margin:0 0 24px">
+              <a href="${portalLoginUrl}"
+                 style="display:inline-block;padding:14px 28px;background:#F07C35;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:16px">
+                Access your portal →
+              </a>
+            </p>
+            <p style="font-size:12px;color:#aaa;margin:0 0 8px">This link logs you in automatically and expires in 30 days.</p>
+            <p style="font-size:12px;color:#aaa;margin:0 0 24px">After logging in, bookmark your portal at <strong>peerscope-waitlist.pages.dev/portal</strong>.</p>
+            <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px" />
+            <p style="font-size:13px;color:#666;margin:0">
+              Questions? Reply to this email or reach us at
+              <a href="mailto:onboarding@resend.dev" style="color:#F07C35">onboarding@resend.dev</a>
+            </p>
+          </div>
+        `,
+      })
+    } catch (e) {
+      console.error('Failed to send welcome email to prospect:', e)
+      // Don't fail the activation — Henrik can forward manually if needed.
+    }
+  }
+
+  return c.html(activateSuccessHtml(agency.name, signup.email, portalLoginUrl, false))
+})
+
+// ── HTML helpers for /admin/activate ─────────────────────────────────────────
+
+function activateSuccessHtml(agencyName: string, email: string, portalUrl: string, alreadyActivated: boolean): string {
+  const heading = alreadyActivated ? 'Already activated' : 'Agency activated!'
+  const subtext = alreadyActivated
+    ? `${agencyName} was activated previously. The prospect's portal is at the link below.`
+    : `${agencyName} is live. A welcome email with a magic login link was sent to ${email}.`
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${heading} — Peerscope</title>
+<style>body{font-family:system-ui,sans-serif;background:#0D0F1A;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:16px;box-sizing:border-box}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:40px;max-width:420px;width:100%;text-align:center}
+.icon{width:56px;height:56px;background:rgba(240,124,53,0.12);border:1px solid rgba(240,124,53,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px}
+h1{font-size:20px;font-weight:700;margin:0 0 8px}p{color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;margin:0 0 24px}
+a.btn{display:inline-block;padding:12px 24px;background:#F07C35;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px}
+a.btn:hover{background:#E06A25}</style></head>
+<body><div class="card">
+<div class="icon">✅</div>
+<h1>${heading}</h1>
+<p>${subtext}</p>
+<a href="${portalUrl}" class="btn">Open their portal →</a>
+</div></body></html>`
+}
+
+function activateErrorHtml(title: string, detail: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${title} — Peerscope</title>
+<style>body{font-family:system-ui,sans-serif;background:#0D0F1A;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:16px;box-sizing:border-box}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:40px;max-width:420px;width:100%;text-align:center}
+.icon{width:56px;height:56px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px}
+h1{font-size:20px;font-weight:700;margin:0 0 8px}p{color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;margin:0}</style></head>
+<body><div class="card">
+<div class="icon">❌</div>
+<h1>${title}</h1>
+<p>${detail}</p>
+</div></body></html>`
+}
+
 // ─── Export ───────────────────────────────────────────────────────────────────
 export const onRequest = handle(app)
