@@ -18,7 +18,7 @@ interface ClientSession {
 
 function parseSession(): ClientSession {
   try {
-    const raw = localStorage.getItem('peerscope_session')
+    const raw = localStorage.getItem('peerscope_portal_jwt')
     if (!raw) return {}
     // JWT payload is base64url-encoded in the second segment
     const parts = raw.split('.')
@@ -58,13 +58,13 @@ export function ClientPortal() {
   useEffect(() => {
     async function fetchReports() {
       try {
-        const token = localStorage.getItem('peerscope_session') ?? ''
+        const token = localStorage.getItem('peerscope_portal_jwt') ?? ''
         const res = await fetch('/api/portal/reports?publishedOnly=true', {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!res.ok) throw new Error(`Failed to load reports (${res.status})`)
-        const data = await res.json() as { reports: Report[] }
-        setReports(data.reports ?? [])
+        const data = await res.json() as { data: Report[] | null }
+        setReports(data.data ?? [])
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load reports.')
       } finally {
