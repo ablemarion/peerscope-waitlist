@@ -7,6 +7,7 @@ import { SocialProofStrip } from './components/SocialProofStrip'
 import { useRevealOnScroll } from './hooks/useRevealOnScroll'
 import { CommunityHero, KNOWN_CHANNELS } from './components/CommunityHero'
 import { HeroBFAQStrip } from './components/HeroBFAQStrip'
+import { AgencyTrustStrip } from './components/AgencyTrustStrip'
 
 const HeroA = lazy(() => import('./components/HeroA').then(m => ({ default: m.HeroA })))
 const HeroB = lazy(() => import('./components/HeroB').then(m => ({ default: m.HeroB })))
@@ -763,6 +764,9 @@ export default function App() {
 
       {/* Hero — community-specific for /for/[channel], otherwise A/B variants */}
       {communityChannel ? <CommunityHero channel={communityChannel} /> : <Hero />}
+
+      {/* Agency trust signals — Cloudflare, encryption, beta count (all variants) */}
+      {!communityChannel && <AgencyTrustStrip />}
 
       {/* FAQ strip — Variant B only, converts hesitators immediately below hero */}
       {!communityChannel && variant === 'b' && <HeroBFAQStrip />}

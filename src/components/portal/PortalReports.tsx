@@ -166,7 +166,7 @@ function EmptyCell({ label }: { label: string }) {
   )
 }
 
-function PricingCell({ field }: { field: TrackingField<PricingData> | null }) {
+export function _PricingCell({ field }: { field: TrackingField<PricingData> | null }) {
   if (!field) return <EmptyCell label="Pricing" />
   if (field.status === 'pending_crawl') return <PendingCell label="Pricing" />
   const data = field.data
@@ -200,7 +200,7 @@ const hiringSignalStyles: Record<JobsData['hiringSignal'], string> = {
   high: 'bg-emerald-50 text-emerald-600 border-emerald-200',
 }
 
-function JobsCell({ field }: { field: TrackingField<JobsData> | null }) {
+export function _JobsCell({ field }: { field: TrackingField<JobsData> | null }) {
   if (!field) return <EmptyCell label="Jobs" />
   if (field.status === 'pending_crawl') return <PendingCell label="Jobs" />
   const data = field.data
@@ -216,7 +216,7 @@ function JobsCell({ field }: { field: TrackingField<JobsData> | null }) {
   )
 }
 
-function ReviewsCell({ field }: { field: TrackingField<ReviewsData> | null }) {
+export function _ReviewsCell({ field }: { field: TrackingField<ReviewsData> | null }) {
   if (!field) return <EmptyCell label="Reviews" />
   if (field.status === 'pending_crawl') return <PendingCell label="Reviews" />
   const data = field.data
@@ -230,7 +230,7 @@ function ReviewsCell({ field }: { field: TrackingField<ReviewsData> | null }) {
   )
 }
 
-function FeaturesCell({ field }: { field: TrackingField<FeaturesData> | null }) {
+export function _FeaturesCell({ field }: { field: TrackingField<FeaturesData> | null }) {
   if (!field) return <EmptyCell label="Features" />
   if (field.status === 'pending_crawl') return <PendingCell label="Features" />
   const data = field.data
