@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
+import { useState, useId } from 'react'
+import type { FormEvent, ChangeEvent } from 'react'
 
 export function Logo({ dark = false }: { dark?: boolean }) {
   const navy = dark ? '#FAFAF6' : '#111320'
@@ -211,6 +211,182 @@ export function EmailForm({
       </div>
       {status === 'error' && (
         <p className="mt-2 text-sm text-red-600">{errorMsg}</p>
+      )}
+    </form>
+  )
+}
+
+const CLIENT_COUNT_OPTIONS = [
+  { value: '1-5', label: '1–5 clients' },
+  { value: '6-10', label: '6–10 clients' },
+  { value: '11-20', label: '11–20 clients' },
+  { value: '20+', label: '20+ clients' },
+]
+
+interface AgencyRequestFormProps {
+  variant?: 'light' | 'dark'
+  onSuccess?: () => void
+  defaultSource?: string
+}
+
+export function AgencyRequestForm({
+  variant = 'dark',
+  onSuccess,
+  defaultSource = 'agency-early-access',
+}: AgencyRequestFormProps) {
+  const id = useId()
+  const [name, setName] = useState('')
+  const [agencyName, setAgencyName] = useState('')
+  const [email, setEmail] = useState('')
+  const [clientCount, setClientCount] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
+
+  const isDark = variant === 'dark'
+  const inputBase = isDark
+    ? 'w-full rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#B8622A]/60 focus:border-white/40 transition px-4 py-3 text-base'
+    : 'w-full rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:border-transparent transition px-4 py-3 text-base'
+  const labelBase = `block text-xs font-medium mb-1 ${isDark ? 'text-white/50' : 'text-gray-500'}`
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    if (!email || !name || !agencyName || !clientCount) return
+    setStatus('loading')
+    setErrorMsg('')
+
+    const params = new URLSearchParams(window.location.search)
+    const storedUtm = (() => {
+      try { return JSON.parse(localStorage.getItem('ps_utm') || 'null') as { utm_source?: string; utm_medium?: string; utm_campaign?: string; ref?: string } | null } catch { return null }
+    })()
+
+    const utmSource = params.get('utm_source') || storedUtm?.utm_source || null
+    const refCode = params.get('ref') || storedUtm?.ref || null
+    const sessionId = sessionStorage.getItem('ps_sid') ?? undefined
+    const pageVariant = params.get('variant') ?? 'b'
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          source: defaultSource,
+          session_id: sessionId,
+          variant: pageVariant,
+          button_variant: 'agency-request',
+          utm_source: utmSource || refCode,
+          utm_medium: clientCount,
+          utm_campaign: agencyName,
+          ref_code: refCode,
+          name,
+          agency_name: agencyName,
+          client_count: clientCount,
+        }),
+      })
+      if (res.ok) {
+        try { localStorage.setItem('ps_sub', '1') } catch { /* ignore */ }
+        onSuccess?.()
+        setStatus('success')
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setErrorMsg((data as { error?: string }).error || 'Something went wrong. Please try again.')
+        setStatus('error')
+      }
+    } catch {
+      setErrorMsg('Something went wrong. Please try again.')
+      setStatus('error')
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div
+        className="rounded-xl px-6 py-6 border text-center"
+        style={{
+          background: isDark ? 'rgba(200,220,232,0.06)' : 'rgba(184,98,42,0.06)',
+          borderColor: isDark ? 'rgba(200,220,232,0.2)' : 'rgba(184,98,42,0.2)',
+        }}
+      >
+        <p className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-[#111320]'}`} style={{ fontFamily: "'Syne', sans-serif" }}>
+          Request received — we'll be in touch.
+        </p>
+        <p className="text-sm" style={{ color: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(17,19,32,0.55)' }}>
+          We review every request personally and reach out within 24 hours.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="w-full space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor={`${id}-name`} className={labelBase}>Your name</label>
+          <input
+            id={`${id}-name`}
+            type="text"
+            value={name}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+            placeholder="Jane Smith"
+            required
+            autoComplete="name"
+            className={inputBase}
+          />
+        </div>
+        <div>
+          <label htmlFor={`${id}-agency`} className={labelBase}>Agency name</label>
+          <input
+            id={`${id}-agency`}
+            type="text"
+            value={agencyName}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAgencyName(e.target.value)}
+            placeholder="Acme Digital Agency"
+            required
+            autoComplete="organization"
+            className={inputBase}
+          />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor={`${id}-email`} className={labelBase}>Work email</label>
+          <input
+            id={`${id}-email`}
+            type="email"
+            value={email}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            placeholder="jane@acmeagency.com"
+            required
+            autoComplete="email"
+            className={inputBase}
+          />
+        </div>
+        <div>
+          <label htmlFor={`${id}-clients`} className={labelBase}>Number of clients</label>
+          <select
+            id={`${id}-clients`}
+            value={clientCount}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setClientCount(e.target.value)}
+            required
+            className={inputBase}
+            style={{ appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%23999\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center' }}
+          >
+            <option value="" disabled>Select range</option>
+            {CLIENT_COUNT_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <button
+        type="submit"
+        disabled={status === 'loading'}
+        className="w-full rounded-lg bg-[#B8622A] text-white font-semibold hover:bg-[#F07C35] hover:shadow-lg hover:shadow-[#B8622A]/30 hover:-translate-y-px active:bg-[#9E5223] active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#B8622A] focus:ring-offset-2 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed px-6 py-3 text-base"
+      >
+        {status === 'loading' ? 'Sending request…' : 'Request early access →'}
+      </button>
+      {status === 'error' && (
+        <p className="text-sm text-red-400">{errorMsg}</p>
       )}
     </form>
   )

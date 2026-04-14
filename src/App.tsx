@@ -771,6 +771,73 @@ export default function App() {
       {/* FAQ strip — Variant B only, converts hesitators immediately below hero */}
       {!communityChannel && variant === 'b' && <HeroBFAQStrip />}
 
+      {/* Agency pain points — 3 cards, shown on all variants */}
+      {!communityChannel && (
+        <section
+          className="py-20 px-4 sm:px-6 lg:px-8"
+          style={{ background: '#0D0F1A', borderTop: '1px solid rgba(184,98,42,0.08)' }}
+        >
+          <div className="max-w-6xl mx-auto">
+            <h2
+              className="text-2xl sm:text-3xl font-bold text-white mb-10 text-center"
+              style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800, letterSpacing: '-0.02em' }}
+            >
+              Sound familiar?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  number: '01',
+                  pain: 'You write competitor reports manually every month',
+                  detail: 'Scraped together from browser tabs, screenshots, and Notion pages — hours of work that\'s stale the moment you send it.',
+                },
+                {
+                  number: '02',
+                  pain: 'Clients ask "what are our competitors doing?" and you scramble',
+                  detail: 'You don\'t have a great answer. You dig, you guess, you promise to follow up. It undermines the relationship.',
+                },
+                {
+                  number: '03',
+                  pain: 'You want to add this service but can\'t charge for manual work',
+                  detail: 'Clients won\'t pay $500/mo for something that takes you 4 hours to produce. But they would pay for a polished portal.',
+                },
+              ].map(item => (
+                <div
+                  key={item.number}
+                  className="rounded-2xl p-6"
+                  style={{
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                >
+                  <span
+                    className="font-mono text-xs tracking-widest mb-4 block"
+                    style={{ color: 'rgba(184,98,42,0.6)' }}
+                  >
+                    {item.number}
+                  </span>
+                  <p
+                    className="text-lg font-bold text-white mb-3 leading-snug"
+                    style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 700 }}
+                  >
+                    {item.pain}
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                    {item.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p
+              className="text-center mt-10 text-sm font-medium"
+              style={{ color: '#B8622A' }}
+            >
+              Peerscope automates all of this. Your clients see a branded portal. You see zero manual work.
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* Problem — before/after comparison */}
       <section
         className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"

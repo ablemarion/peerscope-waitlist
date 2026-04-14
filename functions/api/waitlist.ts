@@ -52,6 +52,10 @@ interface WaitlistRequest {
   utm_medium?: string
   utm_campaign?: string
   ref_code?: string
+  // Agency request fields (not stored in DB, surfaced in alert email only)
+  name?: string
+  agency_name?: string
+  client_count?: string
 }
 
 function isValidEmail(email: string): boolean {
@@ -66,18 +70,31 @@ async function sendAlertEmail(
   email: string,
   name: string,
   source: string,
-  variant: string
+  variant: string,
+  agencyFields?: { agency_name?: string; client_count?: string; submitted_name?: string }
 ): Promise<void> {
   const resend = new Resend(apiKey)
+  const isAgencyRequest = source.includes('agency') || agencyFields?.agency_name
+  const subject = isAgencyRequest
+    ? `Agency early access request: ${agencyFields?.agency_name || name} <${email}>`
+    : `New waitlist sign-up: ${email} (${source || 'direct'})`
+  const agencySection = isAgencyRequest && agencyFields ? `
+      <hr style="border:none;border-top:1px solid #eee;margin:12px 0" />
+      <p style="color:#B8622A;font-weight:bold">Agency Request Details</p>
+      ${agencyFields.submitted_name ? `<p><strong>Name:</strong> ${agencyFields.submitted_name}</p>` : ''}
+      ${agencyFields.agency_name ? `<p><strong>Agency:</strong> ${agencyFields.agency_name}</p>` : ''}
+      ${agencyFields.client_count ? `<p><strong>Clients:</strong> ${agencyFields.client_count}</p>` : ''}
+  ` : ''
   await resend.emails.send({
     from: 'Peerscope Alerts <onboarding@resend.dev>',
     to: alertTo,
-    subject: `New waitlist sign-up: ${email} (${source || 'direct'})`,
+    subject,
     html: `
       <p><strong>New sign-up:</strong> ${name} &lt;${email}&gt;</p>
       <p><strong>Source:</strong> ${source || 'direct/organic'}</p>
       <p><strong>Variant:</strong> ${variant}</p>
       <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+      ${agencySection}
       <p><a href="https://peerscope-waitlist.pages.dev/admin/dashboard">View dashboard →</a></p>
     `,
   })
@@ -140,6 +157,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const utmMedium = (body.utm_medium ?? '').slice(0, 100) || null
     const utmCampaign = (body.utm_campaign ?? '').slice(0, 200) || null
     const refCode = (body.ref_code ?? '').slice(0, 64) || null
+    const agencyFields = {
+      submitted_name: (body.name ?? '').slice(0, 100) || undefined,
+      agency_name: (body.agency_name ?? '').slice(0, 200) || undefined,
+      client_count: (body.client_count ?? '').slice(0, 20) || undefined,
+    }
 
     if (!email || !isValidEmail(email)) {
       return Response.json(
@@ -186,9 +208,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           })
         )
         const alertTo = context.env.ALERT_EMAIL ?? ALERT_EMAIL_DEFAULT
-        const firstName = extractFirstName(email)
+        const firstName = agencyFields.submitted_name || extractFirstName(email)
         context.waitUntil(
-          sendAlertEmail(context.env.RESEND_API_KEY, alertTo, email, firstName, source, variant).catch(
+          sendAlertEmail(context.env.RESEND_API_KEY, alertTo, email, firstName, source, variant, agencyFields).catch(
             (err: unknown) => console.error('Failed to send alert email:', err)
           )
         )
