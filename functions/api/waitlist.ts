@@ -23,10 +23,10 @@ async function sendWelcomeEmail(apiKey: string, email: string): Promise<void> {
   await resend.emails.send({
     from: FROM,
     to: email,
-    subject: "You're on the Peerscope waitlist — founding price locked",
+    subject: "You're on the Peerscope waitlist — beta access confirmed",
     text: `Hi ${firstName},
 
-You're in. Founding price locked at $49/mo for life — as long as you stay subscribed.
+You're in. First 5 agencies get beta access free — after beta, agency plan is AUD$249/mo.
 
 Peerscope monitors your competitors 24/7 and sends you an instant Slack or email alert the moment they change pricing, launch features, or post jobs. Know before your customers tell you.
 
