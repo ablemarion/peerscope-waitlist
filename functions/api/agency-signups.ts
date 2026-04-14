@@ -12,6 +12,9 @@ interface AgencySignupRequest {
   email: string
   client_count: string
   current_method?: string
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
 }
 
 function isValidEmail(email: string): boolean {
@@ -36,6 +39,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const email = (body.email ?? '').trim().toLowerCase().slice(0, 254)
     const clientCount = (body.client_count ?? '').trim()
     const currentMethod = (body.current_method ?? '').trim().slice(0, 1000) || null
+    const source = (body.utm_source ?? '').trim().slice(0, 200) || null
+    const medium = (body.utm_medium ?? '').trim().slice(0, 200) || null
+    const campaign = (body.utm_campaign ?? '').trim().slice(0, 200) || null
 
     if (!agencyName) {
       return Response.json({ error: 'Agency name is required.' }, { status: 400, headers: corsHeaders })
@@ -54,9 +60,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const now = new Date().toISOString()
 
     await context.env.DB.prepare(
-      'INSERT INTO agency_signups (id, agency_name, name, email, client_count, current_method, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO agency_signups (id, agency_name, name, email, client_count, current_method, source, medium, campaign, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     )
-      .bind(id, agencyName, name, email, clientCount, currentMethod, now)
+      .bind(id, agencyName, name, email, clientCount, currentMethod, source, medium, campaign, now)
       .run()
 
     if (context.env.RESEND_API_KEY) {
@@ -76,6 +82,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
             <p><strong>Active clients:</strong> ${clientCount}</p>
             ${currentMethod ? `<p><strong>Current method:</strong> ${currentMethod}</p>` : ''}
+            ${source ? `<p><strong>Lead source:</strong> ${source}${medium ? ` / ${medium}` : ''}${campaign ? ` / ${campaign}` : ''}</p>` : ''}
             <p><strong>Time:</strong> ${now}</p>
             <hr style="border:none;border-top:1px solid #eee;margin:12px 0" />
             <p><a href="https://peerscope-waitlist.pages.dev/admin/dashboard">View dashboard →</a></p>
