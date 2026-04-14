@@ -462,16 +462,12 @@ app.post('/clients/:id/invite', async (c) => {
   const client = await repo.getClient(c.req.param('id'))
   if (!client) return c.json(err('Client not found'), 404)
 
-  if (!c.env.RESEND_API_KEY) {
-    return c.json(err('Email service not configured'), 500)
-  }
-
   // Generate raw token (64 hex chars = 32 random bytes) and store only the hash.
   const rawToken = randomHex(32)
   const tokenHash = await sha256Hex(rawToken)
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
 
-  await repo.createInvitation({
+  const invitation = await repo.createInvitation({
     clientId: client.id,
     email: client.email,
     tokenHash,
@@ -480,30 +476,42 @@ app.post('/clients/:id/invite', async (c) => {
 
   const magicLink = `https://peerscope-waitlist.pages.dev/portal/join?token=${rawToken}`
 
-  const resend = new Resend(c.env.RESEND_API_KEY)
-  const { error: emailError } = await resend.emails.send({
-    from: 'Peerscope <onboarding@resend.dev>',
-    to: client.email,
-    subject: "You've been invited to your Peerscope portal",
-    html: `
-      <p>Hi ${client.name},</p>
-      <p>Your agency has invited you to view your competitive intelligence reports on Peerscope.</p>
-      <p>
-        <a href="${magicLink}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;">
-          Access your portal
-        </a>
-      </p>
-      <p style="color:#6b7280;font-size:14px;">This link expires in 7 days and can only be used once.</p>
-    `,
-    text: `Hi ${client.name},\n\nYour agency has invited you to view your competitive intelligence reports on Peerscope.\n\nAccess your portal: ${magicLink}\n\nThis link expires in 7 days and can only be used once.`,
-  })
-
-  if (emailError) {
-    console.error('Resend error:', emailError)
-    return c.json(err('Failed to send invitation email'), 500)
+  // Attempt email delivery — failure is non-fatal: return magic link so admin can share manually.
+  let emailSent = false
+  if (c.env.RESEND_API_KEY) {
+    try {
+      const resend = new Resend(c.env.RESEND_API_KEY)
+      const { error: emailError } = await resend.emails.send({
+        from: 'Peerscope <onboarding@resend.dev>',
+        to: client.email,
+        subject: "You've been invited to your Peerscope portal",
+        html: `
+          <p>Hi ${client.name},</p>
+          <p>Your agency has invited you to view your competitive intelligence reports on Peerscope.</p>
+          <p>
+            <a href="${magicLink}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;">
+              Access your portal
+            </a>
+          </p>
+          <p style="color:#6b7280;font-size:14px;">This link expires in 7 days and can only be used once.</p>
+        `,
+        text: `Hi ${client.name},\n\nYour agency has invited you to view your competitive intelligence reports on Peerscope.\n\nAccess your portal: ${magicLink}\n\nThis link expires in 7 days and can only be used once.`,
+      })
+      if (emailError) {
+        console.error('Resend error:', emailError)
+      } else {
+        emailSent = true
+      }
+    } catch (e) {
+      console.error('Resend threw:', e)
+    }
   }
 
-  return c.json(ok({ message: 'Invitation sent', email: client.email }))
+  return c.json(ok({
+    invitationId: invitation.id,
+    magicLink,
+    emailSent,
+  }))
 })
 
 // ── POST /reports/generate — build mock snapshot, store to R2, create draft ──
