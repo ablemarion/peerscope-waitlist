@@ -112,14 +112,14 @@ export function PortalSignup() {
                 className="text-[1.6rem] leading-tight font-bold text-white mb-2"
                 style={{ fontFamily: "'Syne', system-ui, sans-serif" }}
               >
-                Join the Peerscope
+                Competitive intelligence
                 <br />
-                <span className="text-[#F07C35]">Agency Beta</span>
+                <span className="text-[#F07C35]">for agencies — automated</span>
               </h1>
 
               {/* Subtext */}
               <p className="text-sm text-white/45 mb-7 leading-relaxed font-sans">
-                Join 10+ agencies in beta. Set up within 24 hours — no credit card until you're ready.
+                Track your clients' competitors automatically. Deliver polished reports in minutes — not days. No credit card until you're ready.
               </p>
 
               {/* Form */}
