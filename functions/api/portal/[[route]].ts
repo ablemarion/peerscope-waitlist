@@ -305,7 +305,7 @@ app.post('/seed-demo', async (c) => {
   await db
     .prepare(
       `INSERT INTO agencies (id, name, slug, plan, primary_color, created_at)
-       VALUES (?, 'Acme Digital Agency', 'demo', 'pro', '#6366f1', ?)`
+       VALUES (?, 'Acme Digital Agency', 'demo', 'pro', '#F59E0B', ?)`
     )
     .bind(agencyId, now)
     .run()
@@ -997,7 +997,7 @@ app.post('/clients/:id/invite', async (c) => {
           <p>Hi ${client.name},</p>
           <p>Your agency has invited you to view your competitive intelligence reports on Peerscope.</p>
           <p>
-            <a href="${magicLink}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;">
+            <a href="${magicLink}" style="display:inline-block;padding:12px 24px;background:#F59E0B;color:#0D0F1A;border-radius:6px;text-decoration:none;font-weight:600;">
               Access your portal
             </a>
           </p>

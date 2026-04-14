@@ -53,7 +53,7 @@ export function ClientPortal() {
   const [error, setError] = useState<string | null>(null)
   const session = parseSession()
 
-  const accentColour = session.agencyColour ?? '#6366f1'
+  const accentColour = session.agencyColour ?? '#F59E0B'
 
   useEffect(() => {
     async function fetchReports() {

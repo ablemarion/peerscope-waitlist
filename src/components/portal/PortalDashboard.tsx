@@ -108,9 +108,9 @@ export function PortalDashboard() {
               <QuickAction
                 icon={
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="7" r="3.5" stroke="#6366f1" strokeWidth="1.5" fill="none" />
-                    <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                    <path d="M14 4v6M11 7h6" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+                    <circle cx="10" cy="7" r="3.5" stroke="#F59E0B" strokeWidth="1.5" fill="none" />
+                    <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                    <path d="M14 4v6M11 7h6" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 }
                 label="Invite a Client"
@@ -123,8 +123,8 @@ export function PortalDashboard() {
               <QuickAction
                 icon={
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <rect x="3" y="2" width="14" height="16" rx="2" stroke="#6366f1" strokeWidth="1.5" fill="none" />
-                    <path d="M7 7h6M7 10h6M7 13h4" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+                    <rect x="3" y="2" width="14" height="16" rx="2" stroke="#F59E0B" strokeWidth="1.5" fill="none" />
+                    <path d="M7 7h6M7 10h6M7 13h4" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 }
                 label="New Project"
@@ -137,8 +137,8 @@ export function PortalDashboard() {
               <QuickAction
                 icon={
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 2v10M7 9l3 3 3-3" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M4 14v2a2 2 0 002 2h8a2 2 0 002-2v-2" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+                    <path d="M10 2v10M7 9l3 3 3-3" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 14v2a2 2 0 002 2h8a2 2 0 002-2v-2" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 }
                 label="Generate Report"

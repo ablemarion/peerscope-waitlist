@@ -1,4 +1,4 @@
-import { useState, useId, type FormEvent } from 'react'
+import { useState, useId, useEffect, type FormEvent } from 'react'
 import { Logo } from '../shared'
 
 type SignupState = 'idle' | 'loading' | 'success' | 'error'
@@ -19,6 +19,16 @@ export function PortalSignup() {
   const [currentMethod, setCurrentMethod] = useState('')
   const [state, setState] = useState<SignupState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [utmSource, setUtmSource] = useState('')
+  const [utmMedium, setUtmMedium] = useState('')
+  const [utmCampaign, setUtmCampaign] = useState('')
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setUtmSource(params.get('utm_source') ?? '')
+    setUtmMedium(params.get('utm_medium') ?? '')
+    setUtmCampaign(params.get('utm_campaign') ?? '')
+  }, [])
 
   const agencyId = useId()
   const nameId = useId()
@@ -42,6 +52,9 @@ export function PortalSignup() {
           email: email.trim(),
           client_count: clientCount,
           current_method: currentMethod.trim() || undefined,
+          utm_source: utmSource || undefined,
+          utm_medium: utmMedium || undefined,
+          utm_campaign: utmCampaign || undefined,
         }),
       })
 
