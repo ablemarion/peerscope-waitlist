@@ -1,12 +1,13 @@
 /**
- * Hero Variant D — Problem-first with product preview
+ * Hero Variant D — SMB-direct with product preview
  *
- * Hypothesis: showing the actual product UI alongside the headline reduces
- * sign-up anxiety. Visitors see exactly what they're getting — a real-time
- * competitor intelligence feed — before committing their email.
+ * Hypothesis: SMB founders respond better to direct "know your competitors"
+ * messaging than agency-framed copy. Shows the actual product UI alongside
+ * the headline to reduce sign-up anxiety.
  *
  * Layout: two-column desktop (copy left, feed mockup right), single-column mobile.
- * CTA: "Claim founding price"
+ * CTA: "Join the waitlist"
+ * Pivot: April 2026 — pivot from agency to SMB-direct messaging.
  */
 import { useState, useEffect, useRef } from 'react'
 import { EmailForm } from './shared'
@@ -314,7 +315,7 @@ export function HeroD() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
               </span>
-              Real-time competitor intelligence
+              Automated competitor monitoring
             </div>
 
             {/* Headline */}
@@ -328,8 +329,8 @@ export function HeroD() {
                 wordBreak: 'break-word',
               }}
             >
-              Track your competitors.{' '}
-              <span style={{ color: '#F07C35' }}>Not your budget.</span>
+              Know what your competitors are doing{' '}
+              <span style={{ color: '#F07C35' }}>— before it matters.</span>
             </h1>
 
             {/* Sub-headline */}
@@ -337,14 +338,14 @@ export function HeroD() {
               className="text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed"
               style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '44ch' }}
             >
-              Peerscope watches your competitors 24/7 - pricing changes, new features, job listings -
-              and alerts you the moment something shifts. Built for SaaS teams. From $49/mo.
+              Automated competitor monitoring for growing SaaS teams. Pricing changes, new features,
+              hiring signals — delivered weekly.
             </p>
 
             {/* Social proof */}
             {waitlistCount !== null && waitlistCount >= 20 && (
               <p className="text-sm font-medium mb-4 sm:mb-6 lg:mb-8" style={{ color: '#C8DCE8' }}>
-                Join {waitlistCount.toLocaleString()} founders already tracking their competitors.
+                Join {waitlistCount.toLocaleString()} SaaS teams already tracking their competitors.
               </p>
             )}
             {(waitlistCount === null || waitlistCount === 0) && (
@@ -357,22 +358,19 @@ export function HeroD() {
             <div className="max-w-lg mb-4">
               <EmailForm
                 placeholder="Enter your work email"
-                buttonText="Claim founding price"
+                buttonText="Join the waitlist"
                 size="large"
                 variant="dark"
                 onSuccess={() => setSubmitted(true)}
               />
               {waitlistCount !== null && waitlistCount >= 20 && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
-                  <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} founders already waiting
+                  <span aria-hidden="true">✓ </span>Join {waitlistCount.toLocaleString()} SaaS teams already waiting
                 </p>
               )}
               <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                Founding price $49/mo &middot; No credit card now &middot; Cancel anytime
-              </p>
-              <p className="mt-3 text-xs font-semibold" style={{ color: 'rgba(240,124,53,0.8)' }}>
-                &#9889; Founding price closes April 15 &mdash; locked for life after signup
+                AUD$99/mo &middot; No enterprise contract &middot; Cancel anytime
               </p>
             </div>
           </div>
@@ -440,7 +438,7 @@ export function HeroD() {
       >
         <EmailForm
           placeholder="Enter your work email"
-          buttonText="Claim founding price"
+          buttonText="Join the waitlist"
           size="default"
           variant="dark"
           onSuccess={() => setSubmitted(true)}
