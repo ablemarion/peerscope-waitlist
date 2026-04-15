@@ -75,7 +75,7 @@ export function PortalDashboard() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard
           label="Total Clients"
           value={stats.clientCount}
@@ -94,7 +94,6 @@ export function PortalDashboard() {
           trend={stats.reportCount === 0 ? 'Get started below' : undefined}
           loading={loading}
         />
-        <StatCard label="Pending Invites" value="—" trend="Coming soon" />
       </div>
 
       {stats.clientCount === 0 && stats.projectCount === 0 && stats.reportCount === 0 && !loading ? (

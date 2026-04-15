@@ -239,7 +239,7 @@ function CheckEmailState({ email }: { email: string }) {
         {[
           { step: '1', text: 'Click the link in your email' },
           { step: '2', text: 'Your demo portal opens instantly — no password needed' },
-          { step: '3', text: 'Explore live competitor data, then upgrade when you're ready' },
+          { step: '3', text: "Explore live competitor data, then upgrade when you're ready" },
         ].map(({ step, text }) => (
           <div key={step} className="flex items-start gap-3">
             <span className="w-5 h-5 rounded-full bg-[#F07C35]/15 text-[#F07C35] text-[11px] font-semibold font-sans flex items-center justify-center flex-shrink-0 mt-0.5">

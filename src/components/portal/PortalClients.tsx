@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { EmptyState } from './PortalDashboard'
 import { portalFetch } from '../../lib/portalApi'
 
@@ -9,6 +9,178 @@ interface ClientRow {
   email: string
   status: 'active' | 'inactive'
   created_at: string
+}
+
+// ─── Add Client Modal ─────────────────────────────────────────────────────────
+
+interface AddClientModalProps {
+  onClose: () => void
+  onCreated: (client: ClientRow) => void
+}
+
+function AddClientModal({ onClose, onCreated }: AddClientModalProps) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [fieldError, setFieldError] = useState<string | null>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    nameRef.current?.focus()
+  }, [])
+
+  // Close on Escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setFieldError(null)
+
+    const trimmedName = name.trim()
+    const trimmedEmail = email.trim()
+
+    if (!trimmedName) { setFieldError('Client name is required.'); return }
+    if (!trimmedEmail) { setFieldError('Contact email is required.'); return }
+
+    setSubmitting(true)
+    try {
+      const res = await portalFetch('/api/portal/clients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: trimmedName, email: trimmedEmail }),
+      })
+      const json = await res.json() as { data: ClientRow | null; error: string | null }
+      if (!res.ok || json.error) {
+        setFieldError(json.error ?? 'Failed to create client.')
+        return
+      }
+      onCreated(json.data!)
+    } catch {
+      setFieldError('Network error — please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-client-title"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h3 id="add-client-title" className="text-base font-semibold text-gray-900">Add Client</h3>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={(e) => void handleSubmit(e)} className="px-6 py-5 space-y-4">
+          <div>
+            <label htmlFor="client-name" className="block text-xs font-medium text-gray-700 mb-1.5">
+              Client Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              ref={nameRef}
+              id="client-name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Acme Corp"
+              maxLength={100}
+              required
+              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#B8622A]/30 focus:border-[#B8622A] placeholder:text-gray-400"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="client-email" className="block text-xs font-medium text-gray-700 mb-1.5">
+              Contact Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="client-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="e.g. hello@acmecorp.com"
+              required
+              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#B8622A]/30 focus:border-[#B8622A] placeholder:text-gray-400"
+            />
+          </div>
+
+          {fieldError && (
+            <p role="alert" className="text-xs text-red-600">{fieldError}</p>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {submitting ? (
+                <>
+                  <svg className="animate-spin" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" strokeDasharray="10 10" />
+                  </svg>
+                  Adding…
+                </>
+              ) : (
+                'Add Client'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+
+function Toast({ message, onDismiss }: { message: string; onDismiss: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onDismiss, 3500)
+    return () => clearTimeout(t)
+  }, [onDismiss])
+
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 bg-gray-900 text-white text-sm rounded-xl shadow-lg"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-emerald-400 flex-shrink-0">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" fill="none" />
+        <path d="M5 8l2 2 4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {message}
+    </div>
+  )
 }
 
 function StatusBadge({ status }: { status: 'active' | 'inactive' }) {
@@ -121,6 +293,8 @@ export function PortalClients() {
   const [clients, setClients] = useState<ClientRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showModal, setShowModal] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
 
   const loadClients = useCallback(async () => {
     setLoading(true)
@@ -139,15 +313,32 @@ export function PortalClients() {
 
   useEffect(() => { void loadClients() }, [loadClients])
 
+  function handleClientCreated(client: ClientRow) {
+    setClients((prev) => [client, ...prev])
+    setShowModal(false)
+    setToast(`${client.name} added successfully.`)
+  }
+
   return (
     <div className="max-w-5xl space-y-5">
+      {showModal && (
+        <AddClientModal
+          onClose={() => setShowModal(false)}
+          onCreated={handleClientCreated}
+        />
+      )}
+      {toast && <Toast message={toast} onDismiss={() => setToast(null)} />}
+
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">Clients</h2>
           <p className="text-sm text-gray-500 mt-0.5">Manage your agency clients and their portal access.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150">
+        <button
+          onClick={() => setShowModal(true)}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150"
+        >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
@@ -193,7 +384,10 @@ export function PortalClients() {
             title="No clients yet"
             description="Add your first client and send them a portal invite to get started."
             action={
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150">
+              <button
+                onClick={() => setShowModal(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150"
+              >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>

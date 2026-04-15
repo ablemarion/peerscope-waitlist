@@ -263,6 +263,7 @@ async function main() {
   console.log('-- Run these SQL commands in your D1 console (Cloudflare Dashboard):')
   console.log(`-- Agency ID: ${agency.id}`)
   console.log('')
+  // Client 1: RetailCo (SEO tools)
   console.log(`INSERT INTO clients (id, agency_id, name, email, status, created_at, updated_at)`)
   console.log(`VALUES ('client-retailco-001', '${agency.id}', 'RetailCo', 'retailco@example.com', 'active', datetime('now'), datetime('now'));`)
   console.log('')
@@ -278,6 +279,22 @@ async function main() {
   console.log('')
   console.log(`INSERT INTO reports (id, project_id, agency_id, title, status, snapshot_json, generated_at, published_at, created_at, updated_at)`)
   console.log(`VALUES ('${reportId}', '${projectId}', '${agency.id}', 'SEO Tool Competitive Analysis — April 2026', 'published', '${snapshot.replace(/'/g, "''")}', datetime('now'), datetime('now'), datetime('now'), datetime('now'));`)
+
+  // Client 2: Brightline Health (project management tools)
+  const projectId2 = crypto.randomUUID()
+  console.log('')
+  console.log('-- Client 2: Brightline Health')
+  console.log(`INSERT INTO clients (id, agency_id, name, email, status, created_at, updated_at)`)
+  console.log(`VALUES ('client-brightline-001', '${agency.id}', 'Brightline Health', 'ops@brightlinehealth.example.com', 'active', datetime('now'), datetime('now'));`)
+  console.log('')
+  console.log(`INSERT INTO projects (id, agency_id, client_id, name, description, created_at, updated_at)`)
+  console.log(`VALUES ('${projectId2}', '${agency.id}', 'client-brightline-001', 'Project Management SaaS Landscape', 'Monitor pricing and hiring signals across PM tools', datetime('now'), datetime('now'));`)
+  console.log('')
+  console.log(`INSERT INTO competitor_targets (id, project_id, domain, name, track_pricing, track_jobs, track_reviews, track_features, created_at, updated_at)`)
+  console.log(`VALUES`)
+  console.log(`  ('ct-asana', '${projectId2}', 'asana.com', 'Asana', 1, 1, 1, 1, datetime('now'), datetime('now')),`)
+  console.log(`  ('ct-linear', '${projectId2}', 'linear.app', 'Linear', 1, 1, 1, 1, datetime('now'), datetime('now')),`)
+  console.log(`  ('ct-clickup', '${projectId2}', 'clickup.com', 'ClickUp', 1, 1, 1, 0, datetime('now'), datetime('now'));`)
 }
 
 main().catch((err) => {
