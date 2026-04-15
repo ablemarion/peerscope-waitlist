@@ -107,8 +107,12 @@ function isValidDomain(value: string): boolean {
   return /^[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
 }
 
-function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
-  const [open, setOpen] = useState(false)
+interface AddCompetitorFormControlledProps extends AddCompetitorFormProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+function AddCompetitorForm({ projectId, onAdded, open, onOpenChange }: AddCompetitorFormControlledProps) {
   const [domain, setDomain] = useState('')
   const [name, setName] = useState('')
   const [tracks, setTracks] = useState<Record<TrackKey, boolean>>({
@@ -161,7 +165,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
       setDomain('')
       setName('')
       setTracks({ trackPricing: true, trackJobs: true, trackReviews: true, trackFeatures: true })
-      setOpen(false)
+      onOpenChange(false)
       onAdded()
     } catch {
       setError('Network error — please try again.')
@@ -173,7 +177,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
   if (!open) {
     return (
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => onOpenChange(true)}
         className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 text-sm text-gray-500 hover:border-[#B8622A]/40 hover:text-[#B8622A] hover:bg-[#B8622A]/5 transition-colors"
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -256,7 +260,7 @@ function AddCompetitorForm({ projectId, onAdded }: AddCompetitorFormProps) {
         </button>
         <button
           type="button"
-          onClick={() => { setOpen(false); setError(null) }}
+          onClick={() => { onOpenChange(false); setError(null) }}
           className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
         >
           Cancel
@@ -275,6 +279,7 @@ export function PortalProjectDetail({ projectId }: Props) {
   const [targets, setTargets] = useState<CompetitorTargetRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [formOpen, setFormOpen] = useState(false)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -366,15 +371,55 @@ export function PortalProjectDetail({ projectId }: Props) {
             <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-semibold text-gray-900">Competitors</h3>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {targets.length === 0
-                    ? 'No competitors tracked yet.'
-                    : `${targets.length} competitor${targets.length !== 1 ? 's' : ''} tracked`}
-                </p>
+                {targets.length > 0 && (
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {targets.length} competitor{targets.length !== 1 ? 's' : ''} tracked
+                  </p>
+                )}
               </div>
+              {targets.length > 0 && !formOpen && (
+                <button
+                  onClick={() => setFormOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#B8622A] bg-[#B8622A]/8 hover:bg-[#B8622A]/15 transition-colors"
+                >
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+                    <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                  Add
+                </button>
+              )}
             </div>
 
-            {/* Competitor rows */}
+            {/* Empty state — no competitors yet */}
+            {targets.length === 0 && !formOpen && (
+              <div className="flex flex-col items-center justify-center px-6 py-10 text-center bg-gradient-to-b from-[#B8622A]/3 to-white">
+                <div className="w-12 h-12 rounded-full bg-[#B8622A]/10 flex items-center justify-center mb-4">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                    <circle cx="9.5" cy="9.5" r="6.5" stroke="#B8622A" strokeWidth="1.5" fill="none" />
+                    <circle cx="9.5" cy="9.5" r="2.5" fill="#B8622A" fillOpacity="0.35" />
+                    <path d="M14.5 14.5L19 19" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M9.5 3V4.5M9.5 14.5V16M3 9.5H4.5M14.5 9.5H16" stroke="#B8622A" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold text-gray-900 mb-1">
+                  Track competitors for <span className="text-[#B8622A]">{project.name}</span>
+                </p>
+                <p className="text-xs text-gray-500 max-w-xs mb-5">
+                  We monitor their homepage and pricing page for changes.
+                </p>
+                <button
+                  onClick={() => setFormOpen(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] active:bg-[#8A4820] transition-colors shadow-sm"
+                >
+                  Add competitor URL
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                    <path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {/* Competitor rows (when populated) */}
             {targets.length > 0 && (
               <ul className="divide-y divide-gray-100" role="list" aria-label="Tracked competitors">
                 {targets.map((target) => (
@@ -401,7 +446,12 @@ export function PortalProjectDetail({ projectId }: Props) {
 
             {/* Add form */}
             <div className="px-5 py-4 border-t border-gray-100">
-              <AddCompetitorForm projectId={projectId} onAdded={() => void loadData()} />
+              <AddCompetitorForm
+                projectId={projectId}
+                onAdded={() => void loadData()}
+                open={formOpen}
+                onOpenChange={setFormOpen}
+              />
             </div>
           </div>
         </>

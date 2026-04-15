@@ -556,27 +556,32 @@ export function PortalReports() {
             </button>
           </div>
         ) : reports.length === 0 ? (
-          <EmptyState
-            icon={
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-300">
-                <rect x="4" y="3" width="24" height="26" rx="3" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                <path d="M10 10h12M10 15h12M10 20h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <div className="flex flex-col items-center justify-center px-6 py-12 text-center bg-gradient-to-b from-[#B8622A]/3 to-white">
+            <div className="w-12 h-12 rounded-full bg-[#B8622A]/10 flex items-center justify-center mb-4">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                <rect x="3" y="2" width="16" height="18" rx="2" stroke="#B8622A" strokeWidth="1.5" fill="none" />
+                <path d="M7 7h8M7 10.5h8M7 14h5" stroke="#B8622A" strokeWidth="1.3" strokeLinecap="round" />
+                <circle cx="16" cy="16" r="4.5" fill="white" stroke="#B8622A" strokeWidth="1.3" />
+                <path d="M14.5 16h3M16 14.5v3" stroke="#B8622A" strokeWidth="1.3" strokeLinecap="round" />
               </svg>
-            }
-            title="No reports yet"
-            description="Reports will appear here after you generate them from a project."
-            action={
-              <button
-                onClick={() => {
-                  window.history.pushState({}, '', '/portal/projects')
-                  window.dispatchEvent(new PopStateEvent('popstate'))
-                }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] transition-colors duration-150"
-              >
-                Go to Projects
-              </button>
-            }
-          />
+            </div>
+            <p className="text-sm font-semibold text-gray-900 mb-1">Your first report will appear here</p>
+            <p className="text-xs text-gray-500 max-w-xs mb-5">
+              Reports run every Monday at 6am. Add a competitor to get started.
+            </p>
+            <button
+              onClick={() => {
+                window.history.pushState({}, '', '/portal/projects')
+                window.dispatchEvent(new PopStateEvent('popstate'))
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] active:bg-[#8A4820] transition-colors duration-150 shadow-sm"
+            >
+              Add a competitor
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
         ) : (
           <div className="divide-y divide-gray-100">
             {reports.map((report) => (

@@ -173,33 +173,62 @@ export function PortalDashboard() {
 
 function GettingStarted({ onAddClient }: { onAddClient: () => void }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h3 className="text-sm font-semibold text-gray-900 mb-1">Let's set up your first client</h3>
-      <p className="text-xs text-gray-500 mb-6">Follow these steps to start generating intelligence reports.</p>
-      <div className="space-y-5">
-        {/* Step 1 - active */}
-        <div className="flex items-start gap-4">
-          <div className="w-6 h-6 rounded-full bg-[#B8622A] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 mt-0.5">1</div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-900">Add a client</p>
-            <p className="text-xs text-gray-500 mt-0.5">Add your client and invite them to their own view.</p>
-            <button onClick={onAddClient} className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#B8622A] text-white text-xs font-medium hover:bg-[#9E5224] transition-colors">Add your first client →</button>
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* Hero band */}
+      <div className="px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-gray-100 bg-gradient-to-b from-[#B8622A]/5 to-white">
+        {/* Peerscope scope icon */}
+        <div className="mb-4 relative">
+          <div className="w-14 h-14 rounded-full bg-[#B8622A]/10 flex items-center justify-center">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="7.5" stroke="#B8622A" strokeWidth="1.5" fill="none" />
+              <circle cx="12" cy="12" r="3" fill="#B8622A" fillOpacity="0.35" />
+              <path d="M17.5 17.5L24 24" stroke="#B8622A" strokeWidth="2" strokeLinecap="round" />
+              <path d="M12 4.5V6M12 18v1.5M4.5 12H6M18 12h1.5" stroke="#B8622A" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
           </div>
+          {/* Pulse ring */}
+          <span className="absolute inset-0 rounded-full ring-4 ring-[#B8622A]/10 animate-ping [animation-duration:2.5s]" aria-hidden="true" />
         </div>
-        {/* Step 2 - pending */}
-        <div className="flex items-start gap-4">
-          <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-semibold flex-shrink-0 mt-0.5">2</div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-400">Create a project</p>
-            <p className="text-xs text-gray-400 mt-0.5">Define which competitors to track for this client.</p>
+        <h3 className="text-base font-semibold text-gray-900 mb-1">Add your first client to get started</h3>
+        <p className="text-xs text-gray-500 max-w-xs">Each client gets their own competitive intelligence report.</p>
+        <button
+          onClick={onAddClient}
+          className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#B8622A] text-white text-sm font-medium hover:bg-[#9E5224] active:bg-[#8A4820] transition-colors shadow-sm"
+        >
+          Add client
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Steps */}
+      <div className="px-6 py-5 space-y-4">
+        <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">How it works</p>
+        <div className="space-y-4">
+          {/* Step 1 - active */}
+          <div className="flex items-start gap-3.5">
+            <div className="w-5 h-5 rounded-full bg-[#B8622A] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mt-0.5">1</div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">Add a client</p>
+              <p className="text-xs text-gray-500 mt-0.5">Invite them to their own read-only portal view.</p>
+            </div>
           </div>
-        </div>
-        {/* Step 3 - pending */}
-        <div className="flex items-start gap-4">
-          <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-semibold flex-shrink-0 mt-0.5">3</div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-400">Generate a report</p>
-            <p className="text-xs text-gray-400 mt-0.5">Run competitive analysis and share it directly.</p>
+          {/* Step 2 - pending */}
+          <div className="flex items-start gap-3.5">
+            <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-[10px] font-bold flex-shrink-0 mt-0.5">2</div>
+            <div>
+              <p className="text-sm font-medium text-gray-400">Track competitors</p>
+              <p className="text-xs text-gray-400 mt-0.5">Define which competitors to watch for each client.</p>
+            </div>
+          </div>
+          {/* Step 3 - pending */}
+          <div className="flex items-start gap-3.5">
+            <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-[10px] font-bold flex-shrink-0 mt-0.5">3</div>
+            <div>
+              <p className="text-sm font-medium text-gray-400">Receive weekly reports</p>
+              <p className="text-xs text-gray-400 mt-0.5">Intelligence reports land every Monday at 6am.</p>
+            </div>
           </div>
         </div>
       </div>
