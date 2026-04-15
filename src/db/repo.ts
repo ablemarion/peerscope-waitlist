@@ -48,6 +48,8 @@ export interface CompetitorTargetRow {
   track_jobs: number
   track_reviews: number
   track_features: number
+  homepage_url: string | null
+  notes: string | null
 }
 
 export interface ReportRow {
@@ -226,6 +228,87 @@ export class AgencyRepo {
       .bind(targetId, this.agencyId)
       .run()
     return (result.meta?.changes ?? 0) > 0
+  }
+
+  async listCompetitorTargetsByClient(clientId: string): Promise<CompetitorTargetRow[]> {
+    // Only return targets for projects belonging to this agency's client.
+    const result = await this.db
+      .prepare(
+        `SELECT ct.* FROM competitor_targets ct
+         JOIN projects p ON p.id = ct.project_id
+         WHERE p.client_id = ? AND p.agency_id = ?
+         ORDER BY ct.name ASC`
+      )
+      .bind(clientId, this.agencyId)
+      .all<CompetitorTargetRow>()
+    return rows(result)
+  }
+
+  async createCompetitorForClient(data: {
+    clientId: string
+    projectId: string
+    name: string
+    homepageUrl: string
+    notes?: string
+  }): Promise<CompetitorTargetRow | null> {
+    // Validate the project belongs to this agency and the given client.
+    const project = await this.db
+      .prepare('SELECT id FROM projects WHERE id = ? AND client_id = ? AND agency_id = ?')
+      .bind(data.projectId, data.clientId, this.agencyId)
+      .first<{ id: string }>()
+    if (!project) return null
+
+    const result = await this.db
+      .prepare(
+        `INSERT INTO competitor_targets
+           (project_id, domain, name, homepage_url, notes,
+            track_pricing, track_jobs, track_reviews, track_features)
+         VALUES (?, ?, ?, ?, ?, 1, 1, 1, 1) RETURNING *`
+      )
+      .bind(data.projectId, data.homepageUrl, data.name, data.homepageUrl, data.notes ?? null)
+      .first<CompetitorTargetRow>()
+    return result ?? null
+  }
+
+  async updateCompetitorTarget(
+    targetId: string,
+    data: { name?: string; homepageUrl?: string; notes?: string }
+  ): Promise<CompetitorTargetRow | null> {
+    // Build SET clause dynamically — only update provided fields.
+    const sets: string[] = []
+    const binds: unknown[] = []
+
+    if (data.name !== undefined) { sets.push('name = ?'); binds.push(data.name) }
+    if (data.homepageUrl !== undefined) {
+      sets.push('homepage_url = ?')
+      sets.push('domain = ?')
+      binds.push(data.homepageUrl)
+      binds.push(data.homepageUrl)
+    }
+    if (data.notes !== undefined) { sets.push('notes = ?'); binds.push(data.notes) }
+
+    if (sets.length === 0) {
+      // Nothing to update — fetch and return current row.
+      return this.db
+        .prepare(
+          `SELECT ct.* FROM competitor_targets ct
+           JOIN projects p ON p.id = ct.project_id
+           WHERE ct.id = ? AND p.agency_id = ?`
+        )
+        .bind(targetId, this.agencyId)
+        .first<CompetitorTargetRow>() ?? null
+    }
+
+    binds.push(targetId, this.agencyId)
+    const result = await this.db
+      .prepare(
+        `UPDATE competitor_targets SET ${sets.join(', ')}
+         WHERE id = ? AND project_id IN (SELECT id FROM projects WHERE agency_id = ?)
+         RETURNING *`
+      )
+      .bind(...binds)
+      .first<CompetitorTargetRow>()
+    return result ?? null
   }
 
   // ── Client invitations (create) ──────────────────────────────────────────────

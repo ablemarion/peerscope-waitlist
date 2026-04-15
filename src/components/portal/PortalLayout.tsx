@@ -169,7 +169,9 @@ export function PortalLayout({ children, currentPath, role }: PortalLayoutProps)
             </svg>
           </button>
           <h1 className="text-sm font-medium text-gray-900">
-            {NAV_ITEMS.find(i => i.path === currentPath)?.label ?? (isClientViewer ? 'Reports' : 'Dashboard')}
+            {NAV_ITEMS.find(i => i.path === currentPath)?.label ??
+              (/^\/portal\/clients\/[^/]+\/competitors$/.test(currentPath) ? 'Competitors' :
+              isClientViewer ? 'Reports' : 'Dashboard')}
           </h1>
           <div className="ml-auto flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-medium bg-[#B8622A]/8 text-[#F07C35] border border-[#B8622A]/20">

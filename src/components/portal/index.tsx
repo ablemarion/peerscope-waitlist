@@ -5,16 +5,20 @@ import { PortalClients } from './PortalClients'
 import { PortalProjects } from './PortalProjects'
 import { PortalProjectDetail } from './PortalProjectDetail'
 import { PortalReports } from './PortalReports'
+import { PortalClientCompetitors } from './PortalClientCompetitors'
 import { ClientPortal } from './ClientPortal'
 
 type Page =
   | 'dashboard'
   | 'clients'
+  | 'client-competitors'
   | 'projects'
   | 'project-detail'
   | 'reports'
 
 function getPage(path: string): Page {
+  // /portal/clients/:id/competitors — client competitor management
+  if (/^\/portal\/clients\/[^/]+\/competitors$/.test(path)) return 'client-competitors'
   if (path.startsWith('/portal/clients')) return 'clients'
   if (path.startsWith('/portal/reports')) return 'reports'
   // /portal/projects/:id — detail view
@@ -26,6 +30,11 @@ function getPage(path: string): Page {
 
 function getProjectId(path: string): string | null {
   const m = path.match(/^\/portal\/projects\/([^/]+)$/)
+  return m ? m[1] : null
+}
+
+function getClientCompetitorsId(path: string): string | null {
+  const m = path.match(/^\/portal\/clients\/([^/]+)\/competitors$/)
   return m ? m[1] : null
 }
 
@@ -67,11 +76,15 @@ export function Portal() {
 
   const page = getPage(currentPath)
   const projectId = getProjectId(currentPath)
+  const clientCompetitorsId = getClientCompetitorsId(currentPath)
 
   return (
     <PortalLayout currentPath={currentPath} role={role}>
       {page === 'dashboard' && <PortalDashboard />}
       {page === 'clients' && <PortalClients />}
+      {page === 'client-competitors' && clientCompetitorsId && (
+        <PortalClientCompetitors clientId={clientCompetitorsId} />
+      )}
       {page === 'projects' && <PortalProjects />}
       {page === 'project-detail' && projectId && <PortalProjectDetail projectId={projectId} />}
       {page === 'reports' && <PortalReports />}

@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { EmptyState } from './PortalDashboard'
 import { portalFetch } from '../../lib/portalApi'
 
 // ─── Types ────────────────────────────────────────────────────────────────────

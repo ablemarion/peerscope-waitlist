@@ -28,6 +28,8 @@ import {
   UpdateClientSchema,
   CreateProjectSchema,
   CreateCompetitorTargetSchema,
+  CreateClientCompetitorSchema,
+  UpdateClientCompetitorSchema,
   AcceptInviteSchema,
   GenerateReportSchema,
 } from '../../../src/types/portal'
@@ -958,6 +960,71 @@ app.delete('/competitor-targets/:id', async (c) => {
   const repo = createRepo(c.env.DB, agencyId)
   const deleted = await repo.deleteCompetitorTarget(c.req.param('id'))
   if (!deleted) return c.json(err('Target not found'), 404)
+  return c.json(ok(null))
+})
+
+// ── GET /clients/:clientId/competitors ───────────────────────────────────────
+app.get('/clients/:clientId/competitors', async (c) => {
+  const { agencyId } = c.var.agencyCtx
+  const repo = createRepo(c.env.DB, agencyId)
+  const targets = await repo.listCompetitorTargetsByClient(c.req.param('clientId'))
+  return c.json(ok(targets))
+})
+
+// ── POST /clients/:clientId/competitors ──────────────────────────────────────
+app.post('/clients/:clientId/competitors', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  const body = await c.req.json().catch(() => null)
+  const parsed = CreateClientCompetitorSchema.safeParse(body)
+  if (!parsed.success) {
+    const message = parsed.error.issues.map((i) => i.message).join('; ')
+    return c.json(err(message), 400)
+  }
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const target = await repo.createCompetitorForClient({
+    clientId: c.req.param('clientId'),
+    projectId: parsed.data.projectId,
+    name: parsed.data.name,
+    homepageUrl: parsed.data.homepageUrl,
+    notes: parsed.data.notes,
+  })
+  if (!target) return c.json(err('Client or project not found'), 404)
+  return c.json(ok(target), 201)
+})
+
+// ── PATCH /competitors/:id ────────────────────────────────────────────────────
+app.patch('/competitors/:id', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  const body = await c.req.json().catch(() => null)
+  const parsed = UpdateClientCompetitorSchema.safeParse(body)
+  if (!parsed.success) {
+    const message = parsed.error.issues.map((i) => i.message).join('; ')
+    return c.json(err(message), 400)
+  }
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const target = await repo.updateCompetitorTarget(c.req.param('id'), {
+    name: parsed.data.name,
+    homepageUrl: parsed.data.homepageUrl,
+    notes: parsed.data.notes,
+  })
+  if (!target) return c.json(err('Competitor not found'), 404)
+  return c.json(ok(target))
+})
+
+// ── DELETE /competitors/:id ───────────────────────────────────────────────────
+app.delete('/competitors/:id', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const deleted = await repo.deleteCompetitorTarget(c.req.param('id'))
+  if (!deleted) return c.json(err('Competitor not found'), 404)
   return c.json(ok(null))
 })
 

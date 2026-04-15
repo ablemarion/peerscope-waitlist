@@ -40,6 +40,7 @@ function TableSkeleton() {
           </div>
           <div className="h-5 w-16 bg-gray-200 rounded-full" />
           <div className="h-8 w-24 bg-gray-200 rounded-lg" />
+          <div className="h-8 w-24 bg-gray-200 rounded-lg" />
         </div>
       ))}
     </div>
@@ -111,6 +112,11 @@ function InviteButton({ clientId }: InviteButtonProps) {
   )
 }
 
+function navigate(path: string) {
+  window.history.pushState({}, '', path)
+  window.dispatchEvent(new PopStateEvent('popstate'))
+}
+
 export function PortalClients() {
   const [clients, setClients] = useState<ClientRow[]>([])
   const [loading, setLoading] = useState(true)
@@ -153,10 +159,11 @@ export function PortalClients() {
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Table header */}
         <div className="px-6 py-3 border-b border-gray-100 bg-gray-50">
-          <div className="grid grid-cols-[1fr_1fr_120px_120px] gap-4 text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <div className="grid grid-cols-[1fr_1fr_120px_120px_120px] gap-4 text-xs font-medium text-gray-500 uppercase tracking-wide">
             <span>Client</span>
             <span>Email</span>
             <span>Status</span>
+            <span>Competitors</span>
             <span>Action</span>
           </div>
         </div>
@@ -197,7 +204,7 @@ export function PortalClients() {
         ) : (
           <div className="divide-y divide-gray-100">
             {clients.map((client) => (
-              <div key={client.id} className="grid grid-cols-[1fr_1fr_120px_120px] gap-4 items-center px-6 py-4 hover:bg-gray-50 transition-colors duration-100">
+              <div key={client.id} className="grid grid-cols-[1fr_1fr_120px_120px_120px] gap-4 items-center px-6 py-4 hover:bg-gray-50 transition-colors duration-100">
                 {/* Client name + avatar */}
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-8 h-8 rounded-full bg-[#B8622A]/15 flex items-center justify-center text-[#B8622A] text-xs font-semibold flex-shrink-0">
@@ -209,6 +216,18 @@ export function PortalClients() {
                 <span className="text-sm text-gray-500 truncate">{client.email}</span>
                 {/* Status badge */}
                 <StatusBadge status={client.status} />
+                {/* Competitors link */}
+                <button
+                  onClick={() => navigate(`/portal/clients/${client.id}/competitors`)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 border border-gray-200 hover:border-[#B8622A]/40 hover:text-[#B8622A] hover:bg-[#B8622A]/5 transition-colors duration-150"
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.2" fill="none" />
+                    <circle cx="6" cy="6" r="2" stroke="currentColor" strokeWidth="1.2" fill="none" />
+                    <circle cx="6" cy="6" r="0.75" fill="currentColor" />
+                  </svg>
+                  Competitors
+                </button>
                 {/* Invite action */}
                 <InviteButton clientId={client.id} />
               </div>

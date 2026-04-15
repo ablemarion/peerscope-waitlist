@@ -49,6 +49,30 @@ export const CreateCompetitorTargetSchema = z.object({
 })
 export type CreateCompetitorTargetInput = z.infer<typeof CreateCompetitorTargetSchema>
 
+export const CreateClientCompetitorSchema = z.object({
+  projectId: z.string().min(1),
+  name: z.string().min(1).max(100),
+  homepageUrl: z
+    .string()
+    .min(1)
+    .max(500)
+    .refine((v) => v.startsWith('https://'), { message: 'URL must start with https://' }),
+  notes: z.string().max(500).optional(),
+})
+export type CreateClientCompetitorInput = z.infer<typeof CreateClientCompetitorSchema>
+
+export const UpdateClientCompetitorSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  homepageUrl: z
+    .string()
+    .min(1)
+    .max(500)
+    .refine((v) => v.startsWith('https://'), { message: 'URL must start with https://' })
+    .optional(),
+  notes: z.string().max(500).optional(),
+})
+export type UpdateClientCompetitorInput = z.infer<typeof UpdateClientCompetitorSchema>
+
 export const AcceptInviteSchema = z.object({
   token: z.string().min(1),
 })
