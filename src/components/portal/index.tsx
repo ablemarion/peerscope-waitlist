@@ -6,6 +6,7 @@ import { PortalProjects } from './PortalProjects'
 import { PortalProjectDetail } from './PortalProjectDetail'
 import { PortalReports } from './PortalReports'
 import { PortalClientCompetitors } from './PortalClientCompetitors'
+import { PortalBilling } from './PortalBilling'
 import { ClientPortal } from './ClientPortal'
 
 type Page =
@@ -15,12 +16,14 @@ type Page =
   | 'projects'
   | 'project-detail'
   | 'reports'
+  | 'billing'
 
 function getPage(path: string): Page {
   // /portal/clients/:id/competitors — client competitor management
   if (/^\/portal\/clients\/[^/]+\/competitors$/.test(path)) return 'client-competitors'
   if (path.startsWith('/portal/clients')) return 'clients'
   if (path.startsWith('/portal/reports')) return 'reports'
+  if (path.startsWith('/portal/billing')) return 'billing'
   // /portal/projects/:id — detail view
   const projectDetail = path.match(/^\/portal\/projects\/([^/]+)$/)
   if (projectDetail) return 'project-detail'
@@ -88,6 +91,7 @@ export function Portal() {
       {page === 'projects' && <PortalProjects />}
       {page === 'project-detail' && projectId && <PortalProjectDetail projectId={projectId} />}
       {page === 'reports' && <PortalReports />}
+      {page === 'billing' && <PortalBilling />}
     </PortalLayout>
   )
 }

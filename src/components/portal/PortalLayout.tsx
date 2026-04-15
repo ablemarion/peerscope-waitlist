@@ -51,6 +51,17 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ),
   },
+  {
+    label: 'Billing',
+    path: '/portal/billing',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="4" width="16" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
+        <path d="M1 7.5h16" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M4 11h2M8 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+  },
 ]
 
 interface PortalLayoutProps {
@@ -169,7 +180,7 @@ export function PortalLayout({ children, currentPath, role }: PortalLayoutProps)
             </svg>
           </button>
           <h1 className="text-sm font-medium text-gray-900">
-            {NAV_ITEMS.find(i => i.path === currentPath)?.label ??
+            {NAV_ITEMS.find(i => currentPath.startsWith(i.path))?.label ??
               (/^\/portal\/clients\/[^/]+\/competitors$/.test(currentPath) ? 'Competitors' :
               isClientViewer ? 'Reports' : 'Dashboard')}
           </h1>

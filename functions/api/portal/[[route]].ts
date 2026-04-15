@@ -51,7 +51,9 @@ interface Env {
   STRIPE_SECRET_KEY?: string
   /** Stripe webhook signing secret (whsec_...). */
   STRIPE_WEBHOOK_SECRET?: string
-  /** Stripe price ID for the AUD$249/mo plan. */
+  /** Stripe price ID for the monthly plan. */
+  STRIPE_PRICE_ID_MONTHLY?: string
+  /** Legacy alias — kept for backwards compat with existing deployments. */
   STRIPE_PRICE_ID?: string
 }
 
@@ -1225,18 +1227,28 @@ app.patch('/reports/:id/publish', async (c) => {
   return c.json(ok(updated))
 })
 
-// ── POST /billing/checkout — create Stripe checkout session (AUD$249/mo) ─────
+// ── POST /billing/checkout — create Stripe checkout session ───────────────────
 app.post('/billing/checkout', async (c) => {
-  const { agencyId, role } = c.var.agencyCtx
+  const { agencyId, role, userId } = c.var.agencyCtx
   if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
 
-  if (!c.env.STRIPE_SECRET_KEY || !c.env.STRIPE_PRICE_ID) {
-    return c.json(err('Billing not configured'), 503)
+  const priceId = c.env.STRIPE_PRICE_ID_MONTHLY ?? c.env.STRIPE_PRICE_ID
+  if (!c.env.STRIPE_SECRET_KEY || !priceId) {
+    return c.json(
+      { error: 'billing_not_configured', message: 'Billing setup in progress — contact support.' },
+      503
+    )
   }
 
   const repo = createRepo(c.env.DB, agencyId)
   const agency = await repo.getAgency()
   if (!agency) return c.json(err('Agency not found'), 404)
+
+  // Fetch user email for pre-filling the Stripe checkout form.
+  const userRow = await c.env.DB
+    .prepare('SELECT email FROM user WHERE id = ? LIMIT 1')
+    .bind(userId)
+    .first<{ email: string }>()
 
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
     // @ts-expect-error — CF Workers use fetch-based HTTP
@@ -1251,6 +1263,7 @@ app.post('/billing/checkout', async (c) => {
   if (!customerId) {
     const customer = await stripe.customers.create({
       name: agency.name,
+      email: userRow?.email,
       metadata: { agency_id: agencyId },
     })
     customerId = customer.id
@@ -1259,16 +1272,48 @@ app.post('/billing/checkout', async (c) => {
 
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
+    customer_email: customerId ? undefined : userRow?.email,
     mode: 'subscription',
-    line_items: [{ price: c.env.STRIPE_PRICE_ID, quantity: 1 }],
+    line_items: [{ price: priceId, quantity: 1 }],
     currency: 'aud',
-    success_url: `${baseUrl}/portal/dashboard?billing=success`,
-    cancel_url: `${baseUrl}/portal/dashboard?billing=cancelled`,
+    success_url: `${baseUrl}/portal/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${baseUrl}/portal/billing`,
     metadata: { agency_id: agencyId },
     subscription_data: { metadata: { agency_id: agencyId } },
   })
 
   return c.json(ok({ url: session.url }))
+})
+
+// ── POST /billing/portal-link — Stripe customer portal session ────────────────
+app.post('/billing/portal-link', async (c) => {
+  const { agencyId, role } = c.var.agencyCtx
+  if (role !== 'agency_admin') return c.json(err('Forbidden'), 403)
+
+  if (!c.env.STRIPE_SECRET_KEY) {
+    return c.json(
+      { error: 'billing_not_configured', message: 'Billing setup in progress — contact support.' },
+      503
+    )
+  }
+
+  const repo = createRepo(c.env.DB, agencyId)
+  const agency = await repo.getAgency()
+  if (!agency?.stripe_customer_id) return c.json(err('No billing account found'), 404)
+
+  const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
+    // @ts-expect-error — CF Workers use fetch-based HTTP
+    httpClient: Stripe.createFetchHttpClient(),
+    apiVersion: '2024-12-18.acacia',
+  })
+
+  const baseUrl = c.env.BETTER_AUTH_URL ?? 'https://peerscope-waitlist.pages.dev'
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: agency.stripe_customer_id,
+    return_url: `${baseUrl}/portal/billing`,
+  })
+
+  return c.json(ok({ url: portalSession.url }))
 })
 
 // ── POST /billing/webhook — handle Stripe subscription lifecycle events ───────
@@ -1301,6 +1346,21 @@ app.post('/billing/webhook', async (c) => {
   }
 
   switch (event.type) {
+    case 'checkout.session.completed': {
+      // Fired when the customer completes the Stripe-hosted checkout page.
+      // Mark as active immediately; subscription.created fires shortly after.
+      const session = event.data.object as Stripe.CheckoutSession
+      const agencyId = session.metadata?.agency_id
+      if (agencyId && session.customer) {
+        const customerId = typeof session.customer === 'string'
+          ? session.customer
+          : session.customer.id
+        const repo = createRepo(c.env.DB, agencyId)
+        await repo.updateAgencyStripe(customerId, 'pro')
+      }
+      break
+    }
+
     case 'customer.subscription.created':
     case 'customer.subscription.updated': {
       const subscription = event.data.object as Stripe.Subscription
@@ -1324,7 +1384,7 @@ app.post('/billing/webhook', async (c) => {
           ? subscription.customer
           : subscription.customer.id
         const repo = createRepo(c.env.DB, agencyId)
-        await repo.updateAgencyStripe(customerId, 'free')
+        await repo.updateAgencyStripe(customerId, 'cancelled')
       }
       break
     }
