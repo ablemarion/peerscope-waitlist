@@ -6,6 +6,7 @@
  * Visual: branded client portal mockup — shows white-label portal with client list.
  * CTA: multi-field agency early access request form
  */
+import { useState, useEffect } from 'react'
 import { AgencyRequestForm } from './shared'
 import { CountdownTimer } from './CountdownTimer'
 
@@ -208,6 +209,17 @@ function AgencyPortalMockup() {
 }
 
 export function HeroB() {
+  const [waitlistCount, setWaitlistCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/waitlist/count')
+      .then(res => res.ok ? res.json() : null)
+      .then((data: { count: number } | null) => {
+        if (data && data.count > 0) setWaitlistCount(data.count)
+      })
+      .catch(() => {/* show nothing on error */})
+  }, [])
+
   return (
     <section
       className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8"
@@ -227,7 +239,7 @@ export function HeroB() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8DCE8] opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8DCE8]" />
               </span>
-              10 agencies in beta
+              {waitlistCount !== null ? `Join ${waitlistCount.toLocaleString()} founders on the waitlist` : '10 agencies in beta'}
             </div>
 
             {/* Headline */}
@@ -256,6 +268,15 @@ export function HeroB() {
             {/* Agency request form */}
             <div className="max-w-lg mb-4">
               <AgencyRequestForm variant="dark" defaultSource="hero-agency-beta" />
+              {waitlistCount !== null && (
+                <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                  <span aria-hidden="true">✓ </span>
+                  <span>Join {waitlistCount.toLocaleString()} founders already tracking their competitors.</span>
+                </p>
+              )}
+              <p className="mt-2 text-xs text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>
+                Limited early access — pricing locked for waitlist members
+              </p>
               <CountdownTimer />
               <p className="mt-3 text-xs font-semibold" style={{ color: 'rgba(240,124,53,0.8)' }}>
                 &#9889; Agency founding price closes April 15 &mdash; locked for life after sign-up

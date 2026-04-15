@@ -177,13 +177,16 @@ export function HeroA() {
             {/* CTA */}
             <div className="max-w-lg mb-6">
               <EmailForm placeholder="Enter your work email" buttonText="Claim founding price" size="large" variant="dark" />
-              {waitlistCount !== null && waitlistCount >= 20 && (
+              {waitlistCount !== null && (
                 <p className="mt-3 text-sm text-center" style={{ color: 'rgba(255,255,255,0.38)' }}>
                   <span aria-hidden="true">✓ </span>
                   <span className="hidden sm:inline">Join {waitlistCount.toLocaleString()} founders already tracking their competitors.</span>
-                  <span className="sm:hidden">Join {waitlistCount.toLocaleString()} founders on the waitlist</span>
+                  <span className="sm:hidden">Join {waitlistCount.toLocaleString()} founders on the waitlist.</span>
                 </p>
               )}
+              <p className="mt-2 text-xs text-center" style={{ color: 'rgba(255,255,255,0.28)' }}>
+                Limited early access — pricing locked for waitlist members
+              </p>
               <CountdownTimer />
               <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 14-day free trial &middot; No credit card required &middot; Cancel anytime
