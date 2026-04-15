@@ -81,6 +81,435 @@ function randomHex(bytes: number): string {
     .join('')
 }
 
+function daysAgo(n: number): string {
+  return new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString()
+}
+
+// ─── Demo seeder ──────────────────────────────────────────────────────────────
+// Seeds 2 clients, 7 competitors, and 1 published report per client into an
+// existing agency. Called by POST /seed-demo and POST /api/demo-invite/:token/claim.
+
+async function seedDemoData(db: D1Database, agencyId: string): Promise<void> {
+  // ── CLIENT 1: Melbourne Plumbing Co ──────────────────────────────────────────
+  const client1Id = crypto.randomUUID()
+  await db
+    .prepare(
+      `INSERT INTO clients (id, agency_id, name, email, status, created_at)
+       VALUES (?, ?, 'Melbourne Plumbing Co', 'info@melbourneplumbing.com.au', 'active', ?)`
+    )
+    .bind(client1Id, agencyId, daysAgo(30))
+    .run()
+
+  const project1Id = crypto.randomUUID()
+  await db
+    .prepare(
+      `INSERT INTO projects (id, agency_id, client_id, name, description, created_at)
+       VALUES (?, ?, ?, 'Local SEO & Brand Monitoring', 'Track competitor pricing, hiring activity, and service page changes across Melbourne plumbing market.', ?)`
+    )
+    .bind(project1Id, agencyId, client1Id, daysAgo(28))
+    .run()
+
+  const plumbingCompetitors = [
+    { name: 'Melbourne Emergency Plumbers', domain: 'melbourneemergencyplumbers.com.au' },
+    { name: 'VIC Plumbing Solutions', domain: 'vicplumbingsolutions.com.au' },
+    { name: 'PlumbCo Melbourne', domain: 'plumbcomelbourne.com.au' },
+    { name: 'Rapid Response Plumbing', domain: 'rapidresponseplumbing.com.au' },
+  ]
+  for (const comp of plumbingCompetitors) {
+    await db
+      .prepare(
+        `INSERT INTO competitor_targets (id, project_id, domain, name, track_pricing, track_jobs, track_reviews, track_features)
+         VALUES (?, ?, ?, ?, 1, 1, 1, 1)`
+      )
+      .bind(crypto.randomUUID(), project1Id, comp.domain, comp.name)
+      .run()
+  }
+
+  const report1Id = crypto.randomUUID()
+  const report1GeneratedAt = daysAgo(2)
+  const snapshot1 = {
+    reportId: report1Id,
+    projectId: project1Id,
+    projectName: 'Local SEO & Brand Monitoring',
+    generatedAt: report1GeneratedAt,
+    competitors: [
+      {
+        domain: 'melbourneemergencyplumbers.com.au',
+        name: 'Melbourne Emergency Plumbers',
+        tracking: { pricing: true, jobs: true, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Flat call-out fee of $95 + labour. Emergency surcharge bumped from $85 to $95 on 8 Apr.',
+            plans: [
+              { name: 'Standard Call-Out', price: 95, currency: 'AUD', period: 'call', highlight: 'Includes first 30 min' },
+              { name: 'After Hours', price: 165, currency: 'AUD', period: 'call', highlight: '6pm – 6am' },
+            ],
+            hasFreeTrialOrTier: false,
+            lastChecked: daysAgo(2),
+          },
+        },
+        jobs: {
+          status: 'populated',
+          data: {
+            openRoles: 3,
+            byDepartment: { 'Field Technicians': 2, 'Customer Service': 1 },
+            hiringSignal: 'medium',
+            lastChecked: daysAgo(2),
+          },
+        },
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 4.6,
+            g2Count: 218,
+            capterra: 4.5,
+            summary: 'Customers praise fast response times. Recurring complaints about after-hours surcharge transparency.',
+            lastChecked: daysAgo(2),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(8), type: 'pricing', description: 'Emergency call-out surcharge increased from $85 to $95.' },
+              { date: daysAgo(14), type: 'service', description: "New service page added: 'Grease Trap Cleaning'." },
+              { date: daysAgo(21), type: 'content', description: "Blog published: '5 Signs Your Hot Water System Needs Replacing'." },
+            ],
+            lastChecked: daysAgo(2),
+          },
+        },
+      },
+      {
+        domain: 'vicplumbingsolutions.com.au',
+        name: 'VIC Plumbing Solutions',
+        tracking: { pricing: true, jobs: true, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Fixed-price quoting on all jobs. Blocked hidden fee model — transparent upfront pricing.',
+            plans: [
+              { name: 'Blocked Drain', price: 189, currency: 'AUD', period: 'fixed', highlight: 'No call-out fee' },
+              { name: 'Hot Water Service', price: 290, currency: 'AUD', period: 'fixed', highlight: 'Parts included' },
+            ],
+            hasFreeTrialOrTier: false,
+            lastChecked: daysAgo(2),
+          },
+        },
+        jobs: {
+          status: 'populated',
+          data: {
+            openRoles: 1,
+            byDepartment: { 'Field Technicians': 1 },
+            hiringSignal: 'low',
+            lastChecked: daysAgo(2),
+          },
+        },
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 4.3,
+            g2Count: 97,
+            capterra: 4.2,
+            summary: 'Strong on fixed-price transparency. Response time mixed outside metro Melbourne.',
+            lastChecked: daysAgo(2),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(5), type: 'content', description: 'Homepage hero updated — now emphasises same-day availability.' },
+              { date: daysAgo(19), type: 'service', description: "Added 'CCTV Drain Inspection' to service menu." },
+            ],
+            lastChecked: daysAgo(2),
+          },
+        },
+      },
+      {
+        domain: 'plumbcomelbourne.com.au',
+        name: 'PlumbCo Melbourne',
+        tracking: { pricing: true, jobs: false, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Hourly rate model at $120/hr. No fixed-price quotes offered on site.',
+            plans: [
+              { name: 'Hourly Labour', price: 120, currency: 'AUD', period: 'hr', highlight: 'Min 1 hr' },
+            ],
+            hasFreeTrialOrTier: false,
+            lastChecked: daysAgo(2),
+          },
+        },
+        jobs: null,
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 3.9,
+            g2Count: 44,
+            capterra: 3.8,
+            summary: 'Polarised reviews — strong regulars but several complaints about delays on new bookings.',
+            lastChecked: daysAgo(2),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(11), type: 'pricing', description: 'Hourly rate increased from $110 to $120.' },
+            ],
+            lastChecked: daysAgo(2),
+          },
+        },
+      },
+      {
+        domain: 'rapidresponseplumbing.com.au',
+        name: 'Rapid Response Plumbing',
+        tracking: { pricing: true, jobs: true, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Competitive flat rate of $79 call-out, positioning aggressively against emergency specialists.',
+            plans: [
+              { name: 'Standard Call-Out', price: 79, currency: 'AUD', period: 'call', highlight: '30-min guarantee' },
+              { name: 'Weekend Rate', price: 120, currency: 'AUD', period: 'call', highlight: 'Sat & Sun' },
+            ],
+            hasFreeTrialOrTier: false,
+            lastChecked: daysAgo(2),
+          },
+        },
+        jobs: {
+          status: 'populated',
+          data: {
+            openRoles: 5,
+            byDepartment: { 'Field Technicians': 4, 'Dispatch': 1 },
+            hiringSignal: 'high',
+            lastChecked: daysAgo(2),
+          },
+        },
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 4.7,
+            g2Count: 312,
+            capterra: 4.6,
+            summary: 'Highest-rated competitor. Customers consistently mention the 30-minute guarantee. Growing fast.',
+            lastChecked: daysAgo(2),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(3), type: 'service', description: "Launched 'Commercial Plumbing' service line with dedicated landing page." },
+              { date: daysAgo(9), type: 'content', description: 'Added customer testimonial video to homepage.' },
+              { date: daysAgo(17), type: 'pricing', description: 'Weekend rate reduced from $140 to $120 — likely a promotional move.' },
+            ],
+            lastChecked: daysAgo(2),
+          },
+        },
+      },
+    ],
+    status: 'published',
+  }
+
+  await db
+    .prepare(
+      `INSERT INTO reports (id, project_id, agency_id, title, status, snapshot_json, generated_at, published_at, created_at)
+       VALUES (?, ?, ?, 'Melbourne Plumbing Co — Competitive Report', 'published', ?, ?, ?, ?)`
+    )
+    .bind(report1Id, project1Id, agencyId, JSON.stringify(snapshot1), report1GeneratedAt, report1GeneratedAt, daysAgo(2))
+    .run()
+
+  // ── CLIENT 2: Sydney Dental Group ─────────────────────────────────────────────
+  const client2Id = crypto.randomUUID()
+  await db
+    .prepare(
+      `INSERT INTO clients (id, agency_id, name, email, status, created_at)
+       VALUES (?, ?, 'Sydney Dental Group', 'admin@sydneydentalgroup.com.au', 'active', ?)`
+    )
+    .bind(client2Id, agencyId, daysAgo(25))
+    .run()
+
+  const project2Id = crypto.randomUUID()
+  await db
+    .prepare(
+      `INSERT INTO projects (id, agency_id, client_id, name, description, created_at)
+       VALUES (?, ?, ?, 'Competitor Intelligence', 'Monitor pricing, service launches, and patient reviews across the Sydney dental market.', ?)`
+    )
+    .bind(project2Id, agencyId, client2Id, daysAgo(23))
+    .run()
+
+  const dentalCompetitors = [
+    { name: 'Sydney CBD Dental', domain: 'sydneycbddental.com.au' },
+    { name: 'SydSmile Dental', domain: 'sydsmile.com.au' },
+    { name: 'Bright Dental Sydney', domain: 'brightdentalsydney.com.au' },
+  ]
+  for (const comp of dentalCompetitors) {
+    await db
+      .prepare(
+        `INSERT INTO competitor_targets (id, project_id, domain, name, track_pricing, track_jobs, track_reviews, track_features)
+         VALUES (?, ?, ?, ?, 1, 1, 1, 1)`
+      )
+      .bind(crypto.randomUUID(), project2Id, comp.domain, comp.name)
+      .run()
+  }
+
+  const report2Id = crypto.randomUUID()
+  const report2GeneratedAt = daysAgo(1)
+  const snapshot2 = {
+    reportId: report2Id,
+    projectId: project2Id,
+    projectName: 'Competitor Intelligence',
+    generatedAt: report2GeneratedAt,
+    competitors: [
+      {
+        domain: 'sydneycbddental.com.au',
+        name: 'Sydney CBD Dental',
+        tracking: { pricing: true, jobs: true, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Premium positioning. Teeth whitening now $399 (was $349) — 14% price increase effective 1 Apr.',
+            plans: [
+              { name: 'Scale & Clean', price: 180, currency: 'AUD', period: 'visit', highlight: 'New patient discount 20% off' },
+              { name: 'Teeth Whitening', price: 399, currency: 'AUD', period: 'visit', highlight: 'Raised from $349 on 1 Apr' },
+              { name: 'Invisalign', price: 6500, currency: 'AUD', period: 'treatment', highlight: 'From price' },
+            ],
+            hasFreeTrialOrTier: false,
+            lastChecked: daysAgo(1),
+          },
+        },
+        jobs: {
+          status: 'populated',
+          data: {
+            openRoles: 2,
+            byDepartment: { 'Dentists': 1, 'Reception': 1 },
+            hiringSignal: 'low',
+            lastChecked: daysAgo(1),
+          },
+        },
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 4.8,
+            g2Count: 534,
+            capterra: 4.7,
+            summary: 'Dominant Google reviews presence. 12 new 5-star reviews in the last 7 days — possible review campaign underway.',
+            lastChecked: daysAgo(1),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(13), type: 'pricing', description: 'Teeth whitening price raised from $349 to $399.' },
+              { date: daysAgo(20), type: 'service', description: "New service launched: 'Invisalign treatment' with full landing page." },
+              { date: daysAgo(7), type: 'content', description: 'Google Reviews spike: 12 new reviews in 7 days — active review generation.' },
+            ],
+            lastChecked: daysAgo(1),
+          },
+        },
+      },
+      {
+        domain: 'sydsmile.com.au',
+        name: 'SydSmile Dental',
+        tracking: { pricing: true, jobs: false, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Value-led positioning. Consistent low-cost entry points targeting price-sensitive patients.',
+            plans: [
+              { name: 'Scale & Clean', price: 120, currency: 'AUD', period: 'visit', highlight: 'Includes X-rays' },
+              { name: 'Teeth Whitening', price: 249, currency: 'AUD', period: 'visit', highlight: 'Take-home kit included' },
+            ],
+            hasFreeTrialOrTier: true,
+            lastChecked: daysAgo(1),
+          },
+        },
+        jobs: null,
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 4.2,
+            g2Count: 189,
+            capterra: 4.1,
+            summary: 'Positive on price and friendliness. Several recent reviews mention wait times and parking.',
+            lastChecked: daysAgo(1),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(4), type: 'content', description: 'Homepage updated — new tagline and before/after whitening gallery.' },
+              { date: daysAgo(16), type: 'service', description: "Added 'Emergency Dental' page targeting same-day appointments." },
+            ],
+            lastChecked: daysAgo(1),
+          },
+        },
+      },
+      {
+        domain: 'brightdentalsydney.com.au',
+        name: 'Bright Dental Sydney',
+        tracking: { pricing: true, jobs: true, reviews: true, features: true },
+        pricing: {
+          status: 'populated',
+          data: {
+            summary: 'Mid-market pricing with bundle offers. New family plan launched this month.',
+            plans: [
+              { name: 'Scale & Clean', price: 150, currency: 'AUD', period: 'visit', highlight: 'Standard consult' },
+              { name: 'Family Plan', price: 89, currency: 'AUD', period: 'mo', highlight: 'Launched Mar 2026 — up to 4 family members' },
+              { name: 'Veneers', price: 1200, currency: 'AUD', period: 'per tooth', highlight: 'Composite from price' },
+            ],
+            hasFreeTrialOrTier: false,
+            lastChecked: daysAgo(1),
+          },
+        },
+        jobs: {
+          status: 'populated',
+          data: {
+            openRoles: 4,
+            byDepartment: { 'Dentists': 2, 'Dental Assistants': 1, 'Reception': 1 },
+            hiringSignal: 'high',
+            lastChecked: daysAgo(1),
+          },
+        },
+        reviews: {
+          status: 'populated',
+          data: {
+            g2Rating: 4.5,
+            g2Count: 276,
+            capterra: 4.4,
+            summary: 'Strong satisfaction across family services. Hiring signal and new family plan suggest aggressive growth phase.',
+            lastChecked: daysAgo(1),
+          },
+        },
+        features: {
+          status: 'populated',
+          data: {
+            recentChanges: [
+              { date: daysAgo(6), type: 'service', description: "Launched 'Family Dental Plan' subscription — $89/mo for up to 4 members." },
+              { date: daysAgo(12), type: 'pricing', description: 'Veneer pricing now listed publicly (was "call for quote").' },
+              { date: daysAgo(24), type: 'content', description: 'New blog series: Monthly dental tips — first two posts published.' },
+            ],
+            lastChecked: daysAgo(1),
+          },
+        },
+      },
+    ],
+    status: 'published',
+  }
+
+  await db
+    .prepare(
+      `INSERT INTO reports (id, project_id, agency_id, title, status, snapshot_json, generated_at, published_at, created_at)
+       VALUES (?, ?, ?, 'Sydney Dental Group — Competitive Report', 'published', ?, ?, ?, ?)`
+    )
+    .bind(report2Id, project2Id, agencyId, JSON.stringify(snapshot2), report2GeneratedAt, report2GeneratedAt, daysAgo(1))
+    .run()
+}
+
 // ─── Lazy-cached agency auth middleware ───────────────────────────────────────
 
 let _agencyAuth: ReturnType<typeof requireAgencyCtx> | null = null
@@ -341,435 +770,8 @@ app.post('/seed-demo', async (c) => {
     .bind(sessionId, sessionToken, userId, sessionExpiry, now, now)
     .run()
 
-  // ── Helper: generate a timestamp N days ago ──────────────────────────────────
-  function daysAgo(n: number): string {
-    return new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString()
-  }
-
-  // ── CLIENT 1: Melbourne Plumbing Co ─────────────────────────────────────────
-  const client1Id = crypto.randomUUID()
-  await db
-    .prepare(
-      `INSERT INTO clients (id, agency_id, name, email, status, created_at)
-       VALUES (?, ?, 'Melbourne Plumbing Co', 'info@melbourneplumbing.com.au', 'active', ?)`
-    )
-    .bind(client1Id, agencyId, daysAgo(30))
-    .run()
-
-  const project1Id = crypto.randomUUID()
-  await db
-    .prepare(
-      `INSERT INTO projects (id, agency_id, client_id, name, description, created_at)
-       VALUES (?, ?, ?, 'Local SEO & Brand Monitoring', 'Track competitor pricing, hiring activity, and service page changes across Melbourne plumbing market.', ?)`
-    )
-    .bind(project1Id, agencyId, client1Id, daysAgo(28))
-    .run()
-
-  // Competitors for Melbourne Plumbing Co
-  const plumbingCompetitors = [
-    { name: 'Melbourne Emergency Plumbers', domain: 'melbourneemergencyplumbers.com.au' },
-    { name: 'VIC Plumbing Solutions', domain: 'vicplumbingsolutions.com.au' },
-    { name: 'PlumbCo Melbourne', domain: 'plumbcomelbourne.com.au' },
-    { name: 'Rapid Response Plumbing', domain: 'rapidresponseplumbing.com.au' },
-  ]
-  const plumbingTargetIds: string[] = []
-  for (const comp of plumbingCompetitors) {
-    const targetId = crypto.randomUUID()
-    plumbingTargetIds.push(targetId)
-    await db
-      .prepare(
-        `INSERT INTO competitor_targets (id, project_id, domain, name, track_pricing, track_jobs, track_reviews, track_features)
-         VALUES (?, ?, ?, ?, 1, 1, 1, 1)`
-      )
-      .bind(targetId, project1Id, comp.domain, comp.name)
-      .run()
-  }
-
-  // Report 1 snapshot with rich data
-  const report1Id = crypto.randomUUID()
-  const report1GeneratedAt = daysAgo(2)
-  const snapshot1 = {
-    reportId: report1Id,
-    projectId: project1Id,
-    projectName: 'Local SEO & Brand Monitoring',
-    generatedAt: report1GeneratedAt,
-    competitors: [
-      {
-        domain: 'melbourneemergencyplumbers.com.au',
-        name: 'Melbourne Emergency Plumbers',
-        tracking: { pricing: true, jobs: true, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Flat call-out fee of $95 + labour. Emergency surcharge bumped from $85 to $95 on 8 Apr.',
-            plans: [
-              { name: 'Standard Call-Out', price: 95, currency: 'AUD', period: 'call', highlight: 'Includes first 30 min' },
-              { name: 'After Hours', price: 165, currency: 'AUD', period: 'call', highlight: '6pm – 6am' },
-            ],
-            hasFreeTrialOrTier: false,
-            lastChecked: daysAgo(2),
-          },
-        },
-        jobs: {
-          status: 'populated',
-          data: {
-            openRoles: 3,
-            byDepartment: { 'Field Technicians': 2, 'Customer Service': 1 },
-            hiringSignal: 'medium',
-            lastChecked: daysAgo(2),
-          },
-        },
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 4.6,
-            g2Count: 218,
-            capterra: 4.5,
-            summary: 'Customers praise fast response times. Recurring complaints about after-hours surcharge transparency.',
-            lastChecked: daysAgo(2),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(8), type: 'pricing', description: 'Emergency call-out surcharge increased from $85 to $95.' },
-              { date: daysAgo(14), type: 'service', description: "New service page added: 'Grease Trap Cleaning'." },
-              { date: daysAgo(21), type: 'content', description: "Blog published: '5 Signs Your Hot Water System Needs Replacing'." },
-            ],
-            lastChecked: daysAgo(2),
-          },
-        },
-      },
-      {
-        domain: 'vicplumbingsolutions.com.au',
-        name: 'VIC Plumbing Solutions',
-        tracking: { pricing: true, jobs: true, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Fixed-price quoting on all jobs. Blocked hidden fee model — transparent upfront pricing.',
-            plans: [
-              { name: 'Blocked Drain', price: 189, currency: 'AUD', period: 'fixed', highlight: 'No call-out fee' },
-              { name: 'Hot Water Service', price: 290, currency: 'AUD', period: 'fixed', highlight: 'Parts included' },
-            ],
-            hasFreeTrialOrTier: false,
-            lastChecked: daysAgo(2),
-          },
-        },
-        jobs: {
-          status: 'populated',
-          data: {
-            openRoles: 1,
-            byDepartment: { 'Field Technicians': 1 },
-            hiringSignal: 'low',
-            lastChecked: daysAgo(2),
-          },
-        },
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 4.3,
-            g2Count: 97,
-            capterra: 4.2,
-            summary: 'Strong on fixed-price transparency. Response time mixed outside metro Melbourne.',
-            lastChecked: daysAgo(2),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(5), type: 'content', description: 'Homepage hero updated — now emphasises same-day availability.' },
-              { date: daysAgo(19), type: 'service', description: "Added 'CCTV Drain Inspection' to service menu." },
-            ],
-            lastChecked: daysAgo(2),
-          },
-        },
-      },
-      {
-        domain: 'plumbcomelbourne.com.au',
-        name: 'PlumbCo Melbourne',
-        tracking: { pricing: true, jobs: false, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Hourly rate model at $120/hr. No fixed-price quotes offered on site.',
-            plans: [
-              { name: 'Hourly Labour', price: 120, currency: 'AUD', period: 'hr', highlight: 'Min 1 hr' },
-            ],
-            hasFreeTrialOrTier: false,
-            lastChecked: daysAgo(2),
-          },
-        },
-        jobs: null,
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 3.9,
-            g2Count: 44,
-            capterra: 3.8,
-            summary: 'Polarised reviews — strong regulars but several complaints about delays on new bookings.',
-            lastChecked: daysAgo(2),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(11), type: 'pricing', description: 'Hourly rate increased from $110 to $120.' },
-            ],
-            lastChecked: daysAgo(2),
-          },
-        },
-      },
-      {
-        domain: 'rapidresponseplumbing.com.au',
-        name: 'Rapid Response Plumbing',
-        tracking: { pricing: true, jobs: true, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Competitive flat rate of $79 call-out, positioning aggressively against emergency specialists.',
-            plans: [
-              { name: 'Standard Call-Out', price: 79, currency: 'AUD', period: 'call', highlight: '30-min guarantee' },
-              { name: 'Weekend Rate', price: 120, currency: 'AUD', period: 'call', highlight: 'Sat & Sun' },
-            ],
-            hasFreeTrialOrTier: false,
-            lastChecked: daysAgo(2),
-          },
-        },
-        jobs: {
-          status: 'populated',
-          data: {
-            openRoles: 5,
-            byDepartment: { 'Field Technicians': 4, 'Dispatch': 1 },
-            hiringSignal: 'high',
-            lastChecked: daysAgo(2),
-          },
-        },
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 4.7,
-            g2Count: 312,
-            capterra: 4.6,
-            summary: 'Highest-rated competitor. Customers consistently mention the 30-minute guarantee. Growing fast.',
-            lastChecked: daysAgo(2),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(3), type: 'service', description: "Launched 'Commercial Plumbing' service line with dedicated landing page." },
-              { date: daysAgo(9), type: 'content', description: 'Added customer testimonial video to homepage.' },
-              { date: daysAgo(17), type: 'pricing', description: 'Weekend rate reduced from $140 to $120 — likely a promotional move.' },
-            ],
-            lastChecked: daysAgo(2),
-          },
-        },
-      },
-    ],
-    status: 'published',
-  }
-
-  await db
-    .prepare(
-      `INSERT INTO reports (id, project_id, agency_id, title, status, snapshot_json, generated_at, published_at, created_at)
-       VALUES (?, ?, ?, 'Melbourne Plumbing Co — Competitive Report', 'published', ?, ?, ?, ?)`
-    )
-    .bind(report1Id, project1Id, agencyId, JSON.stringify(snapshot1), report1GeneratedAt, report1GeneratedAt, daysAgo(2))
-    .run()
-
-  // ── CLIENT 2: Sydney Dental Group ────────────────────────────────────────────
-  const client2Id = crypto.randomUUID()
-  await db
-    .prepare(
-      `INSERT INTO clients (id, agency_id, name, email, status, created_at)
-       VALUES (?, ?, 'Sydney Dental Group', 'admin@sydneydentalgroup.com.au', 'active', ?)`
-    )
-    .bind(client2Id, agencyId, daysAgo(25))
-    .run()
-
-  const project2Id = crypto.randomUUID()
-  await db
-    .prepare(
-      `INSERT INTO projects (id, agency_id, client_id, name, description, created_at)
-       VALUES (?, ?, ?, 'Competitor Intelligence', 'Monitor pricing, service launches, and patient reviews across the Sydney dental market.', ?)`
-    )
-    .bind(project2Id, agencyId, client2Id, daysAgo(23))
-    .run()
-
-  // Competitors for Sydney Dental Group
-  const dentalCompetitors = [
-    { name: 'Sydney CBD Dental', domain: 'sydneycbddental.com.au' },
-    { name: 'SydSmile Dental', domain: 'sydsmile.com.au' },
-    { name: 'Bright Dental Sydney', domain: 'brightdentalsydney.com.au' },
-  ]
-  for (const comp of dentalCompetitors) {
-    await db
-      .prepare(
-        `INSERT INTO competitor_targets (id, project_id, domain, name, track_pricing, track_jobs, track_reviews, track_features)
-         VALUES (?, ?, ?, ?, 1, 1, 1, 1)`
-      )
-      .bind(crypto.randomUUID(), project2Id, comp.domain, comp.name)
-      .run()
-  }
-
-  const report2Id = crypto.randomUUID()
-  const report2GeneratedAt = daysAgo(1)
-  const snapshot2 = {
-    reportId: report2Id,
-    projectId: project2Id,
-    projectName: 'Competitor Intelligence',
-    generatedAt: report2GeneratedAt,
-    competitors: [
-      {
-        domain: 'sydneycbddental.com.au',
-        name: 'Sydney CBD Dental',
-        tracking: { pricing: true, jobs: true, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Premium positioning. Teeth whitening now $399 (was $349) — 14% price increase effective 1 Apr.',
-            plans: [
-              { name: 'Scale & Clean', price: 180, currency: 'AUD', period: 'visit', highlight: 'New patient discount 20% off' },
-              { name: 'Teeth Whitening', price: 399, currency: 'AUD', period: 'visit', highlight: 'Raised from $349 on 1 Apr' },
-              { name: 'Invisalign', price: 6500, currency: 'AUD', period: 'treatment', highlight: 'From price' },
-            ],
-            hasFreeTrialOrTier: false,
-            lastChecked: daysAgo(1),
-          },
-        },
-        jobs: {
-          status: 'populated',
-          data: {
-            openRoles: 2,
-            byDepartment: { 'Dentists': 1, 'Reception': 1 },
-            hiringSignal: 'low',
-            lastChecked: daysAgo(1),
-          },
-        },
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 4.8,
-            g2Count: 534,
-            capterra: 4.7,
-            summary: 'Dominant Google reviews presence. 12 new 5-star reviews in the last 7 days — possible review campaign underway.',
-            lastChecked: daysAgo(1),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(13), type: 'pricing', description: 'Teeth whitening price raised from $349 to $399.' },
-              { date: daysAgo(20), type: 'service', description: "New service launched: 'Invisalign treatment' with full landing page." },
-              { date: daysAgo(7), type: 'content', description: 'Google Reviews spike: 12 new reviews in 7 days — active review generation.' },
-            ],
-            lastChecked: daysAgo(1),
-          },
-        },
-      },
-      {
-        domain: 'sydsmile.com.au',
-        name: 'SydSmile Dental',
-        tracking: { pricing: true, jobs: false, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Value-led positioning. Consistent low-cost entry points targeting price-sensitive patients.',
-            plans: [
-              { name: 'Scale & Clean', price: 120, currency: 'AUD', period: 'visit', highlight: 'Includes X-rays' },
-              { name: 'Teeth Whitening', price: 249, currency: 'AUD', period: 'visit', highlight: 'Take-home kit included' },
-            ],
-            hasFreeTrialOrTier: true,
-            lastChecked: daysAgo(1),
-          },
-        },
-        jobs: null,
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 4.2,
-            g2Count: 189,
-            capterra: 4.1,
-            summary: 'Positive on price and friendliness. Several recent reviews mention wait times and parking.',
-            lastChecked: daysAgo(1),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(4), type: 'content', description: 'Homepage updated — new tagline and before/after whitening gallery.' },
-              { date: daysAgo(16), type: 'service', description: "Added 'Emergency Dental' page targeting same-day appointments." },
-            ],
-            lastChecked: daysAgo(1),
-          },
-        },
-      },
-      {
-        domain: 'brightdentalsydney.com.au',
-        name: 'Bright Dental Sydney',
-        tracking: { pricing: true, jobs: true, reviews: true, features: true },
-        pricing: {
-          status: 'populated',
-          data: {
-            summary: 'Mid-market pricing with bundle offers. New family plan launched this month.',
-            plans: [
-              { name: 'Scale & Clean', price: 150, currency: 'AUD', period: 'visit', highlight: 'Standard consult' },
-              { name: 'Family Plan', price: 89, currency: 'AUD', period: 'mo', highlight: 'Launched Mar 2026 — up to 4 family members' },
-              { name: 'Veneers', price: 1200, currency: 'AUD', period: 'per tooth', highlight: 'Composite from price' },
-            ],
-            hasFreeTrialOrTier: false,
-            lastChecked: daysAgo(1),
-          },
-        },
-        jobs: {
-          status: 'populated',
-          data: {
-            openRoles: 4,
-            byDepartment: { 'Dentists': 2, 'Dental Assistants': 1, 'Reception': 1 },
-            hiringSignal: 'high',
-            lastChecked: daysAgo(1),
-          },
-        },
-        reviews: {
-          status: 'populated',
-          data: {
-            g2Rating: 4.5,
-            g2Count: 276,
-            capterra: 4.4,
-            summary: 'Strong satisfaction across family services. Hiring signal and new family plan suggest aggressive growth phase.',
-            lastChecked: daysAgo(1),
-          },
-        },
-        features: {
-          status: 'populated',
-          data: {
-            recentChanges: [
-              { date: daysAgo(6), type: 'service', description: "Launched 'Family Dental Plan' subscription — $89/mo for up to 4 members." },
-              { date: daysAgo(12), type: 'pricing', description: 'Veneer pricing now listed publicly (was "call for quote").' },
-              { date: daysAgo(24), type: 'content', description: 'New blog series: Monthly dental tips — first two posts published.' },
-            ],
-            lastChecked: daysAgo(1),
-          },
-        },
-      },
-    ],
-    status: 'published',
-  }
-
-  await db
-    .prepare(
-      `INSERT INTO reports (id, project_id, agency_id, title, status, snapshot_json, generated_at, published_at, created_at)
-       VALUES (?, ?, ?, 'Sydney Dental Group — Competitive Report', 'published', ?, ?, ?, ?)`
-    )
-    .bind(report2Id, project2Id, agencyId, JSON.stringify(snapshot2), report2GeneratedAt, report2GeneratedAt, daysAgo(1))
-    .run()
+  // ── Seed clients, competitors, and reports ──────────────────────────────────
+  await seedDemoData(db, agencyId)
 
   // ── Return seed summary ─────────────────────────────────────────────────────
   return c.json(ok({
@@ -790,6 +792,34 @@ app.post('/seed-demo', async (c) => {
       portalUrl: 'https://peerscope-waitlist.pages.dev/portal/dashboard',
     },
   }))
+})
+
+// ── POST /admin/demo-links — generate a shareable demo invite URL (ADMIN_KEY gated) ──
+// Returns a one-time token URL pointing to /portal/demo/:token.
+// The prospect claims it at POST /api/demo-invite/:token/claim.
+app.post('/admin/demo-links', async (c) => {
+  const adminKey = c.env.ADMIN_KEY
+  const provided = c.req.header('X-Admin-Key')
+  if (!adminKey || provided !== adminKey) {
+    return c.json(err('Forbidden'), 403)
+  }
+
+  const db = c.env.DB
+  const now = new Date().toISOString()
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
+  // 16-char URL-safe token derived from a UUID (hex, no dashes)
+  const token = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
+
+  await db
+    .prepare('INSERT INTO demo_tokens (token, created_at, expires_at) VALUES (?, ?, ?)')
+    .bind(token, now, expiresAt)
+    .run()
+
+  const baseUrl = c.env.BETTER_AUTH_URL?.replace(/\/$/, '') ?? 'https://peerscope-waitlist.pages.dev'
+  const url = `${baseUrl}/portal/demo/${token}`
+
+  return c.json(ok({ url, token, expiresAt }), 201)
 })
 
 // ── All routes below require a valid agency JWT ───────────────────────────────
