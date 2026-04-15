@@ -796,6 +796,43 @@ app.post('/seed-demo', async (c) => {
   }))
 })
 
+// ── GET /admin/demo-links — list last 10 generated demo tokens (ADMIN_KEY gated) ──
+// Returns token, url, created_at, expires_at, and claimed (bool) for each row.
+// Auth: ?key={adminKey} query param (browser-friendly for page-load fetches).
+app.get('/admin/demo-links', async (c) => {
+  const adminKey = c.env.ADMIN_KEY
+  const provided = c.req.query('key')
+  if (!adminKey || provided !== adminKey) {
+    return c.json(err('Forbidden'), 403)
+  }
+
+  const db = c.env.DB
+  const baseUrl = c.env.BETTER_AUTH_URL?.replace(/\/$/, '') ?? 'https://peerscope-waitlist.pages.dev'
+
+  interface DemoTokenRow {
+    token: string
+    created_at: string
+    expires_at: string
+    claimed_at: string | null
+  }
+
+  const rows = await db
+    .prepare(
+      'SELECT token, created_at, expires_at, claimed_at FROM demo_tokens ORDER BY created_at DESC LIMIT 10'
+    )
+    .all<DemoTokenRow>()
+
+  const links = (rows.results ?? []).map((r) => ({
+    token: r.token,
+    url: `${baseUrl}/portal/demo/${r.token}`,
+    created_at: r.created_at,
+    expires_at: r.expires_at,
+    claimed: r.claimed_at !== null,
+  }))
+
+  return c.json(ok(links))
+})
+
 // ── POST /admin/demo-links — generate a shareable demo invite URL (ADMIN_KEY gated) ──
 // Returns a one-time token URL pointing to /portal/demo/:token.
 // The prospect claims it at POST /api/demo-invite/:token/claim.

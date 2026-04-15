@@ -182,9 +182,9 @@ function renderHtml(data: {
         </div>
       </div>
 
-      <!-- Recent links list (client-side state, last 5) -->
+      <!-- Recent links list (server-persisted, last 10) -->
       <div id="demo-history-wrap" style="display:none;margin-top:24px;border-top:1px solid #1e2133;padding-top:16px;">
-        <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Recently Generated</div>
+        <div style="font-size:11px;color:#a0a3b1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Previously Generated</div>
         <div id="demo-history-list" style="display:flex;flex-direction:column;gap:6px;"></div>
       </div>
 
@@ -194,8 +194,28 @@ function renderHtml(data: {
 </div>
 
 <script>
-// Demo Links — client-side state (session only, last 5 links)
+// Demo Links — server-persisted state
 var _demoLinks = [];
+
+// Load existing demo links from server on page load
+async function loadDemoHistory(adminKey) {
+  try {
+    var res = await fetch('/api/portal/admin/demo-links?key=' + encodeURIComponent(adminKey));
+    if (!res.ok) return;
+    var body = await res.json();
+    var links = body.data || [];
+    _demoLinks = links.map(function(item) {
+      var expires = new Date(item.expires_at);
+      var expiresStr = expires.toLocaleDateString('en-AU', { day:'2-digit', month:'short', year:'numeric' });
+      var created = new Date(item.created_at);
+      var ts = created.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:false });
+      return { url: item.url, expires: expiresStr, ts: ts, claimed: item.claimed };
+    });
+    renderDemoHistory();
+  } catch (e) {
+    // Non-fatal — history just won't show
+  }
+}
 
 async function generateDemoLink(adminKey) {
   var btn = document.getElementById('demo-generate-btn');
@@ -209,11 +229,10 @@ async function generateDemoLink(adminKey) {
   try {
     var res = await fetch('/api/portal/admin/demo-links?key=' + encodeURIComponent(adminKey), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey },
     });
 
     if (res.status === 404 || res.status === 405) {
-      // Backend not ready yet
       status.textContent = '⚠️ Demo link API not available yet — coming soon.';
       status.style.color = '#facc15';
       btn.textContent = 'Generate demo link';
@@ -234,7 +253,8 @@ async function generateDemoLink(adminKey) {
     }
 
     var data = await res.json();
-    var url = data.url || data.link || data.demo_url || data.demoUrl || '';
+    var payload = data.data || data;
+    var url = payload.url || data.link || data.demo_url || data.demoUrl || '';
     if (!url) {
       status.textContent = '✕ Unexpected response — no URL returned.';
       status.style.color = '#fca5a5';
@@ -257,12 +277,8 @@ async function generateDemoLink(adminKey) {
     status.textContent = '✓ Link ready';
     status.style.color = '#4ade80';
 
-    // Add to history (keep last 5)
-    var expiresAt = new Date(Date.now() + 7 * 86400000);
-    var expiresStr = expiresAt.toLocaleDateString('en-AU', { day:'2-digit', month:'short', year:'numeric' });
-    _demoLinks.unshift({ url: url, expires: expiresStr, ts: new Date().toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:false }) });
-    if (_demoLinks.length > 5) _demoLinks = _demoLinks.slice(0, 5);
-    renderDemoHistory();
+    // Reload history from server to reflect the new token + claimed status
+    await loadDemoHistory(adminKey);
 
   } catch (e) {
     status.textContent = '✕ Network error — is the API running?';
@@ -302,14 +318,23 @@ function renderDemoHistory() {
   wrap.style.display = 'block';
   list.innerHTML = _demoLinks.map(function(item, i) {
     var isLatest = i === 0;
+    var claimedBadge = item.claimed
+      ? '<span style="font-size:10px;background:#166534;color:#4ade80;padding:2px 6px;border-radius:4px;font-weight:700;flex-shrink:0;">CLAIMED</span>'
+      : '<span style="font-size:10px;background:#1a1d33;color:#4a4d5e;padding:2px 6px;border-radius:4px;font-weight:600;flex-shrink:0;">UNCLAIMED</span>';
+    var newBadge = (isLatest && !item.claimed)
+      ? '<span style="font-size:10px;background:#F07C35;color:#fff;padding:2px 6px;border-radius:4px;font-weight:700;flex-shrink:0;">NEW</span>'
+      : '';
     return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:' + (isLatest ? '#1a1d33' : '#0D0F1A') + ';border-radius:6px;border:1px solid #1e2133;">'
-      + (isLatest ? '<span style="font-size:10px;background:#F07C35;color:#fff;padding:2px 6px;border-radius:4px;font-weight:700;flex-shrink:0;">NEW</span>' : '<span style="font-size:10px;color:#4a4d5e;flex-shrink:0;">#' + (i+1) + '</span>')
+      + (newBadge || claimedBadge)
       + '<span style="font-family:monospace;font-size:12px;color:#a0a3b1;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + item.url + '">' + item.url + '</span>'
       + '<span style="font-size:11px;color:#4a4d5e;white-space:nowrap;flex-shrink:0;">expires ' + item.expires + '</span>'
-      + '<button onclick="copySpecific(this, \'' + item.url.replace(/'/g, "\\'") + '\')" style="padding:4px 10px;background:#1a1d33;color:#a0a3b1;border:1px solid #1e2133;border-radius:4px;font-size:11px;cursor:pointer;flex-shrink:0;">Copy</button>'
+      + (item.claimed ? '' : '<button onclick="copySpecific(this, \'' + item.url.replace(/'/g, "\\'") + '\')" style="padding:4px 10px;background:#1a1d33;color:#a0a3b1;border:1px solid #1e2133;border-radius:4px;font-size:11px;cursor:pointer;flex-shrink:0;">Copy</button>')
       + '</div>';
   }).join('');
 }
+
+// Load history on page ready — admin key injected server-side
+loadDemoHistory('${escHtml(adminKey)}');
 
 function copySpecific(btn, url) {
   navigator.clipboard.writeText(url).then(function() {
