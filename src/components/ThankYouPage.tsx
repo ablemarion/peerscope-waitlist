@@ -18,8 +18,9 @@ export default function ThankYouPage() {
   const refCode = email ? emailToRefCode(email) : 'share'
   const shareUrl = `${BASE_URL}?ref=${refCode}`
   const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    `Stop tracking competitors in spreadsheets. @PeerscopeHQ monitors pricing, features, and jobs 24/7 — on the waitlist for founding price: ${shareUrl}`
+    `Just joined the Peerscope waitlist — competitive intel for SMBs without the Crayon price tag. Check it out: ${shareUrl}`
   )}`
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
 
   const [position, setPosition] = useState<number | null>(null)
   const [displayedPosition, setDisplayedPosition] = useState<number | null>(null)
@@ -153,7 +154,7 @@ export default function ThankYouPage() {
           </button>
 
           {/* Secondary links */}
-          <div className="flex items-center justify-center gap-4 mt-4">
+          <div className="flex items-center justify-center gap-4 mt-4 flex-wrap">
             <a
               href={tweetUrl}
               target="_blank"
@@ -161,6 +162,15 @@ export default function ThankYouPage() {
               className="text-sm text-white/40 hover:text-white/70 transition-colors"
             >
               Post on X
+            </a>
+            <span className="text-white/20" aria-hidden="true">·</span>
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-white/40 hover:text-white/70 transition-colors"
+            >
+              Share on LinkedIn
             </a>
             <span className="text-white/20" aria-hidden="true">·</span>
             <button

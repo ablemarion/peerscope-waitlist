@@ -91,28 +91,12 @@ export function EmailForm({
   }
 
   if (status === 'success') {
-    const SHARE_URL = 'https://peerscope-waitlist.pages.dev?ref=referral'
-    const SHARE_TEXT = 'Worth signing up for — tracks competitor pricing and messaging automatically.'
-
-    async function handleShare() {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: 'Peerscope — competitive intelligence for SMBs',
-            text: SHARE_TEXT,
-            url: SHARE_URL,
-          })
-          return
-        } catch {
-          // User cancelled or share not supported — fall through to clipboard
-        }
-      }
-      try {
-        await navigator.clipboard.writeText(SHARE_URL)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      } catch { /* ignore */ }
-    }
+    const SHARE_URL = 'https://peerscope-waitlist.pages.dev/?ref=share'
+    const TWEET_TEXT = encodeURIComponent(
+      'Just joined the Peerscope waitlist — competitive intel for SMBs without the Crayon price tag. Check it out: https://peerscope-waitlist.pages.dev'
+    )
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${TWEET_TEXT}`
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(SHARE_URL)}`
 
     async function handleCopy() {
       try {
@@ -143,43 +127,54 @@ export function EmailForm({
         </div>
         <div className="text-center">
           <p className={`font-bold text-lg leading-tight ${textColor}`} style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
-            You're on the list - we'll be in touch.
+            You're on the list — we'll be in touch.
           </p>
         </div>
         <div className={`w-full border-t ${separatorColor}`} />
         <div className="w-full flex flex-col items-center gap-3">
           <p className={`text-sm font-medium text-center ${subduedColor}`}>
-            Know an SMB owner who's flying blind on competitors?
+            Know another founder who tracks competitors manually?<br />Share Peerscope with them:
           </p>
-          <div className="w-full flex gap-2">
-            <button
-              type="button"
-              onClick={handleShare}
-              className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5"
-              style={{
-                border: '1px solid rgba(184,98,42,0.45)',
-                color: '#F07C35',
-                background: variant === 'dark' ? 'rgba(184,98,42,0.1)' : 'rgba(184,98,42,0.06)',
-              }}
-            >
-              Share with a colleague <span aria-hidden="true">→</span>
-            </button>
+          <div className="w-full flex gap-2 flex-wrap">
             <button
               type="button"
               onClick={handleCopy}
-              className={`rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5 ${mutedColor}`}
+              className={`flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5`}
               style={{
                 border: variant === 'dark' ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(0,0,0,0.12)',
                 background: 'transparent',
-                color: copied ? '#C8DCE8' : undefined,
+                color: copied ? '#C8DCE8' : (variant === 'dark' ? 'rgba(255,255,255,0.6)' : undefined),
               }}
             >
               {copied ? '✓ Copied' : 'Copy link'}
             </button>
+            <a
+              href={twitterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5"
+              style={{
+                border: '1px solid rgba(255,255,255,0.12)',
+                background: variant === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                color: variant === 'dark' ? 'rgba(255,255,255,0.7)' : '#374151',
+              }}
+            >
+              Share on X
+            </a>
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center gap-1.5"
+              style={{
+                border: '1px solid rgba(184,98,42,0.45)',
+                background: variant === 'dark' ? 'rgba(184,98,42,0.1)' : 'rgba(184,98,42,0.06)',
+                color: '#F07C35',
+              }}
+            >
+              Share on LinkedIn
+            </a>
           </div>
-          <p className={`text-xs italic text-center ${mutedColor}`}>
-            This takes 20 seconds and helps us build for real people.
-          </p>
         </div>
       </div>
     )
@@ -241,6 +236,7 @@ export function AgencyRequestForm({
   const [clientCount, setClientCount] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [agencyCopied, setAgencyCopied] = useState(false)
 
   const isDark = variant === 'dark'
   const inputBase = isDark
@@ -299,20 +295,82 @@ export function AgencyRequestForm({
   }
 
   if (status === 'success') {
+    const SHARE_URL = 'https://peerscope-waitlist.pages.dev/?ref=share'
+    const TWEET_TEXT = encodeURIComponent(
+      'Just joined the Peerscope waitlist — competitive intel for SMBs without the Crayon price tag. Check it out: https://peerscope-waitlist.pages.dev'
+    )
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${TWEET_TEXT}`
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(SHARE_URL)}`
+
+    async function handleCopy() {
+      try {
+        await navigator.clipboard.writeText(SHARE_URL)
+        setAgencyCopied(true)
+        setTimeout(() => setAgencyCopied(false), 2000)
+      } catch { /* ignore */ }
+    }
+
     return (
       <div
-        className="rounded-xl px-6 py-6 border text-center"
+        className="rounded-xl px-6 py-6 border"
         style={{
           background: isDark ? 'rgba(200,220,232,0.06)' : 'rgba(184,98,42,0.06)',
           borderColor: isDark ? 'rgba(200,220,232,0.2)' : 'rgba(184,98,42,0.2)',
         }}
       >
-        <p className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-[#111320]'}`} style={{ fontFamily: "'Syne', sans-serif" }}>
+        <p className={`font-bold text-lg mb-1 text-center ${isDark ? 'text-white' : 'text-[#111320]'}`} style={{ fontFamily: "'Syne', sans-serif" }}>
           Request received — we'll be in touch.
         </p>
-        <p className="text-sm" style={{ color: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(17,19,32,0.55)' }}>
+        <p className="text-sm text-center mb-4" style={{ color: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(17,19,32,0.55)' }}>
           We review every request personally and reach out within 24 hours.
         </p>
+        <div
+          className="w-full border-t mb-4"
+          style={{ borderColor: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)' }}
+        />
+        <p className="text-sm font-medium text-center mb-3" style={{ color: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(17,19,32,0.55)' }}>
+          Know another founder who tracks competitors manually?<br />Share Peerscope with them:
+        </p>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center"
+            style={{
+              border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(0,0,0,0.12)',
+              background: 'transparent',
+              color: agencyCopied ? '#C8DCE8' : (isDark ? 'rgba(255,255,255,0.6)' : '#374151'),
+            }}
+          >
+            {agencyCopied ? '✓ Copied' : 'Copy link'}
+          </button>
+          <a
+            href={twitterUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center"
+            style={{
+              border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.1)',
+              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+              color: isDark ? 'rgba(255,255,255,0.7)' : '#374151',
+            }}
+          >
+            Share on X
+          </a>
+          <a
+            href={linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 rounded-lg font-semibold text-sm transition min-h-[44px] px-3 py-2.5 flex items-center justify-center"
+            style={{
+              border: '1px solid rgba(184,98,42,0.45)',
+              background: isDark ? 'rgba(184,98,42,0.1)' : 'rgba(184,98,42,0.06)',
+              color: '#F07C35',
+            }}
+          >
+            Share on LinkedIn
+          </a>
+        </div>
       </div>
     )
   }
