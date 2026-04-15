@@ -1,4 +1,4 @@
-import { useState, useId, useEffect, type FormEvent } from 'react'
+import { useState, useId, useEffect, useRef, type FormEvent } from 'react'
 import { Logo } from '../shared'
 
 type DemoState = 'idle' | 'loading' | 'success' | 'error'
@@ -95,7 +95,7 @@ export function PortalDemo() {
         {/* Card */}
         <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_24px_64px_rgba(0,0,0,0.6)]">
           {state === 'success' ? (
-            <CheckEmailState email={email} />
+            <CheckEmailState email={email} token={token} />
           ) : isInvalidToken ? (
             <InvalidTokenState />
           ) : (
@@ -207,7 +207,40 @@ export function PortalDemo() {
   )
 }
 
-function CheckEmailState({ email }: { email: string }) {
+type ResendState = 'idle' | 'loading' | 'sent' | 'error'
+
+function CheckEmailState({ email, token }: { email: string; token: string | null }) {
+  const [resendState, setResendState] = useState<ResendState>('idle')
+  const cooldownRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  async function handleResend() {
+    if (resendState !== 'idle' || !token) return
+    setResendState('loading')
+    try {
+      const res = await fetch(`/api/demo-invite/${token}/claim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setResendState('sent')
+        cooldownRef.current = setTimeout(() => setResendState('idle'), 30_000)
+      } else {
+        setResendState('error')
+        cooldownRef.current = setTimeout(() => setResendState('idle'), 4_000)
+      }
+    } catch {
+      setResendState('error')
+      cooldownRef.current = setTimeout(() => setResendState('idle'), 4_000)
+    }
+  }
+
+  const resendLabel =
+    resendState === 'loading' ? 'Sending...' :
+    resendState === 'sent'    ? 'Sent — check spam again' :
+    resendState === 'error'   ? 'Failed — try again' :
+                                'Resend email'
+
   return (
     <div className="p-8 text-center">
       {/* Envelope icon */}
@@ -229,10 +262,15 @@ function CheckEmailState({ email }: { email: string }) {
         We've sent a magic link to your inbox.
       </p>
       {email && (
-        <p className="text-xs text-white/25 font-sans mb-6">
+        <p className="text-xs text-white/25 font-sans mb-1">
           Sent to <span className="text-white/40">{email}</span>
         </p>
       )}
+
+      {/* Spam guidance */}
+      <p className="text-xs text-white/20 font-sans mb-6">
+        Cannot find it? Check spam — sent from onboarding@resend.dev
+      </p>
 
       {/* What happens next */}
       <div className="text-left space-y-3 border-t border-white/[0.08] pt-5">
@@ -249,6 +287,26 @@ function CheckEmailState({ email }: { email: string }) {
           </div>
         ))}
       </div>
+
+      {/* Resend button */}
+      {token && (
+        <div className="mt-5 border-t border-white/[0.08] pt-4">
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={resendState === 'loading' || resendState === 'sent'}
+            className={[
+              'text-xs font-sans transition-colors',
+              resendState === 'sent'    ? 'text-[#4ade80] cursor-default' :
+              resendState === 'error'   ? 'text-red-400 cursor-pointer' :
+              resendState === 'loading' ? 'text-white/20 cursor-default' :
+                                          'text-white/30 hover:text-white/50 cursor-pointer',
+            ].join(' ')}
+          >
+            {resendLabel}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

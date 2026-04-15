@@ -520,7 +520,65 @@ app.post('/:token/claim', async (c) => {
   }
 
   if (row.claimed_at) {
-    return c.json(err('This demo link has already been used.'), 400)
+    // Allow resend: if the same email re-POSTs, find their session and resend the magic link.
+    if (row.claimant_email !== email) {
+      return c.json(err('This demo link has already been used.'), 400)
+    }
+
+    // Look up the user and their most recent valid session to resend the magic link.
+    interface UserRow { id: string }
+    interface SessionRow { token: string }
+
+    const resendUser = await db
+      .prepare('SELECT id FROM user WHERE email = ? LIMIT 1')
+      .bind(email)
+      .first<UserRow>()
+
+    if (resendUser) {
+      const resendSession = await db
+        .prepare(
+          "SELECT token FROM session WHERE user_id = ? AND expires_at > ? ORDER BY created_at DESC LIMIT 1"
+        )
+        .bind(resendUser.id, new Date().toISOString())
+        .first<SessionRow>()
+
+      if (resendSession) {
+        const baseUrl = c.env.BETTER_AUTH_URL?.replace(/\/$/, '') ?? 'https://peerscope-waitlist.pages.dev'
+        const magicLink = `${baseUrl}/portal/join?session=${resendSession.token}`
+        const name = email.split('@')[0]
+
+        if (c.env.RESEND_API_KEY) {
+          const resend = new Resend(c.env.RESEND_API_KEY)
+          try {
+            await resend.emails.send({
+              from: 'Peerscope <onboarding@resend.dev>',
+              to: email,
+              subject: "Your Peerscope demo link — resent",
+              html: `
+                <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;color:#1a1a1a">
+                  <p style="font-size:22px;font-weight:700;margin:0 0 4px">Here's your demo link again.</p>
+                  <p style="color:#666;margin:0 0 24px">Hi ${name}, here's the magic link to your Peerscope demo portal.</p>
+                  <p style="margin:0 0 24px">
+                    <a href="${magicLink}"
+                       style="display:inline-block;padding:14px 28px;background:#F07C35;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:16px">
+                      Enter your demo portal →
+                    </a>
+                  </p>
+                  <p style="font-size:12px;color:#aaa;margin:0">This link logs you in automatically. Check spam if it still doesn't appear.</p>
+                </div>
+              `,
+              text: `Here's your Peerscope demo link again, ${name}:\n${magicLink}\n\nThis link logs you in automatically.`,
+            })
+          } catch (e) {
+            console.error('Failed to resend demo invite email:', e)
+          }
+        }
+
+        return c.json(ok({ ok: true, resent: true }))
+      }
+    }
+
+    return c.json(err('Could not resend — please contact support.'), 400)
   }
 
   // Atomic single-use enforcement: only update if still unclaimed.
